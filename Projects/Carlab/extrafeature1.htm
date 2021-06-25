@@ -1,0 +1,193 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoCaption, li.MsoCaption, div.MsoCaption
+	{margin-top:6.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:12.0pt;
+	font-family:"Calibri","sans-serif";
+	font-style:italic;}
+p.MsoList, li.MsoList, div.MsoList
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p.Heading, li.Heading, div.Heading
+	{mso-style-name:Heading;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Arial","sans-serif";}
+p.Index, li.Index, div.Index
+	{mso-style-name:Index;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><span style='font-size:22.0pt;line-height:115%'>Extra
+Feature #1: Music Controlled Steering</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>5/4/2010</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>            For
+our first extra feature, we decided to try to control steering based on the
+pitch of an instrument being played nearby the car.  We used the built-in
+microphone on the board (which is linked to the ADC) to pick up sound, and this
+sound was sent through the wireless serial to be processed on the base station
+(since it would have been a pain to program any DSP routines on the board
+itself due to its limited memory and slow processing power).  During research,
+we found out that the ADC has a lowpass filter of 4000hz built into it, so we
+sampled the sound from the ADC at 8000hz (twice that Nyquist Rate) using an
+Interrupt timer with a period of 125 microseconds.  We also set it to be 8-bit
+samples so that they could easily be sent on the byte without byte-packing and
+unwrapping.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>            8000hz
+8-bit sound would require a baud rate of 64000, which is beyond the capability
+of our 38500 baud rate serial.  Therefore we sent the sound out in chunks
+instead; we had a double buffering scheme set up where the board would be
+continually sampling the sound and sending it out as fast as it could.  There
+were gaps in between the chunks of sound that got sent out because of the
+limited baud rate, and this caused noise, but the hope was that periodic modes
+could still be identified even in the face of missing data.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>            On
+the base station end, a serial library was used in Java called “Java
+Communications” which is an add-on library that we had to install:</span></p>
+
+<p class=MsoNormal><a href="http://java.sun.com/products/javacomm/index.jsp">http://java.sun.com/products/javacomm/index.jsp</a></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>We read in
+data through a data input stream and displayed it to the screen as a waveform.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>We then did
+our own Cooley-Tukey in-place FFT in Java, doing a real-time transform of
+length 512 as soon as data came in.  At first we though we could identify
+frequency peaks and correlate turning directly to them, but finding individual
+FFT bins that were peaks turned out to be difficult.  So instead, we decided to
+reduce the problem to finding a range of the spectrum that had the most power,
+and to map each one of these ranges to a specific turning direction.  The idea
+was that each range would be ten musical halfsteps wide (5 to the left and 5 to
+the right), and that there would be five ranges: hard left, soft left, center,
+soft right, hard right.  If we had a signal that was “loud” enough (loudness
+was determined by variance of the signal), we would attempt to figure out which
+one of these regions had the most power and to tell the car to turn in the
+corresponding direction.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>5/6/2010</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>We had a
+slight problem getting the car to listen to communications going back to it; so
+we repeat each turning command that we want to give it about 30 times and that
+seems to fix the problem</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'><img
+border=0 width=574 height=605 src="extrafeature1_files/image001.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Here is a
+screenshot of our program running on the base station.  On top the waveform is
+displayed (note its periodicity), on the bottom the FFT is displayed.  In the
+FT window, there are 6 vertical lines drawn to mark out the 5 regions of
+turning, with the leftmost being turning hard left and the rightmost being
+turning hard right.  Note how their width increases exponentially since we hear
+pitches on a logarithmic scale.</span></p>
+
+<p class=MsoNormal><b><span style='font-size:16.0pt;line-height:115%'>References:</span></b></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>FFT: </span><a
+href="http://www.librow.com/articles/article-10">http://www.librow.com/articles/article-10</a></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Serial
+Library: </span><a
+href="http://www.seattlerobotics.org/Encoder/200205/gbcam.html">http://www.seattlerobotics.org/Encoder/200205/gbcam.html</a></p>
+
+</div>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+
+</html>

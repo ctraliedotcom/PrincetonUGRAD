@@ -1,0 +1,187 @@
+<html>
+<title>Chris Tralie's Individual HCI Proposals</title>
+<body>
+<h2><a href = "../../../">Chris Tralie</a></h2><BR>
+<img src = "me.jpg"><BR>
+<h1><u>Violin Hero</u><BR>
+<img src = "violinhero_sketch.jpg"><BR>
+<table border = "2" padding = "10">
+<tr><td>Type</td><td><i>Reasonable</i></td></tr>
+<tr><td>Description</td>
+<td>To create a fake violin and bow that the user can manipulate, and to synthesize sounds and draw sheet music in real time based on the user's motions.  The instrument will consist mostly of a chin rest and a fingerboard (proportional to where they are on an actual full-sized violin).  There will be some sort of a position sensor on the fingerboard to detect what "string" the user is touching, and where on that string they are touching (most likely, there will be no strings, but there may be little ruts on the fingerboard to help the user "feel" where they would be).<BR>
+	Aside from detecting the note that the user plays, there will also be an accelerometer in the bow to detect #1: when the user changes direction (so the user can play the same note over again many times on different bows), and #2: if the user changes speed (this will impact the loudness of the note, and perhaps it can be used to put articulation directions in the sheet music)<BR>
+	For user friendliness, the top of the fingerboard should be curved like it is on a regular violin.  On a real violin, this feature is to prevent the user from playing on two of the same string when they don't want to.  I will use it for a similar purpose here, which brings up another point: to play a note on a string, the user has to both be fingering on the correct string and bowing on the correct string.</td></tr>
+<tr><td>Who's in the group?</td>
+<td>
+Me, myself, and I.<BR>
+<u>What I know</u>: 
+<ul>
+<li>I know a lot about the violin and sheet music already</li>
+<li>I've had a lot of experience with GUI programming, so making the sheet music interface would be relatively straightforward.  I would probably use the Windows API to do this, but I could also use Java's graphics library.  Whichever is language is easier to interface with the BASIC stamp...</li>
+<li>I've learned a lot in the past about frequency vs. pitch, and I know how to determine what note should sound based on the position along a string</li>
+</ul>
+<u>What I need to research</u>:
+<ul>
+<li>
+I need to figure out how I'm going to synthesize the sound.  I'll be doing some research about MIDI to figure out how feasilbe that is for violin sounds, and I've also heard some mention of an algorithm called the <a href = "http://ccrma.stanford.edu/~jos/SimpleStrings/Karplus_Strong_Algorithm.html">"karplus strong algorithm"</a>, but I think that's optimized for plucked strings
+</li>
+<li>
+I'll need to do some research about the acoustics of a violin and how bowing changes them, depending on how nuianced I want to be with the bow (I still don't know if I want to do anything beyond just detecting bowing changes and making the notes suddenly louder, or if I want to really go into the physics of it)</li>
+<li>
+I will have to look back at our labs and figure out the best options for touch sensors given this setup</li>
+</ul>
+</td></tr>
+<tr><td>Motivations/use</td><td>This has a ton of applications/uses:<BR>
+<ul><li>It can be used to teach people how to play the violin; there could conceivably be software created to give pieces to play on the screen and grade the player for accuracy.  It could then give dynamic advice on how to improve.</li>
+<li>It can be used for composing music for violins (or for any instrument in that range).  It can be especially helpful for aspiring composers who can play the violin but lose their ideas too quickly when they try to sit down and write their ideas out on paper (like me).</li>
+<li>As the title implies, games could be created with this device.  Lots of fun for the whole orchestra!!</li></ul>
+</td></tr>
+<tr><td>How would it be tested?</td><td>I would pick out sheet music for three pieces: one "easy" (twinkle twinkle), one "medium" ("Jesu Joy of Man's Desiring"), and one "hard" ("Scheherazade").  Each piece has varying complexity of bowings and rhythms.  Have the user play each piece, and record #1: the percent of notes accurately recorded (analyze both the rhythm and the actual note on the scale), and #2: the percent of correct bowing directions detected.</td></tr>
+<tr><td>What equipment will be needed?</td><td>
+<ul><li>Some wood or plastic to create the violin frame</li>
+<li>Touch sensor for the fingerboard (either a restistive sensor or an array of capacitive sensors, but the whole idea is to have a continuous feel along the strings that the violin has)</li>
+<li>Wood for bow, accelerometer for bow, and some sort of textile to emulate horse hair for the bow</li>
+</ul></td></tr>
+<tr><td>Timeline for completion</td><td><i>Assuming a 6-week time period of development</i><BR>
+<u>Week 1:</u> Complete preliminary research, determine feasible options for violin sound synthesis, do some acoustical research about the violin and bowing, determine good options for position sensing on a fingerboard of the appropriate dimensions
+<BR><BR><u>Week 2:</u>Construct the frame for the violin, begin working on the touch sensor on fingerboard
+<BR><BR><u>Week 3:</u>Finish and test touch sensor on fingerboard (print note names to the screen continuously), and figure out how to link the incoming data to another language where a GUI can be developed
+<BR><BR><u>Week 4:</u>Begin developing the GUI interface for composing music
+<BR><BR><u>Week 5:</u>Finish developing the GUI interface for composing music
+<BR><BR><u>Week 6:</u>Wrap it up and test
+</td></tr>
+<tr><td>Extensions</td><td>Provide alternate tunings, change the sound to a different instrument, provide capability to bow more than one string at a time</td></tr></table>
+<BR><BR><BR>
+<hr>
+<BR><BR><BR>
+<h1><u>The Discrete <a href = "http://www.thereminworld.com">Theremin</a></u><BR>
+<img src = "discrete_theremin.gif">
+<table border = "2" padding = "10">
+<tr><td>Type</td><td><i>Flaky</i></td></tr>
+<tr><td>Description</td>
+<td>
+One of the biggest reasons the Theremin isn't a commonplace instrument today is because of the steep learning curve involved.  So unless you're Clara Rockmore, it's doubtful that you'll ever have the patience to learn how to play it right.  The purpose of this project would be to facilitate the learning process by making the Theremin a discrete instrument; that is, I will devise a way to get a theremin to "round up" or "round down" to the nearest note based on the user's position (kind of like a singer using an autotune).  This way, there will be a discrete number of notes that the user can play (presumably notes on a certain range with half steps).  I may give the user the opportunity to calibrate the instrument, or I may just have a set of base frequencies that the computer will round to.
+</td></tr>
+<tr><td>Who's in the group?</td>
+<td>
+Me, myself, and I.<BR>
+<u>What I know</u>: 
+<ul>
+<li>I was part of a team that built a theremin at the <a href = "http://www-pgss.mcs.cmu.edu/">Pennsylvania Governor School for the Sciences</a> back in 2006.  However, since it was a team of 11, I was only responsible for a very small portion of the project.  Also, I hadn't even had calculus yet at that point, so I didn't really understand second order circuits back then.  Therefore, I've never looked at the big picture, and I would love an opportunity to build the whole thing myself and to understand the circuit</li>
+<li>I took ELE 203 (circuit analysis) last fall, so I should be able to build the theremin circuit just fine</li>
+<li>I took ELE 201 (intro to signals and systems) last year and am currently taking ELE 301 (signal processing), so I should hopefully be able to figure out how to do processing/modulation on the signal that's generated on the theremin to "round up" or "round down" appropriately</li>
+<li>I have absoulte pitch, so that should help me test it for accuracy</li>
+</ul>
+<u>What I need to research</u>:
+<li>I'll have to figure out how to "round up" or "round down" the pitch.  I'm also going to have to figure out if I can do the signal processing in the digital domain, or if I have to make an analog filter.  I'm worried that because the theremin deals with heterodyning of two signals that are in the 100khz range, that there will be adverse effects from aliasing if I try to read it into the computer sampling at 44000hz (I'll have to do some more calculations about this).  Maybe I'll take this into consideration and modify the theremin to only generate one frequency (but I don't know how this will affect the timbre of the instrument).  I also have to figure out if I can do the processing I need real-time, or if it's going to incur some delay (in which case the project would be significantly less cool).
+<ul>
+
+</ul>
+</td></tr>
+<tr><td>Motivations/use</td><td>
+Mostly recreational; the instrument can be used for cool effects in songs.  Making the theremin a "common man's" instrument
+</td></tr>
+<tr><td>What equipment wil be needed?</td><td>
+<ul>
+<li>Theremin circuit components (perhaps a <a href = "http://harrisoninstruments.com/101/101_description.html">theremin kit</a>)</li>
+</ul>
+</td></tr>
+<tr><td>How would it be tested?</td><td>
+Test the transitions between notes by moving the hand away from the antenna slowly, and ensure that everything is, indeed, discrete.
+
+</td></tr>
+<tr><td>Timeline for completion</td><td><i>Assuming a 6-week time period of development</i><BR>
+<u>Week 1:</u> Obtain materials for building a theremin, do research for feasibility (real-time processing, determine if a digital filter can be made.  Presumably some sort of modulation will need to be done to shift the signal up or down)
+<BR><BR><u>Week 2:</u> Begin construction of theremin, begin creation of digital filter (if applicable)
+<BR><BR><u>Week 3:</u> Finish construction of theremin and debugging of theremin, without any modifications</u>
+<BR><BR><u>Week 4:</u> Work on getting signal from theremin into the computer, test out some simple filters and see how it sounds in real time
+<BR><BR><u>Week 5:</u> Finish the digital filter to discretize the analog theremin instrument
+<BR><BR><u>Week 6:</u> Finalize and test
+</td></tr>
+</table>
+
+
+<BR><BR><BR>
+<hr>
+<BR><BR><BR>
+
+
+
+<h1><u>Virtual Rodney Mullen: Skateboarding Flip Trick Simulation</u><BR>
+<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/1U-cgn3cEGA&hl=en&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/1U-cgn3cEGA&hl=en&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object><BR>
+<img src = "virtual_mullen.jpg"><BR>
+<table border = "2" padding = "10">
+<tr><td>Type</td><td><i>Far-Fetched</i></td></tr>
+<tr><td>Description</td>
+<td>
+To have a skateboarding deck that's glued to a mount with force sensors on it that can detect where a user pushes off of it.  Then, to render a 3D image of a virtual skateboard to the screen that flips appropriately based on where the user kicked it.  Also, perhaps a pressure sensor can be put on the back of the skateboard to ensure that the user is not on the board when it tries to flip (because in real life, the board won't flip unless the skateboarder lets go of it with his/her feet for a period of time).
+</td></tr>
+<tr><td>Who's in the group?</td>
+<td>
+Me, myself, and I.<BR>
+<u>What I know</u>: 
+<ul>
+<li>I've been experimenting with trick skateboarding for about 7 years now, and I have some instructional videos on how to do different tricks.  I'm not great at it, but I know a lot about it</li>
+<li>I've made some programs using Opengl in the past (including a basic 3D video game engine with gravity, friction, and basic collisions).  I should be able to make the visual simulation in question if I go back and brush up on a few things</li>
+</ul>
+<u>What I need to research</u>:
+<ul>
+<li>More about the physics of skateboarding</li>
+<li>I'll have to brush up on opengl and 3D rendering, but I have a book on opengl and a book on math for video programming that should help</li>
+<li>It would be really nice if I could have some sort of feedback mechanisms, so I'll do more research on haptics</li>
+</ul>
+</td></tr>
+<tr><td>Motivations/use</td><td>
+<li>It can help people gain muscle memory on flip tricks before they go out and execute them for real (which is much more dangerous)</li>
+<li>And API can be created out of it that can be used to make games, music, or whatever</li>
+</td></tr>
+<tr><td>What equipment wil be needed?</td><td>
+<li>A skateboarding deck (not a fancy one, just a really cheap one...I probably have one that can be used already)</li>
+<li>Something to mount the deck on so that it doesn't move</li>
+<li>A positional force sensor to put all around the edges of the deck</li>
+<li>A pressure sensor to determine where the user is standing on the board/whether he/she has jumped off of the board (giving the board room to flip)
+</td></tr>
+<tr><td>How would it be tested?</td><td>
+Bring in someone who can do certain tricks, have them go through the motions, and see if the board flips on the screen as expected.  Specifically, note the number of times the board flips around the different axes (x, y, and z).  See if pushing off harder gets the board to flip more rigorously.
+</td></tr>
+<tr><td>Timeline for completion</td><td><i>Assuming a 6-week time period of development</i><BR>
+<u>Week 1: </u> Obtain materials, do more research about the physics of certain tricks
+<BR><BR><u>Week 2:</u>  Start working on the 3D simulation of a rotatable skateboard on the computer, and start positioning the sensors on the deck and testing their readings
+<BR><BR><u>Week 3:</u>  Begin linking the deck to the computer simulation
+<BR><BR><u>Week 4:</u>  Test/debug
+<BR><BR><u>Week 5:</u>  Test/debug
+<BR><BR><u>Week 6:</u>  Finalize
+</td></tr>
+</table>
+
+
+<BR><BR><BR>
+<hr>
+<BR><BR><BR>
+
+
+<h1><u>The Musical Campus Bicycle</u><BR>
+<img src = "musical_bike.jpg"><BR>
+<table border = "2" padding = "10">
+<tr><td>Type</td><td><i>A Joke (maybe)</i></td></tr>
+<tr>
+<td>
+Description
+</td>
+<td>
+I always get frustrated when people are in their own world and don't pay attention when I'm riding my bike.  Sometimes, people do unexpected things and dart out right in front of you, and then you have to swerve to miss hitting them.  Also, sometimes riding the bike can be a bit monotonous day to day.  I propose that a computerized system be attached to the bike that blares a set of theme songs / special effects sounds while I'm riding my bike based on the following parameters: time of day, mood, acceleration/deceleration, and weather.  This way, nobody will be surprised when I'm coming their way, and my transits to and from class will become a lot more interesting
+</td>
+</tr>
+<tr><td>What equipment wil be needed?</td><td>
+<ul>
+<li>A bike (that I can provide)</li>
+<li>A portable speaker system</li>
+<li>A temperature sensor and a moisture sensor (to help detect weather)</li>
+<li>A clock (for time of day)</li>
+<li>An accelerometer (to detect acceleration/decelleration)</li>
+</ul>
+</td></tr>
+<tr><td>How would it be tested?</td><td>
+Ride one day with it and one day without it.  Record the number of near accidents in both cases, and the number of bizarre looks that people give in each case
+</td></tr>
+</table>

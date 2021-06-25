@@ -1,0 +1,17 @@
+This all started last Saturday night when I went to Blair Arch with my laptop and a balloon.  I was on a mission to get the impulse response of Blair Arch.  So first, I tried popping a balloon (as was suggested in class) to model the impulse.  But I ended up just using a loud, sharp clap.
+
+Once I had the impulse response of blair arch, I could convolve it with other sounds to make it sound like they were in Blair arch.  This worked surprisingly well, considering how crappy the microphone built-in to my laptop is.
+
+To make my final clip, I took the BeeGees song "Stayin Alive" and chopped it up into different segments, and convolved each segment with a different filter.
+
+First 5 Seconds: Unchanged
+
+Next 12 Seconds: Convolved with the Blair Arch impules response by itself
+
+Next 6 seconds: Convolved with Blair Arch impulse twice (lots more reverb)
+
+Next 7 seconds: Convolved with reversed Blair Arch impulses (kind of annoying, since the biggest response is delayed by a second, it sounds like they're getting ahead of themselves/off rhythm)
+
+Next 4 seconds: Convolved with reversed Blair Arch impulses twice (that "getting ahead of themselves" effect is even more pronounced here)
+
+Last 7 seconds:  I got bored and decided to convolve this part of the song with the first second of the song.  This basically just turns into one big low frequency booming.  Since it's so loud and bassy, the whole thing just acts like sort of a moving average/lowpass filter.  So their voices totally disappear here

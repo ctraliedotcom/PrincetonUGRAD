@@ -1,0 +1,104 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+'Programmers: Chris Tralie and Chris Koscielny
+'Purpose: To create embedded software for the basic STAMP
+'that converts analog signals from the potentiometers to digital
+'form and sends formatted data through the serial port to the
+'computer
+
+CS   CON   2       ' Chip Select Pin
+CLK   CON   3      ' Clock Pin
+DIO_n   CON   4    ' Data In/Out Pin
+config   VAR   Nib ' Configuration bits
+AD0   VAR   Word   ' Analog Data Channel 0
+AD1   VAR   Word   ' Analog Data Channel 1
+LSB   VAR   Byte   ' Least significant bits of position reading
+MSB   VAR   Byte   ' Most significant bits of position reading
+axis1 VAR Word     ' Data for accelerometer
+Mode VAR Byte      ' Mode - rectangular, polar, change weight, grayscale
+                   ' The board keeps track of the mode internally
+
+HIGH CS
+HIGH DIO_n
+INPUT 0
+Mode = 0
+
+myloop:
+
+    'get readings from our homemade capacitor pressure sensor
+    LOW 0
+    RCTIME 0,0, AD0
+
+    'if the user stomps on the button, change modes
+    IF AD0 < 3000 THEN samemode
+        Mode = Mode + 1
+        PAUSE 200 'for debouncing
+        IF Mode <= 2 THEN modeokay
+            Mode = 0
+        modeokay:
+    samemode:
+
+    'get potentiometer readings:
+    GOSUB convert0:
+    GOSUB convert1:
+
+
+    'System to send:
+    '2 least significant bits used to specify x or y,
+    'and LSB/MSB (the least significant 6 bits of 12 bit
+    'position and the most significant 6 bits of 12 bit pos)
+    'Bit 0: 1 for MSB, 0 for LSB
+    'Bit 1: 1 for Y, 0 for X
+    'AD0 is y, AD1 is x
+
+    'send X coordinate
+    LSB = (AD1 & $3f) << 2
+    MSB = ((AD1 >> 6) << 2) + 1
+    SEROUT 16, $6, [LSB]
+    SEROUT 16, $6, [MSB]
+
+    'send Y coordinate
+    LSB = ((AD0 & $3f) << 2) + 2
+    MSB = ((AD0 >> 6) << 2) + 3
+    SEROUT 16, $6, [LSB]
+    SEROUT 16, $6, [MSB]
+
+
+    '5th byte in sequence (used for changing modes and clearing screen)
+    '2 Most significant bits store mode
+    '3rd most significant bit indicates whether or not to clear the screen
+    '0-clear 1-do not clear
+    'remaining 5 bits are always set to 1
+
+    'get  accelerometer reading
+    PULSIN 5, 1, axis1
+
+    'clear board if user shakes accelerometer
+    IF Axis1 < 300 THEN dontclear
+        SEROUT 16, $6, [(MODE << 6) | $1f]
+        GOTO myloop:
+    dontclear:
+
+    'send mode and dont clear
+    SEROUT 16, $6, [(MODE << 6) | $3f]
+
+GOTO myloop:
+
+
+'get potentiometer readings:
+convert0:      ' Convert channel 0 only
+    config = %1011
+    LOW CS
+    SHIFTOUT DIO_n,CLK,LSBFIRST,[config\4]
+    SHIFTIN DIO_n,CLK,MSBPOST,[AD0\10]
+    HIGH CS
+RETURN
+
+convert1:      ' Convert channel 1 only
+    config = %1111
+    LOW CS
+    SHIFTOUT DIO_n,CLK,LSBFIRST,[config\4]
+    SHIFTIN DIO_n,CLK,MSBPOST,[AD1\10]
+    HIGH CS
+RETURN

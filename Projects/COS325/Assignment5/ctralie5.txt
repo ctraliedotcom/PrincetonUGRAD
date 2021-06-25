@@ -1,0 +1,28 @@
+So I started out in "Noteworthy Composer" making the background to the well-known Sir Mix-A-Lot song "Baby Got Back" and repeating it over and over again using boring old MIDI synthesis.  The result of this is found in "background_before.wav."  Then what I did was LPC encode background_before.wav and try to reconstruct it perfectly by including the error file in lpcresyn.  Since it's not perfect, though, it gives rise to minor artifacts at first.  But then I compounded this by doing the process over and over again, and then it started to sound like a completely different instrument. The result is found in "background_after.wav".  So the sequence of commands I repeated was:
+
+./fitlpc 40 1024 128 background_before.wav background_before.lpc background_before.res
+./lpcresyn background_before.lpc out.float -s background_before.res
+./float2wv out.float background_before.wav -s 16000
+
+And I repeated that 5-6 times.  The effect is a sort of blurry, underwater sound that reminds me a bit of the "waaa" pedal effect of the guitar.  There's probably a more rigorous explanation I could go through of why it sounds that way with signal analysis techiques, but I haven't studied the exact nature of the error yet (maybe it has to do with floating point?).
+
+
+I couldn't just stop there, though.....I had to bust out Microsoft Anna (Windows Vista Speech Synthesizer) and have her rap along!  The resuult is found in "microsoftanna_butts.wav".  NOTE that this was the hardest part, since I had to try to synchronize her with the rhythm (I had to add lots of whitespace systematically to keep her on).  But I believe the result was worth it, and I hope you agree!
+
+Enjoy!
+
+
+------------------------------------------
+
+"I like big butts and I can not lie
+You other brothers can't deny
+That when a girl walks in with an itty bitty waist
+And a round thing in your face
+You get sprung, wanna pull out your tough
+Cause you notice that butt was stuffed
+Deep in the jeans she's wearing
+I'm hooked and I can't stop staring
+Oh baby, I wanna get with you
+And take your picture
+My homeboys tried to warn me
+But that butt you got makes me so horny"

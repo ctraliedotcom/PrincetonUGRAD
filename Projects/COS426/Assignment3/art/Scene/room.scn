@@ -1,0 +1,55 @@
+# A camera looking from (0,0,50) down the negative z-axis (0,0,-1) with up in the direction (0,1,0) 
+# The xfov is 0.5, while the yfov will be computed to match the aspect ratio of the image
+# The near and far distances are 0.01 and 100, which conservatively contain the scene
+camera  50 0 30  0 0 -1  0 1 0  0.5   0.01 100
+
+# Two directional lights, one white (1,1,1) pointing in the direction (-3,-4,-5)
+# and another gray (0.5,0.5,0.5) pointing in the direction (3,2,3)
+dir_light  1 1 1        0 -1 0
+point_light 1 1 1		5 5 7	1 0 0
+
+material 1 1 1  1 1 1  0 0 0   0 0 0  0 0 0  0 0 0
+
+begin 0
+0.6 0 0 0 
+0 0.6 0 0
+0 0 0.6 0
+0 0 0 1
+	include couch.scn
+end
+	
+begin 0
+1 0 0 15
+0 1 0 0 
+0 0 1 6
+0 0 0 1
+	begin 0
+	0 0 -1 0
+	0 1 0 0 
+	1 0 0 0
+	0 0 0 1
+		include bed.scn
+	end
+end
+
+begin 0
+1 0 0 -2
+0 1 0 0 
+0 0 1 6
+0 0 0 1
+	include table.scn
+end
+
+begin 0
+1 0 0 2
+0 1 0 0 
+0 0 1 6
+0 0 0 1
+	begin 0
+	0.966 0 0.259 0
+	0 1 0 0 
+	-0.259 0 0.966 0
+	0 0 0 1
+		include table.scn
+	end
+end

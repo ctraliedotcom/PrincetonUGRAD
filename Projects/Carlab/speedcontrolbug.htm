@@ -1,0 +1,173 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoCaption, li.MsoCaption, div.MsoCaption
+	{margin-top:6.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:12.0pt;
+	font-family:"Calibri","sans-serif";
+	font-style:italic;}
+p.MsoList, li.MsoList, div.MsoList
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.Heading, li.Heading, div.Heading
+	{mso-style-name:Heading;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Arial","sans-serif";}
+p.Index, li.Index, div.Index
+	{mso-style-name:Index;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><span style='font-size:20.0pt;line-height:115%'>Speed
+Control Bugs Discovered during Project 4</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>5/4/2010<br>
+We discovered a few bugs that were causing the speed control to go haywire at
+certain points.  Originally, we set up a special microsecond timer that had
+double word precision to time the time between hall pulses on the wheel (used
+for speed sensing).  We needed to do this because 1 second in microseconds is
+10<sup>6</sup>, which is beyond the range of a 2-byte word on this
+microprocessor.  To do this we created an overflow counter that counts 0.05
+(twentieth) second intervals and had the regular counter that returned the rest
+of the time as a word.  The microsecond timer was reset each time a new
+twentieth of a second was counted.  So splitting it into twentieth second
+intervals and resetting the counter, we get the following:</span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;line-height:115%;font-family:
+"Courier New"'>word hallTime //The actual time read on the timer</span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;line-height:115%;font-family:
+"Courier New"'>word hall20thTime //The number of 20<sup>th</sup> seconds that
+elapsed</span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;line-height:115%;font-family:
+"Courier New"'>dword actualTime = hallTime / 100 + hall20thTime * 500 //The
+time in “tenth milliseconds” (10 times finer resolution than a millisecond)</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>There were
+two bugs that came out of inconsistent use of this timer we set up:</span></p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='line-height:normal'><span style='font-size:12.0pt'>When
+     looking at the time between hall ticks, we calculated <b>dt</b> by
+     returning the time in milliseconds from the clock (since we figured <b>dt</b>
+     didn’t need to be as accurate).  But we forgot to count the 20<sup>th</sup>
+     timer when we did this, so we were simply getting the spillover from the
+     timer.  The consequence was that if, for example, there was a time of
+     about 1/20<sup>th</sup> of a second between hall pulses, the program would
+     think there was a time of roughly <b>0</b>, which meant that it thought it
+     was going much much faster than it actually was.  Since dt was so small,
+     this sometimes caused the duty cycle to be set to full, so the car would
+     speed off extremely quickly at times due to this bug.  Once it was fixed
+     this speeding off to infinity went away.</span></li>
+ <li class=MsoNormal style='line-height:normal'><span style='font-size:12.0pt'>Timing
+     reads only occur on hall tick negative edges.  To make sure that the car
+     didn’t halt, we gave the dutyCycle a jolt to 0.25 every time 1 second
+     elapsed without seeing any hall pulses.  What we also did after one second
+     (which was a mistake) was completely reset the timer (20<sup>th</sup>
+     seconds and actual timer).  This made it so that after the jolt when a
+     hall pulse was seen again, a really small time would have been read since
+     the timer was reset.  So if there was supposed to be 1.001 seconds between
+     hall pulses after giving the jolt, the program would have seen only 0.001
+     seconds and thought once again that it was going too fast.  This would
+     lead to another jolt being given, and the car would sort of jolt forward
+     slowly once per second if it got into this state.  So we were screwed
+     whenever the car got slowed down enough that it missed pulses for a
+     second, because it could never get out of it.  Resetting the timer every
+     30 seconds (instead of every 1 second when we gave it the jolt) fixed this
+     problem</span></li>
+</ol>
+
+</div>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+
+</html>

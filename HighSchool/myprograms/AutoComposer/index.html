@@ -1,0 +1,50 @@
+<html>
+<head><title>Chris Tralie's Java Automatic Composer</title></head>
+<body>
+<center><h1><img src="title.jpg" alt="Java Automatic Composer"></h1>
+<table><tr><td><ul><li><a href="#abstract">Project Abstract</a></li></ul></td><td>
+<ul><li><a href="#screenshots">Program Screenshots</a></li></ul></td><td>
+<ul><li><a href="#awards">Awards and Recognition</a></li></ul></td></tr></table><BR></center>
+<a name="abstract"><b><u>ABSTRACT:</u></b></a><BR>
+<p>The main goal of this project was to design an application with the Java programming language capable of capturing and analyzing low-level sound input in a byte array from a microphone.  This information was then displayed to the user in the form of universally accepted sheet music.
+<BR><BR>In the graphical user interface, many musical theory concepts were addressed.  Namely, the user can change the time signature, the key signature (which is loaded from a file), and the tempo (which is synchronized with a flashing metronome during recording).  Gathered music is analyzed and displayed to conform to these parameters.
+<BR><BR>There are two different ways to compose music: manually (which involves clicking on a virtual violin fingerboard), or automatically (which relies directly on a microphone).  In the latter case, information is gathered and passed to one "DSP" (digital signal processing) class, where it undergoes a "Discrete Fourier Transform," in which the relative powers of contained frequencies of the sound wave are calculated.  With the powers of the fundamental frequency and its first five harmonics, the exact note that the user is playing can be determined.  Checking for notes in sixteenth-beat time intervals, the sound is built up and merged in a dynamic collection that is drawn to the screen.
+<BR><BR>During testing with a violin, it was found that the program detects the most notes and makes the fewest mistakes under moderate tempos around 100bmp.
+<BR><BR>Practical applications of this program include teaching new music students, providing a pitch tool for the tone deaf, verifying pitch accuracy for those learning a tonal language such as Chinese, and increasing efficiency for aspiring composers.
+<BR><BR>
+<a name="screenshots"><b><u>SCREENSHOTS:</u></b></a><BR>
+<table border="1"><tr><td><center><img src="automaticCalculations.jpg"><br>Determining the notes that the user played after a recording session and drawing them to the screen as they are calculated</center></td></tr>
+<tr><td><center><img src="automaticrainbow.jpg"><BR>The output of one test in which I played "Over the Rainbow" on my violin</center></td></tr>
+<tr><td><center><img src="manuallyComposing.jpg"><BR>The user also has the option to click on a virtual violin fingerboard with the mouse (instead of using a microphone) if he/she does not want to play an instrument</td></tr>
+<tr><td><center><img src="settings.jpg"><BR>Here are all of the parameters that can be modified in the Options->Settings menu</td></tr>
+<tr><td><center><img src="alternatives.jpg"><BR>Here is an example in which the user has modified the default settings with respect to tempo, time signature, and key signature.</td></tr>
+<tr><td><center><img src="harmonics.jpg"><BR>To highlight the physics aspect of the project, I also created a program that analyzes an incoming sound wave in detail.  After recording a portion of sound, the user can zoom in on a particular time interval and check it for a range of frequencies (the power of each frequency is then plotted).  The amplitude/time domain is graphed in green, while the power/frequency domain is graphed in cyan</td></tr>
+<tr><td><center><img src="spectralAnalysis.jpg"><BR>I also created a real-time sound spectrum analyzer/oscilloscope program in which the powers of fundamental frequencies are plotted above their associated notes.  If you look closely at the picture above, you should notice a harmonic pattern.  This particular one resulted from me playing an "A" on my lowest string.</td></tr>
+</table><BR><BR>
+<a name="awards"><b><u>AWARDS/RECOGNITION:</u></b>
+<ul><li><a href="http://www.mcsta.org/">Montgomery County Science Fair</a>:
+<ul><li>1st place computer science Category</li><li>MCSTA Teacher award for best overall math/computer science project ($100 cash)</li></ul></li>
+<li><a href="http://www.drexel.edu/dvsf/">Delaware Valley Science Fair</a>:<ul><li>1st place computer science category</li><li>Leonardo DaVinci Society award for best music-related project ($200 cash)</li>
+<li>Intel Corporation award for computer science achievement ($200 cash)</li>
+<li>Delaware Valley Science fairs special recognition award ($50 cash)</li>
+<li>Partial scholarship to Drexel University</li>
+<li>Recognition plaque from Yale University</li></ul></li>
+<li><a href="http://pjas.net/">Pennsylvania Junior Academy of Science (PJAS)</a>:<ul><li>Junior talent search award</li></ul></li>
+<li>United States copyright approval received on October 13, 2006</li>
+</ul>
+<BR><center><img src="DaVinciAward.jpg"><BR>Me (left) receiving the DaVinci award, which was presented by John Bravo (middle).  And there's my mom on the right :)</center>
+
+
+</ul><!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->

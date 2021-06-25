@@ -1,0 +1,26 @@
+Put in order of importance in each category
+
+
+My Stuff (Fun Stuff)
+Signals:
+*DFT
+*FFT
+
+Linear Algebra:
+*Projection matrices (prerequisite for the least squares and SVD tutorials)
+*Changes of Base and Similar Matrices
+*Least Squares
+*Singular Value Decomposition
+
+
+3D Math:
+*Rotation: Matrices and Quaternions
+*The plane equation
+
+Music:
+*Musical frequency notes; consonance and dissonance
+-----------------------------
+
+Calculus (Common tutoring problems):
+*Multivariable Taylor Series and the Hessian
+*The Jacobian

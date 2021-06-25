@@ -1,0 +1,299 @@
+<html>
+<title>Chris Squared HCI Final Project: Report</title>
+<body>
+<h2>
+<a href = "../"><--Back to Projects</a><BR>
+<a href = "../../"><--Home</a>
+</h2>
+<hr>
+<h1><center>TAB: Talking Alarm Buddy Report</center></h1><BR>
+<h2>By the <i>Sleep Hunters</i> (Chris Tralie and Chris Koscielny)</h2><BR><HR><BR><BR>
+<img src="conversational_ac.gif"><BR>
+
+<!--Hi all,
+
+As dean's date approaches, you should be finishing up your projects 
+and starting on the final project writeup. It is OK to do this in 
+web-linked or emailed form, but it MUST be one big flat file that 
+we can click on and print out. We don't want to navigate a menu or 
+set of links to get to the individual parts of the report. You may 
+structure a web page like that if you like, but we require a version 
+of it that is one document with headings, etc.
+
+The report should contain all the stuff you've been putting on 
+the updates (group codename, device/system name, who is in the 
+group, what each member was responsible for, what did you build, 
+who will use it, how did you build it, how did you test it), 
+with much more detail on design, but with no timeline for 
+completion, and added formal sections for conclusions, future 
+work, references, and acknowledgements. Feel free to put in 
+as much as you like about the two papers you have or will read 
+for Assignment Omega, and other papers, web links, patents, etc. 
+that your group has discovered in researching your project.
+
+If you have tested humans on your device (which you should have), 
+include sections about the design of your experiment(s), and 
+results of those experiments including data analysis, plots, 
+tables, etc.
+
+Remember all of this is due by 5:PM on Tuesday, Jan 13, 
+and you must also schedule and do a demo for me prior to 
+2:PM on Friday, January 16th. Wait until your device/system 
+is mostly feature complete, but the earlier the better for 
+demos. Most ideal would be to do the demo on the 12th-14th, 
+modulo getting all your group members, plus your device/system, 
+plus me, in the same place.
+
+These instructions are also now linked from the Final Schedule.
+
+Rock on.
+
+PRC!-->
+
+<ol>
+<li><a href = "#description">Description</a></li>
+<!--<li><a href = "#videos">Videos</a></li>-->
+<li><a href = "#motivations">Motivations / Target Audience</a></li>
+<li><a href = "#related">Related Past Work</a></li>
+<li><a href = "#design">Design</a></li>
+<li><a href = "#source">Source Code</a></li>
+<li><a href = "#contributions">Group Member Contributions</a></li>
+<li><a href = "#testing">Testing for success</a></li>
+<li><a href = "#conclusions">Conclusions / Future Work</a></li>
+<li><a href = "#references">References/Acknowledgements</a></li>
+</ol>
+
+<h3><a name = "description">Description</a></h3>
+<p>The goal is to have the user select a time that he/she wants to wake up. When the alarm goes off, it plays an annoying sound and waits for the user to say "stop," at which point it shuts off.  The alarm clock will then go into "conversation mode" where it will speak to the user (using voice synthesis) to fully wake him up and make sure he doesn't go back to sleep. The alarm clock will start by telling the user the current time and reading the day's weather based on a previously specified zip code. It will then proceed to play an interactive verbal game with the user, where the alarm reads two numbers from 2-13, and the user says back the product. If the user makes too many mistakes or is unresponsive (he probably went back to bed), the alarm with make loud/unpleasant sounds to wake him up again.  The alarm asks 10 questions to try to wake the user up initially, then reads the news from a previously-specified RSS feed, and then resumes the math game until the user gets up from bed and terminates the program manually.</p>
+
+<!--<h3><a name = "videos">Videos</a></h3>-->
+<!--<ul>-->
+<!--<li><a href = "AlarmProposal.wmv">Project Proposal</a></li>-->
+<!--<li><a href = "TalkingAlarmBuddy.mov">Actual Demonstration Footage</a></li>-->
+<!--</ul>-->
+
+<h3><a name = "motivations">Motivations / Target Audience</a></h3>
+<p><u>As put by Chris Koscielny:</u><BR>I sometimes wake up to my loud alarm clock, only to turn it off and fall back to sleep. While my alarm clock successfully jolts me into a mental state capable of turning it off and going back to bed, it fails to wake me up enough to start the day. I hypothesize that the proposed conversational alarm clock will have more success for the following reasons:
+<ol>
+<li>It's preferable to shut off the alarm by saying/shouting "stop" rather than by getting out of bed and manually disabling the entire system (especially on cold days). Therefore, I won't be as tempted to get out of bed, disable the verbal interface, then go back to sleep.</li>
+<li>The verbal interface will serve to gradually wake me up by forcing me to do basic thinking. It will also encourage me to wake up by providing me with useful information (e.g. news, weather). The goal of the interface is to bring me to a conscious mental state so that it won't be unpleasant to get out of bed.</li>
+<li>The ultimate goal is not only to get the user out of bed, but to have the user feel ready for the day by giving him/her useful information during the waking process, improving overall quality of life.</li>
+</ol>
+Most people with busy and stressful schedules who need to maximize their productivity while awake (99.999% of Princeton students) will benifit from this alarm clock.
+</p>
+
+<BR><BR>
+<h3><a name = "related">Related Past Work</a></h3>
+<ul>
+<li><a href = "http://www.hammacher.com/publish/75359.asp?source=Google&keyword=interactive+alarm+clock&cm_ven=NewGate&cm_cat=Google&cm_pla=OtherProducts&cm_ite=interactive+alarm+clock&OVMTC=Exact&site=&creative=2348315897&OVKEY=interactive%20alarm%20clock">"The Voice Interactive Alarm Clock"</a>:<BR>
+A physical alarm clock that does some voice recognition for commands like "set alarm," "set time," "check alarm," "what is the date," "alarm sound."  It can also tell the user the temperature in the room.  But since the alarm clock doesn't have web access, it can't do stuff like finding the temperature outside on weather.com or finding news clips.  It also doesn't play games with the user.  Our alarm clock would also be less expensive since it relies on existing hardware </li>
+
+<li><a href = "http://www.activeforever.com/p-2105-sunshine-alarm-clock.aspx?Source=Nextag">Another voice activated alarm clock</a>, but this one can turn on a TV in the morning.  Perhaps our alarm clock can feature turning on internet TV.</li>
+
+<li><a href = "http://www.uberreview.com/2006/01/clocky-alarm-clock-for-snooze-button.htm">Clocky</a>: A physical annoying alarm clock that goes counter to our mission: to engage the user in positive, constructive interaction upon waking.  But it's still cool</li>
+
+<li><a href = "http://www.patentstorm.us/patents/7306567.html">The Easy Wake Wrist Watch</a>: A wrist watch that uses motion detection and heuristics to induce sleep cycle to help figure out the optimal time to wake a subject up</li>
+</ul>
+
+<h3><a name = "design">Design</a></h3><BR>
+<u>Software Environment:</u><BR>
+This project was developed under Ubuntu Linux 8.10 using primarily the C language (the only place we had to use C++ was to plug in Festival audio).  We used a <b>make</b> to organize library dependencies and interdependencies between source files, and <b>gcc/g++</b> to compile everything.  We used <b>subversion</b> to organize code collaboration efforts (especially helpful over break).<BR><BR>
+<u>Hardware Environment:</u><BR>
+microphone:<BR>
+cheap microphone that came with a computer Chris K. bought almost ten years ago.<BR>
+telex brand, patent # D395893<BR><BR>
+
+<u>Overview of libraries/modules and their functions:</u><BR>
+<ul>
+<li><u>Festival</u>: Developed by the University of Edinburgh, this library was used for voice synthesis.  We plugged it in through <i>speak.cpp</i>, so that any file that includes this module simply has to call the function <i>speak(char*)</i>.  We needed to do some special work in our makefile to link this to the rest of our program, since the Festival API is written for C++ (and our program was in C)<BR></li>
+<li><u>Sphinx II</u>: Carnegie Mellon has done a lot of work with voice recognition over the past couple of decades, all grouped together under the name "CMU Sphinx." SphinxII is a fast, tried-and-true system from this project that can be used in C. We developed a module in <i>sphinx_recognition.c</i> that class functions from this library. It works by filling a buffer of audio from the default microphone for a specified amount of time (while listening to the user), and sends this off to the sphinx system to be decoded into a string based off an acoustic and language model. For our project, we used a custom dictionary (<i>alarm.dict</i>) and custom finite state machines (<i>alarm.fsg</i>, <i>numbers.fsg</i>) to assist in decoding. The dictionary file consists of a list of words that our program recognizes along with their respective phonemes. The finite state machine uses state transitions to define what combinations of words are recognized (e.g. "three hundred fifty six" and "three hundred and fifty six" are valid sentences, but "three hundred hundred six" isn't); the finite state machine isn't required, but it reduces computations and makes the system more accurate. <BR></li>
+<li><u>libmrss</u>: A C library that facilitates the process of reading rss feeds.  We first used this to read a specified RSS feed for the news (the default is "top stories" on yahoo, but we even had it set to slashdot and celebrity gossip at one point), which is encapsulated in the file <i>news.c</i>.  We also used this library to help read weather, because weather.com has an rss feed returned based on zip code.  The weather functionality is encapsulated in the file <i>weather.c</i><BR></li>
+<li><u>strftime</u>: This is a library in C that can be used to return systen time in any format desired.  It is used both to tell the user the current time when he/she wakes up (implemented in <i>weather.c</i>) and to check the current hour and minute to see when to set the alarm off (implemented in <i>alarmconfig.c</i> with the functions getCurrentHour() and getCurrentMinute())<BR></li>
+<li><u>glib</u>: This library had some useful functions for manipulating C strings and creating an argc/argv array combination from a given string (the festival library actually requires its performance tweaking parameters in this format).  We also used this library to help spawn command line processes, which enabled a simple solution for playing alarm sounds; we simply called the Unix program "<i>play</i>" from within the command line to play the alarm sound.  This approach is implemented in the file <i>play.c</i>.</li>
+
+</ul><BR>
+
+<u>Other Technical Details</u>:<BR>
+<ul>
+<li>We use a very simple configuration file scheme to specify the name of the user, the RSS feed to use, the max number of RSS feed items to read, the zip code for obtaining weather, and the minute and the hour to wake the user up (specified in 24 hour format to disambiguate).  The user runs the program from the console and specifies one parameter: the location of this configuration file (e.g. <i>./TAB config</i>).  The configuration file is then opened and parsed in the file <i>alarmconfig.c</i></li>
+<li>The alarm clock sleeps and occasionally checks to see how close it's getting to the alarm time, and then continues sleeping</li>
+<li>When the alarm first goes off, it plays a loud sound for a couple of seconds, and then listens for three seconds to hear if the user says "STOP."  It stays in this loop until it has determined that the user has said STOP</li>
+</ul>
+
+<h3><a name = "source">Source Code</a></h3>
+<h3><i>A snapshot of our source code is located <a href = "trunk">here</a></i></h3><BR><BR>
+
+<h3><a name = "contributions">Group Member Contributions</a></h3>
+<p><u>Chris Tralie:</u><BR>
+<ul>
+<li>Got a basic interface to connect with <a href = "http://www.cstr.ed.ac.uk/projects/festival/">Festival Speech Synthesis System</a></li> 
+<li>Found a C library, <a href = "http://www.autistici.org/bakunin/libmrss/doc/">libmrss</a>, for reading in rss feeds.  Used this library to create modules to read the news (specifying a specific RSS feed) and the weather (weather.com rss feed with a zipcode specified)</li>
+<li>Learned how to read in system time and output in a manner the user can easily understand</li>
+<li>Worked on configuration file scheme for easy tweaking and testing</li>
+<li>Created the base implementation for obtaining audio streams and sending them to be decoded into text using the sphinx2 library</li>
+<li>Learned how to play alarm sounds in the console, and experimented with other ways to load and play raw audio data using the Sphinx library</li>
+</ul>
+
+<BR>
+
+
+<u>Chris Koscielny:</u><BR>
+<ul>
+<li>Set up and maintained subversion server that was used for code collaboration throughout the project</li>
+<li>Worked with finite state grammar and dictionary for sphinx voice recognition</li>
+<li>Used the dictionary to help create the arithmetic game that the user plays</li>
+<li>Experimented with an tweaked voice recognition system</li>
+<li>
+<li>Worked on linking C and C++ code together (so that a more elegant solution could be used to call Festival), creating a makefile, improving the modularity of the program, and solving library dependency issues</li>
+<li>Tied all of the modules together into a main program that blocks until the alarm is ready to be set off, and then does logic to determine when the user is awake.</li>
+</ul>
+
+</p>
+
+<h3><a name = "testing">Testing for success</a></h3>
+<p>
+Instead of testing qualitative aspects of the alarm, we decided to quantitatively test features using ourselves as the subjects.  This was also better given the time constraints, because not only does Chris T.'s soundcard not work properly under Linux (making recording impossible), but most people do not have linux (and getting the dependencies working so that it can be compile under Windows would be a mess right now), so the logistics of using test subjects to qualitatively test features at this time is not feasible.<BR>
+Our main metric for success is the accuracy of the voice recognition during the number game.  We created a test that reads 30 numbers 0 to 999, and we repeat them back to the microphone.  We lied in bed, head facing towards the ceiling instead of towards the microphone resting 7 feet away on a table. This is how we would use the system if we were waking up in the morning.  The logic for performing this test is contained in function <i>number_test()</i> in the file <i>number_game.c</i><BR><BR>
+Results (the first column is what we said, and the second column is what the computer thought we said):<BR>
+<BR><table border = "1"><tr><td>
+Chris K. First time: 21/30 (70%)<BR>
+9 Wrong:<BR>
+880 808<BR>
+522 542<BR>
+383 308<BR>
+869 868<BR>
+63 62<BR>
+490 408<BR>
+623 620<BR>
+877 873<BR>
+580 558</td>
+<td>Chris K. Second Time: 21/30 (70%)<BR>
+9 Wrong:<BR>
+763 752<BR>
+324 824<BR>
+297 293<BR>
+408 48<BR>
+480 48<BR>
+522 520<BR>
+158 150<BR>
+518 588<BR>
+885 883<BR></tr>
+<tr><td>
+Chris T: First Time: 16/30 (53%)<BR>
+Wrong 14 out of 30<BR>
+5 3<BR>
+417 416<BR>
+727 626<BR>
+803 883<BR>
+397 396<BR>
+307 306<BR>
+697 696<BR>
+409 12<BR>
+247 646<BR>
+653 683<BR>
+706 76<BR>
+899 811<BR>
+360 368<BR>
+667 663<BR>
+</td>
+<td>
+Chris T: Second Time: 16/30 (53%)<BR>
+Wrong 14 out of 30<BR>
+161 86<BR>
+49 45<BR>
+837 836<BR>
+992 982<BR>
+907 307<BR>
+707 76<BR>
+239 235<BR>
+135 133<BR>
+937 936<BR>
+665 663<BR>
+680 63<BR>
+704 604<BR>
+432 436<BR>
+843 823<BR>
+</td></tr>
+<tr><td>Mike (a friend down the hall) : 17/30 (57%)<BR>
+13/30 Wrong:<BR>
+721 71<BR>
+997 97<BR>
+956 56<BR>
+889 808<BR>
+59 55<BR>
+964 26<BR>
+291 281<BR>
+59 58<BR>
+552 3<BR>
+219 298<BR>
+887 87<BR>
+671 68<BR>
+281 40</td></tr>
+</table>
+Overall accuracy: 61%<BR>
+The two consistent trends here are mixing 5 and 3 and 6 and 7 (especially for Chris T on the latter).
+<hr>
+
+
+</p>
+
+<h3><a name = "conclusions">Conclusions / Future Work</a></h3>
+<p>
+Overall, the voice synthesis and the integration with news, weather, and time worked out extremely well.  The voice recognition accuracy definitely needs to be improved, however.  
+Chris K. also used the alarm to wake him up one morning when he knew he wouldn't be getting much sleep (so that he would have trouble getting up when he heard the alarm).  He reported that it was nice to get news and weather, but that it would have been more soothing to have played music to wake him up initially instead of the annoying alarm.
+
+</p>
+<p>
+What we have done is only a very basic prototype for what could be done with this concept.  We can still greatly improve voice detection and voice synthesis (better voices are coming out on Festival, and we have the option to make our own voices for the Festival system).  There are also heuristics we can use to help improve the accuracy of the number game itself.  For example, if we have a three digit number and two out of the three digits are correct and in the correct location, then assume it's right, even if the third digit is off.  This would have marked 4 additional numbers correct in the first test for Chris K, 6 more in the second test for Chris K, 8 more in the first test for Chris T, and 10 more for the second test for Chris T, for an overall corrected accuracy of 85% for the Chrises.  Since we're just trying to get an overall feel for if the user is awake, these heuristics may be acceptable, even though the probability of accepting wrong answers is slightly higher with this scheme.  Also note that if the user got the least significant digits right, then the probability that the whole thing is right is much higher (the philosophy used in md5 checksums).  For instance, when 324 was confused with 824, it is clear that it is a computer error.<BR>
+Another thing that could really help is to have the user calibrate the system by saying a bunch of numbers.  This increases user independence.  Note that Chris T's accuracy is lower, so Chris T may have benifited from calibration.  Note also that sometimes the first digit gets cut off because the user starts talking before the device is ready to record, so perhaps also include heuristics for this.
+<BR>One of the main features we originally planned on having but had to abandon was a hueristic to deduce sleep cycle, and to wake a user up before the set time if necessary so that they don't fall into deep sleep again.  The <a href = "http://www.patentstorm.us/patents/7306567.html">The Easy Wake Wrist Watch</a> made use of the fact that a person tends to move more while in light sleep, so we could use a similar concept with the alarm clock.  And in the spirit of this project (which is supposed to rely on existing hardware), we could use a webcam to help detect motion.  There's apparently a library called <a href = "http://linuxtv.org/v4lwiki/index.php/Main_Page">video4linux</a> that can be used to help with this effort.  Another idea is to use a microphone as a motion detector (placing it near the bed).<BR><BR>
+Aside from adding sleep cycle capabilities, we would also like to add more games that the user can play aside from the arithmetic one, such as a pitch matching game or auditory tic tac toe.  We have also discussed making a plugin system so that people from the community can develop their own games for the alarm clock.  There is also definitely work to be done with the speech recognition accuracy before the latter can be feasible.<BR><BR>
+We are both planning to put this up on sourceforge.net and to continue development as an open source project.  <!--We could also implement this idea later as a hardware device with a wireless interface to connect to the internet (so that it can still read news and weather).!-->
+</p><BR>
+
+<h3><a name = "references">References / Acknowledgements</a></h3>
+<p>
+<ul>
+<li><a href = "http://www.cstr.ed.ac.uk/projects/festival/">Festival Speech Synthesis System </i></a></li>
+<li><a href = "http://cmusphinx.sourceforge.net/html/cmusphinx.php">CMU Sphinx.</a> speech recognition library
+<ul>
+<li><a href = "http://cmusphinx.sourceforge.net/sphinx2/doc/sphinx2.html">Sphinx II: User Guide</a></li>
+<li><a href = "https://cmusphinx.svn.sourceforge.net/svnroot/cmusphinx/trunk/sphinx2/src/examples/">Sphinx II: Examples</a></li>
+</ul>
+</li>
+<li>Gnome Library Tools:
+<a href = "http://library.gnome.org/devel/glib/unstable/glib-Spawning-Processes.html">Spawning processes</a>, 
+<a href = "http://library.gnome.org/devel/glib/unstable/glib-String-Utility-Functions.html">String utility functions</a></li>
+
+<li><a href = "http://live.gnome.org/GnomeVoiceControl">GNOME Voice Control</a> (used as an example to help understand spawning processes and a system that uses SphinxII, and we used many of the command line parameters for sphinx from here)</li>
+
+<li><a href = "http://www.cplusplus.com/reference/clibrary/ctime/strftime.html">cplusplus.com tutorial on strftime</a> for outputting system time in a user friendly manner</li>
+
+<li><a href = "http://www.autistici.org/bakunin/libmrss/doc/">The libmrss library for C</a>: A library used to facilitate reading RSS feeds</li>
+<li><a href = "http://mcuprogramming.com/">Microcontrollor Programming</a> site (helped us to figure out library dependencies needed for festival)</a></li>
+<li><a href = "http://subversion.tigris.org/">SVN</a></li>
+<li><a href = "http://www.ubuntu.com/">Ubuntu Linux 8.10</li>
+</ul>
+
+</p><BR>
+<hr>
+<h2>
+<a href = "../"><--Back to Projects</a><BR>
+<a href = "../../"><--Home</a>
+</h2>
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body></html>

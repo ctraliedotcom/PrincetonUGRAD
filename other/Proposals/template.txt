@@ -1,0 +1,42 @@
+<h1><u>Title</u><BR>
+<table border = "2" padding = "10">
+<tr><td>Type</td><td><i>Flaky</i></td></tr>
+<tr><td>Description</td>
+<td>
+
+Description
+
+</td></tr>
+<tr><td>Who's in the group?</td>
+<td>
+Me, myself, and I.<BR>
+<u>What I know</u>: 
+<ul>
+
+</ul>
+<u>What I need to research</u>:
+<ul>
+
+</ul>
+</td></tr>
+<tr><td>Motivations/use</td><td>
+
+
+</td></tr>
+<tr><td>What equipment wil be needed?</td><td>
+
+
+</td></tr>
+<tr><td>How would it be tested?</td><td>
+
+
+</td></tr>
+<tr><td>Timeline for completion</td><td><i>Assuming a 6-week time period of development</i><BR>
+<u>Week 1:</u> 
+<BR><BR><u>Week 2:</u>
+<BR><BR><u>Week 3:</u>
+<BR><BR><u>Week 4:</u>
+<BR><BR><u>Week 5:</u>
+<BR><BR><u>Week 6:</u>
+</td></tr>
+</table>

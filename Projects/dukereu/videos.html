@@ -1,0 +1,62 @@
+<html>
+<body>
+<h2>
+<a href = "../"><--Back to Projects</a><BR>
+<a href = "../../"><--Home</a>
+</h2>
+<hr>
+<center><h1>Duke REU 2009: Robotic Navigation with RFID Waypoints Demo Videos</h1><BR><BR>
+
+<hr>
+<h2>Local hallway navigation with a centroid finder</h2><BR>
+<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/8QgzZRBxXak&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/8QgzZRBxXak&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><BR><BR>
+This video shows the robot driving through a hallway while trying to stay towards the center.  It's running a program that rasterizes the laser scans (which are in polar coordinates) into rectangular coordinates and finds the centroid of open space.  The robot aims towards the centroid of open space as it drives forward.<BR>
+
+<hr>
+<h2>Visualizing the Hokuyo laser range scanner in real time</h2><BR>
+<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/Fg0c1z63u0E&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/Fg0c1z63u0E&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><BR><BR>
+This video shows how Player is used to visualize the laser range scans in real time as the robot drives down a hallway.
+
+<hr>
+<h2>Running Adaptive Monte Carlo Localization (AMCL) as the robot drives</h2><BR>
+<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/W0SZytWFEIM&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/W0SZytWFEIM&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><BR><BR>
+This video shows how AMCL is used to estimate the most probable pose of the robot on the occupancy grid (map) as it drives forward.  On the left the pose estimate is shown, and on the right the corresponding video from the webcam is shown.
+
+<BR><BR>
+<hr>
+<h2>AMCL + Viewing Laser Scan + Video</h2>
+<object width="640" height="385"><param name="movie" value="http://www.youtube.com/v/DN7jS2lmb4A&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/DN7jS2lmb4A&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="640" height="385"></embed></object><BR>
+This is another example of using AMCL, this time with the laser scan and the video plotted synchronously next to the pose estimate on the map to put it in context.
+
+<BR><BR>
+<hr>
+<h2>Viewing Heatmaps</h2><BR>
+<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/xa7oXuU69yA&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/xa7oXuU69yA&amp;hl=en_US&amp;fs=1?color1=0x006699&amp;color2=0x54abd6" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>
+<BR><BR>
+I created a visualization tool in Java for the RFID tags.  After using AMCL to find the best estimate of the position of the robot on the map, I could look at the RFID reader to see what tags were visible at that location.  This tool shows a plot of the tag visibility for a single tag after running this process.  The blue dots show the strongest read for a given tag, and the tags are sorted in the order in which they were seen.  The red dot shows the currently selected tag and the rest of the orange-colored pixels show other locations the selected tag was read, with the intensity of orange proportional to the strength of the read.
+
+</center>
+<BR><BR>
+<hr>
+<h2>
+<a href = "../"><--Back to Projects</a><BR>
+<a href = "../../"><--Home</a>
+</h2>
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>

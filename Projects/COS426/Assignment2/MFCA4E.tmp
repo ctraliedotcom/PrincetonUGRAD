@@ -1,0 +1,313 @@
+<html>
+<title>Chris Tralie COS 426 Assignment #2</title>
+<body>
+<center><h1>COS 426 Assignment #2:Mesh Processing</h1><BR>
+<h2>Chris Tralie<BR>
+Platform: Windows Vista SP1 Using Microsoft Visual Studio 2005<BR>
+<a href = "http://www.cs.princeton.edu/courses/archive/spr09/cos426/assn2/">Assignment Specification</a></h2></center><BR>
+<ul>
+<li><a href = "#datastructure">Data Structure Description</a></li>
+<li><a href = "#transformations">Transformations and Warps</a></li>
+<ul>
+<li><a href = "#randomnoise">Random Noise</a></li>
+<li><a href = "#fun">Fun</a></li>
+<li><a href = "#Scale">Scale</a></li>
+<li><a href = "#Rotate">Rotate</a></li>
+<li><a href = "#Inflate">Inflate</a></li>
+<li><a href = "#deform">Deform according to Point Correspondences</a></li>
+</ul></li>
+<li><a href = "#linear">Filters</a></li>
+<ul>
+<li><a href = "#Smooth">Gaussian Smooth</a></li>
+<li><a href = "#sharpen">Sharpen</a></li>
+</ul></li>
+<li><a href = "#Remeshing">Remeshing Operations</a></li>
+<ul>
+<li><a href = "#Subdivide">Subdivide</a></li>
+</ul></li>
+<li><a href = "#Analysis">Analysis</a></li>
+<ul>
+<li><a href = "#normals">Compute Normals</a></li>
+</ul></li>
+<li><a href = "#Geometry">Geometric Construction</a></li>
+<ul>
+<li><a href = "#Revolution">Surface of Revolution</a></li>
+<li><a href = "#sweep">Surface Sweep</a></li>
+<li><a href = "#fractalize">Fractalize</a></li>
+</ul></li>
+<li><a href = "#Topological">Topological Fixup</a></li>
+<ul>
+<li><a href = "#holes">Fill Holes</a></li>
+</ul></li>
+<li><a href = "#misc">Miscellaneous Operations</a></li>
+<ul>
+<li><a href = "#image">Create Mesh from an Image</a></li>
+</ul>
+<li><a href = "#art">Art Contest Submissions</a></li>
+</ul>
+
+<h2><a name = "datastructure">Data Structure Description</a></h2><BR>
+My data structure setup for this program was as follows:<BR>
+<ul>
+<li>I started with an STL vector list of vertices, a vector list of edges, and a vector list of faces.</li> 
+
+<li>Each vertex has a position, a normal, a texture coordinate (not actually used but in original implementation), and an STL Set of neighboring faces.  The reason I chose to use a set to store neighboring faces was so that I could easily find the intersection between the sets of two adjacent vertices in an edge, and hence find the faces that come out of an edge.  It also allowed me to easily get a vertex's neighbors</li>
+
+<li>Each face has a vector of 3 vertices, a vector list of edges(which ends up being 3 after the construction is over), and a plane.  The plane usually isn't calculated unless it's actually needed</li>
+
+<li>Each edge has a pointer to its two vertices, and a pointer to the vertex at its midpoint.  The reason I added the pointer to the vertex midpoint was because it was so convenient to have for functions like Fractalize() and Subdivide().  In many functions, it's not used, so it's simply null.  But when I begin to split edges, it's very convenient to have a pointer that allows me to easily access the center.</li>
+</ul>
+
+<h2><a name = "transformations">Transformations and Warps</a></h2>
+<h3><a name = "randomnoise">Random Noise</a></h3><BR>
+<PRE>void R3Mesh::RandomNoise(double noise);</PRE>
+Adds noise of a random amount and direction to the position of every vertex<BR>
+<table border = "1">
+<tr><td><img src = "results/noise1.jpg"></td>
+<td><img src = "results/noise2.jpg"></td>
+</tr><tr><td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunnynoise.off">bunnynoise.off</a> -noise 0.01</td>
+<td>meshpro <a href = "results/sphere.off">sphere.off</a> <a href = "results/spherenoise.off">spherenoise.off</a> -noise 0.1</td></tr>
+</table>
+
+<h3><a name = "fun">Fun</a></h3><BR>
+<PRE>void R3Mesh::Fun(double omega, double factor);</PRE>
+Do a sine bulge along the z-axis, using the x-axis as the argument to the sine, with frequency omega and
+amplitude factor.
+
+<table>
+<tr><td><img src = "results/fun.jpg"></td>
+</tr>
+<tr><td>meshpro <a href = "results/sphere.off">sphere.off</a> <a href = "results/spherehighres.off">spherehighres.off</a> -subdivide<BR>
+meshpro <a href = "results/spherehighres.off">spherehighres.off</a>
+ <a href = "results/spherefun.off">spherefun.off</a> -fun 30 0.2</td></tr>
+</table>
+
+<h3><a name = "Scale">Scale</a></h3><BR>
+<PRE>void R3Mesh::Scale(double sx, double sy, double sz);</PRE>
+Scale the mesh by increasing the distance from every vertex to the origin by a factor given for each dimension (sx, sy, sz).
+<table border = "1">
+<tr>
+<td><center>Original:</center><BR><img src = "results/sphere.jpg"></td>
+<td><center>Scaled:</center><BR><img src = "results/ellipse.jpg"></td>
+</tr><tr><td></td>
+
+<td>meshpro <a href = "results/sphere.off">sphere.off</a> <a href = "results/ellipse.off">ellipse.off</a> -scale 0.5 1 2</td></tr>
+</table>
+
+<h3><a name = "Rotate">Rotate</a></h3><BR>
+<PRE>void R3Mesh::Rotate(double angle, const R3Line& axis);</PRE>
+Rotate the mesh counter-clockwise by an angle (in radians) around a line specified by a point (x, y, z) and a direction vector (dx, dy, dz).
+<BR>
+No screenshot provided, since this one is self-explanatory and not-interesting (and hard to show with a screenshot).<BR>
+Sample Execution:<BR>
+meshpro input.off output.off -rotate 1 1 0 0 0 1<BR>
+Rotates the mesh about the z-axis placed at (x=1, y=1)
+
+<h3><a name = "Inflate">Inflate</a></h3><BR>
+<PRE>void R3Mesh::Inflate(double offset);</PRE>
+Move every vertex by a given offset along its normal direction (this relies first on the successful execution of the <a href = "#normals">compute vertex normals</a> routine).  This is as if every point were moved along the gradient of the surface (like moving out to an adjacent level set of an implicit suface).
+
+<table border = "1">
+<tr><td><img src = "results/bunny.jpg"></td>
+<td><img src = "results/inflate1.jpg"></td>
+<td><img src = "results/inflate2.jpg"></td>
+<td><img src = "results/inflate3.jpg"></td>
+<td><img src = "results/inflate4.jpg"></td>
+</tr><tr>
+
+<td>Original</td>
+<td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunny-0.01.off">bunny-0.01.off</a> -inflate -0.01<BR>(This one is technically "deflating" since the parameter is negative)</td>
+<td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunny0.01.off">bunny0.01.off</a> -inflate 0.01</td>
+<td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunny0.01.off">bunny0.1.off</a> -inflate 0.1</td>
+<td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunny0.01.off">bunny1.off</a> -inflate 1</td>
+</table>
+
+
+<h3><a name = "deform">Deform According to Point Correspondences</a></h3><BR>
+<PRE>void R3Mesh::Deform(R3Point *source_points, R3Point *target_points, int npoints, double t);</PRE>
+Deform according to point correspondences: Warp the mesh by a deformation defined by point correspondences provided in an ascii file with six numbers on each line: x y z x' y' z'. The position of every vertex in the output mesh should be offset by a Gaussian weighted average of the offsets implied by the point correspondences (x,y,z) -> (x',y',z'). The t parameter should control the "amount" of offset, so that t = 0 gives the original mesh, t = 1 gives the deformed mesh, and other t values interpolate or extrapolate. <i>I chose to use the distance between the points in each correspondence as the width of the Gaussian</i>.
+<table border = "1">
+<tr><td><img src = "results/deform0.jpg"></td>
+<td><img src = "results/deform1.jpg"></td>
+<td><img src = "results/deform2.jpg"></td>
+<td><img src = "results/deform3.jpg"></td></tr><tr>
+<td><center>Original</center></td>
+<td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunnydeform1.off">bunnydeform1.off</a> -deform <a href = "results/corr.txt">corr.txt</a> 1</td>
+<td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunnydeform10.off">bunnydeform10.off</a> -deform <a href = "results/corr.txt">corr.txt</a> 10</td>
+<td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunnydeform-1.off">bunnydeform-1.off</a> -deform <a href = "results/corr.txt">corr.txt</a> -1</td>
+</tr>
+</table>
+<hr>
+
+<h2><a name = "linear">Filtering Operations</a></h2><BR>
+
+<h3><a name = "Smooth">Smooth</a></h3><BR>
+<PRE>void R3Mesh::Smooth(double sigma)</PRE>
+Smooth the mesh by moving every vertex to a position determined by a weighted average of its immediate neighbors (wiht weights determined by a Gaussian function of distance in R3)<BR>
+<BR>Use the equation G(dx,dy,dz, sigma) = e ^ (-(dx^2 + dy^2 + dz^2) / sigma^2), where dx, dy, and dz are the distance of a neighbor point from a central point<BR>
+<BR>
+<table border = "1">
+<tr>
+<td><img src = "results/bunnyside.jpg"></td>
+<td><img src = "results/bunnysmooth.jpg">
+<BR>
+meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunnysmooth.off">bunnysmooth.off</a> -smooth 5
+</td>
+</tr>
+<tr>
+<td><img src = "results/turtle.jpg"></td>
+<td><img src = "results/turtlesmooth.jpg">
+<BR>
+meshpro <a href = "results/turtle.off">turtle.off</a> <a href = "results/turtlesmooth.off">turtlesmooth.off</a> -smooth 500
+</td>
+</tr>
+</table><BR>
+
+
+							 
+<h3><a name = "sharpen">Sharpen</a></h3><BR>
+<PRE>void R3Mesh::Sharpen(double sigma)</PRE>
+Accentuate details in the mesh by moving every vertex away from the position determined by a weighted average of its neighbors (with weights determined by a Gaussian function). <BR>
+If S is the smoothed position, P is the original position, P’ = P + t*(P-S)<BR>
+<BR>
+<table border = "1">
+<tr>
+<td><img src = "results/bunnyside.jpg"></td>
+<td><img src = "results/bunnysharp.jpg">
+<BR>
+meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunnysharp.off">bunnysharp.off</a> -sharpen 5
+</td>
+</tr>
+<tr>
+<td><img src = "results/turtle.jpg"></td>
+<td><img src = "results/turtlesharp.jpg">
+<BR>
+meshpro <a href = "results/turtle.off">turtle.off</a> <a href = "results/turtlesharp.off">turtlesharp.off</a> -sharpen 500
+</td>
+</tr>
+</table><BR>
+
+<h2><a name = "Remeshing">Remeshing Operations</a></h2><BR>
+
+
+<h3><a name = "Subdivide">Subdivide Faces</a></h3><BR>
+<PRE>void R3Mesh::Subdivide(void);</PRE>
+Replace every triangle by four new ones. Create a new vertex at the midpoint of every edge, create new triangles between the vertices, and remove the original triangles.<BR>
+
+<table border = "1">
+<tr><td><img src = "results/subdivide0.jpg"></td>
+<td><img src = "results/subdivide1.jpg"></td>
+<td><img src = "results/subdivide2.jpg"></td></tr><tr>
+<td><center>Original</center></td>
+<td>meshpro <a href = "results/cube.off">cube.off</a> <a href = "results/cubediv1.off">cubediv1.off</a> -subdivide</td>
+<td>meshpro <a href = "results/cubediv1.off">cubediv1.off</a> <a href = "results/cubediv2.off">cubediv2.off</a> -subdivide</td>
+</tr>
+</table><BR>
+
+<hr>
+<BR>
+<h2><a name = "Analysis">Analysis</a></h2><BR>
+
+
+<h3><a name = "normals">Compute Normals</a></h3><BR>
+<PRE>void R3Mesh::ComputeVertexNormals(void);</PRE>
+
+Compute the surface normal at every vertex by taking a weighted average of the normals for the attached faces, where the weights are determined by the areas of the faces (like estimating the gradient of a level surface at discrete points).  I take advantage of the fact that every vertex in my data structure points to its neighboring faces.<BR>
+NOTE: No screenshot or mesh available; this operation is used in <a href = "#Inflate">the inflate operation</a>.
+
+<BR><BR><BR>
+<hr>
+<h2><a name = "Geometry">Geometry Operations</a></h2><BR>
+
+<h3><a name = "Revolution">Surface of Revolution</a></h3><BR>
+<PRE>void R3Mesh::SurfaceOfRevolution(const R3Mesh& profile_curve, 
+    const R3Line& axis_of_revolution, double rotation_angle_step);</PRE>
+
+Take the cross sectional area described in <i>profile_curve</i> and rotate it by discrete amounts equal to <i>rotation_angle_step</i> around the line <i>axis_of_revolution</i> until it has rotated by 2PI.  Join up each adjacent rotation of the cross section with faces.  I relied heavily on my <a href = "#Rotate">Rotation Routine</a> here.<BR><BR>
+Execution:<BR><b>
+meshpro int.off out.off -revolution file:profile real:px real:py real:pz real:vx real:vy real:vz real:angle_step</b><BR>
+Where <i>profile</i> is a mesh that's only vertices (no faces) describing the cross-sectional area<BR>
+The axis is (px, py, pz) * t * (vx, vy, vz) for a real number t<BR>
+angle_step is the discrete rotation between adjacent faces<BR>
+NOTE: The mesh "in.off" is ignored, but something needs to provided since I didn't get a chance to modify meshpro.cpp enough to deal with just an output mesh.<BR><BR><BR>
+
+For this example, I used the cross-section provided in <a href = "results/curv.off">curv.off</a>, which is the implicit curve defined by x = cos(a)+2; y = 0; z = sin(a) (a = [1/2*PI, 3/2*PI])
+<table border = "1">
+<tr><td><img src = "results/revolution1.jpg"></td>
+<td><img src = "results/revolution2.jpg"></td>
+<td><img src = "results/revolution3.jpg"></td>
+</tr><tr>
+<td>meshpro bunny.off <a href = "results/revolution1.off">revolution1.off</a> -revolution <a href = "results/curv.off">curv.off</a> 0 0 0 0 0 1 0.1<BR>Rotate around the z-axis, using an angle step of 0.1 radians</td>
+
+<td>meshpro bunny.off <a href = "results/revolution3.off">revolution3.off</a> -revolution <a href = "results/curv.off">curv.off</a> 0 1 0 0 0 1 0.05<BR>Rotate around an offset of the z-axis this time, and use a smaller quantization for the angle (0.05 radians).  Note how it's wider this time because of the placement of the rotation axis.</td>
+
+<td>meshpro bunny.off <a href = "results/revolution2.off">revolution2.off</a> -revolution <a href = "results/curv.off">curv.off</a> 0 0 0 1 0 0 0.1<BR>Rotate around the x-axis with a quantization of 0.1 radians</td>
+
+</tr>
+</table>
+<BR><BR>
+
+<h3><a name = "sweep">Surface Sweep</a></h3><BR>
+<PRE>void R3Mesh::SurfaceSweep(const R3Mesh& crosssection_polygon, const R3Mesh& centerline_curve);
+</PRE>
+Take a cross-sectional area, provided in a mesh <i>crosssection_polygon</i>, and move it along the curve specified by another mesh, <i>centerline_curve</i>, to sweep out a surface from that area.  In order for this to work and to have the right volume, the cross-sectional area needs to be rotated each time<BR><BR>
+<img src = "results/sweepexplain.gif"><BR>
+In order to figure out how to rotate the cross-sectional area in each successive application of the sweep, I had to keep track of vectors that represented changes between points in the centerline curve.  Taking the cross product of two of these successive vectors (v1 X v2, as shown in the picture above), gives the axis of rotation.  Then, the angle between them gives the amount by which to rotate about that axis (I used the dot product to figure out theta).<BR>
+<BR><BR>
+I used the same cross-sectional area as in the surface of revolution, except I moved it across a line this time instead of rotating about an axis<BR>
+NOTE: Once again, providing "bunny.off" as the input mesh is garbage, because the input mesh is simply ignored (the mesh is constructed from other paramters; namely, the cross-section area and the curve along which that area moves)<BR>
+NOTE ALSO: The cross-sectional area is in <i>curv.off</i>, and the sweep line is in <i>profile.off</i>
+ <table border = "1">
+<tr><td><img src = "results/sweep.jpg"></td>
+</tr><tr>
+<td>meshpro bunny.off <a href = "results/sweep.off">sweep.off</a> -sweep <a href = "results/curv.off">curv.off</a> <a href = "results/profile.off">profile.off</a>
+</tr>
+</table>
+
+<h3><a name = "fractalize">Fractalize</a></h3><BR>
+<PRE>void R3Mesh::Fractalize(int nlevels);</PRE>
+
+Create fractal detail by recursively subdividing every triangle of an input mesh into four (as in the <a href = "#Subdivide">Subdivide feature</a>) and moving every new vertex by a random offset vector (as in the <a href = "#randomnoise">Random Noise feature</a>) with magnitude proportional to the original edge length.
+
+<table border = "1">
+<tr><td><img src = "results/fractalize1.jpg"></td>
+<td><img src = "results/fractalize0.jpg"></td>
+<td><img src = "results/fractalize2.jpg"></td>
+</tr><tr>
+<td>meshpro <a href = "results/bunny.off">bunny.off</a> <a href = "results/bunnyfrac.off">bunnyfrac.off</a> -fractalize</a></td>
+<td><center>Original planar surface (after applying <a href = "#Subdivide">subdivide</a> many times to one square to make the file <a href = "results/fractalize.off">fractalize.off</a>)</center></td>
+<td>meshpro <a href = "results/fractalize.off">fractalize.off</a> <a href = "results/fractalize2.off">fractalize2.off</a> -fractalize</a></td>
+</tr>
+</table>
+
+
+<BR><BR><BR>
+<hr>
+<h2><a name = "Topological">Topological Fixup</a></h2><BR>
+
+<h3><a name = "holes">Fill Holes</a></h3><BR>
+<PRE>void R3Mesh::FixHoles(void);</PRE><BR>
+Create triangles covering the holes of a mesh by connecting vertices on the boundary of every hole.  Find holes by detecting a loop of edges that only have one face on them.
+
+I created the following algorithm to do this:<BR>
+<ul>
+<li>Loop through all of the edges until an edge with only one neighboring face is found</li>
+<li>Create an STL vector object that holds vertices, and add the first two vertices of that edge.  Call them v1 and v2.</li>
+<li>Get a list of all of the neighboring vertices of v2.  If any of the edges between v2 and its neighbors have only one face attached, then add the neighbor to the set, clone the set, and repeat the process for that vertex (recurse out)</li>
+<li>If at any point in time, a new vertex that gets added to the set is already contained in the set, then we know we've found a loop of vertices around a hole.  Create a new vertex that's a weighted average of the loop vertices, and create faces between all of the loop vertices and the center vertex</li>
+<li>The recursion process will terminate when a hole has been filled, and the entire process will finished when all edges are checked</li>
+</ul>
+
+<BR><BR><BR>
+<hr>
+<h2><a name = "misc">Miscellaneous Operations</a></h2><BR>
+
+<h3><a name = "image">Creat a Mesh from an Image</a></h3><BR>
+<PRE>void R2Image::Crop(int x, int y, int w, int h)</PRE><BR>
+
+
+
+<h2><a name = "art">Art Contest Submissions</a></h2><BR>
+
+
+</ol>

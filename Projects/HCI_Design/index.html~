@@ -1,0 +1,121 @@
+<html>
+<title>Chris Squared HCI Final Project: Design Review</title>
+<body>
+<h1><center>TAB: Talking Alarm Buddy</center></h1><BR>
+<h2>By the <i>Sleep Hunters</i> (<a href = "../../../">Chris Tralie</a> and Chris Koscielny)</h2><BR><BR>
+<a href = "HCI demo.wmv">Video</a><BR>
+<a href = "Presentation.ppt">Powerpoint</a><BR>
+
+<BR><HR><BR><BR>
+<img src="conversational_ac.gif"><BR>
+<h3>Description</h3>
+<p>The goal is to have the user select a time that he/she wants to wake up. When the alarm goes off, the user can shut off the alarm by saying "stop." The alarm clock will then go into "conversation mode" where it will converse with the user to fully wake him up and make sure he doesn't go back to sleep. The alarm clock will start by reading the day's weather and top news headlines (via Internet). It will then proceed to play interactive verbal games with the user (e.g. mental tic-tac-toe, yes-no/multiple-choice trivia). If the user makes too many mistakes or is unresponsive (he probably went back to bed), the alarm with make loud/unpleasant sounds to wake him up again. The games will stop when the user gets out of bed and manually turns off the alarm with the mouse.</p>
+
+<h3>Group Members' Responsibilities</h3>
+<p><u>Chris Tralie:</u><BR>
+<ul>
+<li>Has experience with web services; could figure out a way to get the daily news, etc. into the program, work on date/time, etc. (NOTE that there are different voices specialized for different actions, like time, so maybe change voice for this)<BR></li>
+</ul>
+
+
+<u>Chris Koscielny:</u><BR>
+<ul>
+<li>Responsible for voice synthesis experimentation and abstraction for use with other parts of the program</li>
+</ul>
+
+<u>Joint Responsibilities:</u><BR>
+<ul>
+<li>Because we expect speech detection to be difficult, we will both dig through CVS and try to figure out how it works independently.  We will then come together and test it (this may not be a pleasant step in the process, but it's very necessary, and it could use both of our full attention)
+</li>
+<li>We'll each work on our own "sobriety games" and come together at the end to figure out the best way to alternate using them.  Examples: auditory tic tac toe, some sort of a Simon game where the user has to match pitches or tones that the computer generates, or whatever else would "wake the user up."  Note that the games can be like "plugins" into the alarm clock, and the user can enable or disable the games</li>
+</ul>
+
+</p>
+
+<h3>Motivations</h3>
+<p>I sometimes wake up to my loud alarm clock, only to turn it off and fall back to sleep. While my alarm clock successfully jolts me into a mental state capable of turning it off and going back to bed, it fails to wake me up enough to start the day. I hypothesize that the proposed conversational alarm clock will have more success for the following reasons:
+<ol>
+<li>It's preferable to shut off the alarm by saying/shouting "stop" rather than by getting out of bed and manually disabling the entire system (especially on cold days). Therefore, I won't be as tempted to get out of bed, disable the verbal interface, then go back to sleep.</li>
+<li>The verbal interface will serve to gradually wake me up by forcing me to do basic thinking. It will also encourage me to wake up by providing me with useful information (e.g. news, weather). The goal of the interface is to bring me to a conscious mental state so that it won't be unpleasant to get out of bed.</li>
+<li>The ultimate goal is not only to get the user out of bed, but to have the user feel ready for the day by giving him/her useful information during the waking process, improving overall quality of life.</li>
+</ol>
+Most people with busy and stressful schedules who need to maximize their productivity while awake (99.999% of Princeton students) will benifit from this alarm clock, and if the project is successful, both of us Chrises plan to use it on a daily basis to help us to maximize our productivity at Princeton
+</p>
+
+<h3>Testing</h3>
+<p>Testing will involve a number of volunteer students who will use the program and fill out a brief daily questionnaire. The questionnaire will contain the following questions:
+<ul>
+
+<li>Did you get back into bed after turning off your alarm? (yes/no)</li>
+<li>Approximately how many hours of sleep did you get the night before?</li>
+<li>Are there any relevant conditions that may have influenced your sleep/waking up patterns? (e.g. stress, sickness, etc.)</li>
+</ul>
+The questionnaire should be filled out at night or in the afternoon rather than in the morning so that filling out the survey doesn't affect the waking-up process. Volunteers should fill out surveys for a period using their own alarm clock, and for a period using the conversational alarm clock so that the data can be compared.<BR>
+<HR><BR>
+For more quantitative analysis, have the alarm clock record the average time it takes for the computer to deem the user "awake," and compare them to some recorded time with an ordinary alarm clock.  Look to see if there is a statistically significant difference in time for the user to get up.
+</p>
+
+<h3>Equipment</h3>
+<p>This project will be more software than hardware oriented.  Therefore, all we need for the interactive part of the alarm clock is a computer with speakers and a microphone (we may need to get a microphone that isn't just optimized for close distances like most laptop mics, so that we can detect the user further away from the computer, but we can do this on our own). We will use libraries to synthesize and interpret voice rather than coding everything from scratch (completely unfeasible). <i>One of the libraries we came up with to synthesize voice was the <a href = "http://www.cstr.ed.ac.uk/projects/festival/">Festival Speech Synthesis System </i></a>.  Voice recognition seems like a tougher problem, but we may be able to reuse some of the work that's already been done on <a href = "http://live.gnome.org/GnomeVoiceControl">GNOME Voice Control</a>, which uses <a href = "http://cmusphinx.sourceforge.net/html/cmusphinx.php">CMU Sphinx.</a><BR>
+<ul>
+<li>This project will be developed under C++ (because of Sphynx and Festival) under Ubuntu</li>
+<li>Since this is largely a software project, we will be using SVN to help with code collaboration.  Using StatSVN will also ensure that we're dividing up the coding responsibilities evenly</li>
+</ul>
+
+</p>
+
+<h3>Deadlines</h3>
+<b>Fri 20 December</b><BR>
+Write basic test programs that interface with the Festival Speech Synthesis and CMU Sphynx libraries to synthesize voice output and interpret voice input. 
+<BR><BR>
+<b>Fri 26</b><BR>
+Write the main alarm clock software (options, program flow, etc) and develop an interface between out software and Fesitval/Sphynx.  Work on parsing a config file, which stores alarm clocks we're using, paths to games, modules, etc.
+<BR><BR>
+<b>Fri 2</b><BR>
+Write games, add GUI (to edit config files) if time permits
+<BR><BR>
+<b>Fri 9th</b><BR>
+Finish testing and write up.
+
+
+<BR><BR>
+<h3>Related Past Work</h3>
+<ul>
+<li><a href = "http://www.hammacher.com/publish/75359.asp?source=Google&keyword=interactive+alarm+clock&cm_ven=NewGate&cm_cat=Google&cm_pla=OtherProducts&cm_ite=interactive+alarm+clock&OVMTC=Exact&site=&creative=2348315897&OVKEY=interactive%20alarm%20clock">"The Voice Interactive Alarm Clock"</a>:<BR>
+A physical alarm clock that does some voice recognition for commands like "set alarm," "set time," "check alarm," "what is the date," "alarm sound."  It can also tell the user the temperature in the room.  But since the alarm clock doesn't have web access, it can't do stuff like finding the temperature outside on weather.com or finding news clips.  It also doesn't play games with the user.  Our alarm clock would also be less expensive since it relies on existing hardware </li>
+
+<li><a href = "http://www.activeforever.com/p-2105-sunshine-alarm-clock.aspx?Source=Nextag">Another voice activated alarm clock</a>, but this one can turn on a TV in the morning.  Perhaps our alarm clock can feature turning on internet TV.</li>
+
+<li><a href = "http://www.uberreview.com/2006/01/clocky-alarm-clock-for-snooze-button.htm">Clocky</a>: A physical annoying alarm clock that goes counter to our mission: to engage the user in positive, constructive interaction upon waking.  But it's still damn cool</li>
+
+<!--<li><a href = "http://www.ornj.net/citrus/">Citrus Alarm Clock</a>: An alarm clock made for windows.  An idea we got out of this was to make multiple alarms for our clock.</li>!-->
+
+</ul>
+
+<BR><BR>
+<h3>References</h3>
+<ul>
+<li><a href = "http://www.cstr.ed.ac.uk/projects/festival/">Festival Speech Synthesis System </i></a></li>
+<li><a href = "http://live.gnome.org/GnomeVoiceControl">GNOME Voice Control</a><li>
+<li><a href = "http://cmusphinx.sourceforge.net/html/cmusphinx.php">CMU Sphinx.</a></li>
+<li><a href = "http://subversion.tigris.org/">SVN</a></li>
+
+</ul>
+
+<BR><BR><BR><BR><BR><BR>
+<img src="alarm_clock_12.gif"><BR>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body></html>

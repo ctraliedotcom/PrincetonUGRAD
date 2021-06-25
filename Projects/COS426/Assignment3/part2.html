@@ -1,0 +1,308 @@
+<html>
+<title>Chris Tralie COS 426 Assignment #3</title>
+<body>
+
+<h2>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+
+<center><h1>COS 426 Assignment #3:Ray Tracing (Part 2)</h1><BR>
+<h2>Chris Tralie<BR>
+Platform: Windows Vista SP1 Using Microsoft Visual Studio 2005<BR>
+<a href = "http://www.cs.princeton.edu/courses/archive/spr09/cos426/assn3/">Assignment Specification</a></h2></center><BR>
+
+<ul>
+<li><a href = "#rayscene">Ray-Scene Intersection</a>
+<ul>
+<li><a href = "#modeling">Handle scene traversals with modeling transformations (<b>Corrected</b>)</a></li>
+<li><a href = "#bbox">Accelerate ray-scene intersection with bounding box checks</a></li>
+</ul>
+</li>
+<li><a href = "#lighting">Lighting</a>
+<ul>
+<li><a href = "#phong">Phong Illumination</a></li>
+</ul>
+</li>
+<li><a href = "#texture">Texture Mapping</a>
+<ul>
+<li><a href = "#tsphere">Sphere</a></li>
+<li><a href = "#tcylinder">Cylinder</a></li>
+<li><a href = "#tcone">Cone</a></li>
+<li><a href = "#tbox">Box</a></li>
+</ul>
+</li>
+<li><a href = "#shadows">Shadows</a></li>
+<li><a href = "#global">Global Illumination</a>
+<ul>
+<li><a href = "#specular">Specular Reflection</a></li>
+<li><a href = "#transmission">Transmission</a></li>
+<li><a href = "#refraction">Refraction</a></li>
+</ul>
+<li><a href = "#scene">Interesting Scene</a></li>
+<li><a href = "#art">Art Contest Submissions</a></li>
+<li><a href = "#points">Total Expected Point Earnings</a></li>
+</ul>
+
+<h2><a name = "rayscene">Ray-Scene Intersections</a></h2><BR>
+
+
+<h3><a name = "modeling">Handle scene traversals with modeling transformations (<b>Corrected</b>)</a></h3>
+<i>NOTE: My code only worked for pure translations last time, so I corrected it here</i><BR>
+I keep a matrix that's the product of all of the transformations that have been done so far going along the scene graph.  Every time the recursion goes a step deeper, multiply this matrix <b>on the right</b> by the newest transformation (<i>NOTE: I multiplied on the left in the previous submission, which was a mistake and would only end up working for pure translations</i>).  This product of all transformations (I'll call it the "accumulation matrix") represents a transformation from the local coordinates of the specific object in question to the world coordinates of all objects.<BR>  Before checking the ray-primitive intersection at that step, multiply the ray by the inverse of the transformation matrix to put the ray back in the local object coordinates (where stuff is simple, like axis-aligned cones and cylinders and pure spheres).  Then, perform the ordinary intersection tests.  After the intersection has been performed, multiply the calculated intersection point and the normal by the accumulation matrix to put them back in the regular world coordinates, and recalculate t (since scaling may have occurred).<BR><BR>
+
+After I realized there was a mistake with my first implementation, I created a sort of "stress test" of a combinations of rotations, scales, and translations to test this.  I did this because if these operations aren't done in the correct order, the results could be catostrophically different.  Here's the (correct) result of the test below:<BR>
+<table>
+<tr><td><img src = "results/scale.jpg"></td></tr>
+<tr><td><center>raypro <a href = "results/scale.scn">scale.scn</a> scale.jpg -width 400 -height 400</center></td></tr>
+</table>
+<BR><BR>
+<h3><a name = "bbox">Accelerate ray-scene intersection with bounding box checks</a></h3>
+Augment your code for ray-scene intersection to check whether a ray intersects the bounding box for each child of a scene graph node before calling R3Intersects recursively for that child.  If the ray hits the bounding box, check the parametric value along the ray against the least parametric value seen so far for a ray-primitive intersection previously found during the same recursive traversal and avoid descending into the child if the parametric value of the ray-bbox intersection is greater.  <b>Note that the bounding box for each node is stored in the coordinate system of the parent node to facilitate these checks) (I forgot this the first time and had quite a nasty bug that took me hours to find).</b><BR><BR>
+Here are some timing differences for different scenes (with full lighting effects, secondary rays, etc. enabled to accentuate the differences).<BR>
+
+
+<table border = "1">
+<tr><td>Command</td><td>No Optimization</td><td>Bounding box optimization</td></tr>
+<tr><td>raypro hierarchy.scn out.jpg -width 512 -height 512</td><td>5.643 sec</td><td>4.74 sec</td></tr>
+<tr><td>raypro transform.scn out.jpg -width 512 -height 512</td><td>6.713 sec</td><td>5.556 sec</td></tr>
+<tr><td>raypro dinopet_reflect.scn out.jpg</td><td><b>679.473 sec</b></td><td>40.188 sec(!!)</td></tr>
+</table><BR>
+Note that the savings are <i>huge</i> when a mesh is in the scene (since it has to check every triangle for every ray if it decides that it needs to check the mesh), especially when secondary ray checking and shadow checking gets factored in (later).
+
+<BR><BR><BR><hr>
+<h2><a name = "lighting">Lighting</a></h2><BR>
+<h3><a name = "phong">Phong Illumination</a></h3><BR>
+<img src = "results/lighting_calc.jpg"><BR>
+Phong illumination includes all of the <b>"primary ray"</b> terms in the above equation: direction emission from a source (I<SUB>E</SUB>), ambient reflection (I<SUB>AL</SUB>), and diffuse and specular reflections from each light in the scene (I<SUB>L</SUB>).  There are also three different types of lights possible: point lights (attenuation with distance), spot lights (attenuation with angle from the source), and directional lights (no attenuation, and no change in direction, i.e. they are all parallel like rays from the sun).  Below are some simple scenes demonstrating aspects of phong illumination:<BR>
+<i>NOTE: This is where things start to get exciting, because this is where color starts to appear instead of just black or white for whether or not an object was in the way.</i><BR>
+NOTE ALSO: Only include reflections in the upper-hemisphere around a material (this applies for specular and diffuse reflections)<BR><BR>
+<table border = "1" cellpadding = "5">
+<tr>
+<td><img src = "results/sphere.jpg"></td>
+<td><img src = "results/cube.jpg"></td>
+<td><img src = "results/teapot.jpg"></td>
+</tr>
+<tr>
+<td>raypro <a href = "results/sphere.scn">sphere.scn</a> sphere.jpg</td>
+<td>raypro <a href = "results/cube.scn">cube.scn</a> cube.jpg</td> 
+<td>raypro <a href = "results/teapot.scn">teapot.scn</a> teapot.jpg</td> 
+</tr>
+</table>
+
+<table border = "1" cellpadding = "5">
+<tr>
+<td><img src = "results/cylinder.jpg"></td>
+<td><img src = "results/skewcylinder.jpg"></td>
+<td><img src = "results/cone.jpg"></td>
+</tr>
+<tr>
+<td>raypro <a href = "results/cylinder.scn">cylinder.scn</a> cylinder.jpg</td>
+<td>raypro <a href = "results/skewcylinder.scn">skewcylinder.scn</a> skewcylinder.jpg</td> 
+<td>raypro <a href = "results/cone.scn">cone.scn</a> cone.jpg</td> 
+</tr>
+</table>
+
+<table border = "1" cellpadding = "5">
+<tr>
+<td><img src = "results/hierarchy.jpg"></td>
+<td><img src = "results/transform.jpg"></td>
+<td><img src = "results/materials.jpg"></td>
+</tr>
+<tr>
+<td>raypro <a href = "results/hierarchy.scn">hierarchy.scn</a> hierarchy.jpg</td>
+<td>raypro <a href = "results/transform.scn">transform.scn</a> transform.jpg -width 512 -width 512</td> 
+<td>raypro <a href = "results/materials.scn">materials.scn</a> materials.jpg -width 1000 -height 1000</td> 
+</tr>
+</table>
+
+<table border = "1" cellpadding = "5">
+<tr>
+<td><img src = "results/spotlight.jpg"></td>
+</tr>
+<tr>
+<td>raypro <a href = "results/spotlight.scn">spotlight.scn</a> spotlight.jpg -width 512 -height 512</td>
+</tr>
+</table>
+
+<BR><BR><BR><hr>
+<h2><a name = "texture">Texture Mapping</a></h2><BR>
+<pre>R2Pixel GetTextureColor(R3Intersects* hit)</pre>
+<BR>The object is to come up with texture coordinates that pick out pixels in a 2D image to map to the 3D surface.  The pixels in the texture change  the k<SUB>d</SUB> parameter for diffuse reflections.<BR>
+I use the following texture in all of my examples:<BR>
+<img src = "results/checker.jpg" width = 200 height = 200>
+<h3><a name = "tsphere">Textured sphere</a></h3><BR>
+I used spherical coordinates to make this mapping.  That is, a position on the sphere is given by (theta, phi, R), where theta is the angle a vector from the center makes with the x-axis (ranging from 0 to 2PI) and phi is the angle it makes with the y-axis (ranging from 0 to PI) in the sphere's coordinates.  I simply make the texture coordinates theta along the width of the image and phi along the height of the image (scaled so that 0 to 2PI spans the width of the texture for theta, and 0 to PI spans the height of the texture for phi):<BR>
+<table border = "1" cellpadding = "5">
+<tr><td><img src = "results/checker_sphere.jpg"></td></tr>
+<tr><td>raypro <a href = "results/checker_sphere.scn">checker_sphere.scn</a> checker_sphere.jpg -width 512 -height 512</td></tr>
+</table><BR>
+<img src = "results/sphere1.jpg"><img src = "results/sphere2.jpg"><img src = "results/sphere3.jpg"><img src = "results/sphere4.jpg">
+
+<BR><BR>
+<h3><a name = "tcylinder">Textured cylinder</a></h3><BR>
+Put this in cylindrical coordinates, and map the angle a point on the surface makes with the x-axis to points along the width of the texture, and map the height along the cylinder to the height of the texture.<BR>
+
+
+<table border = "1" cellpadding = "5">
+<tr><td><img src = "results/checker_cylinder.jpg"></td></tr>
+<tr><td>raypro <a href = "results/checker_cylinder.scn">checker_cylinder.scn</a> checker_cylinder.jpg -width 512 -height 512</td></tr>
+</table><BR>
+<img src = "results/cylinder1.jpg"><img src = "results/cylinder2.jpg"><img src = "results/cylinder3.jpg">
+
+<BR>
+<h3><a name = "tcone">Textured cone</a></h3><BR>
+
+<table border = "1" cellpadding = "5">
+<tr><td><img src = "results/checker_cone.jpg"></td></tr>
+<tr><td>raypro <a href = "results/checker_cone.scn">checker_cone.scn</a> checker_cone.jpg -width 512 -height 512</td></tr>
+</table><BR>
+<img src = "results/cone1.jpg"><img src = "results/cone2.jpg"><img src = "results/cone3.jpg">
+
+<BR>
+<h3><a name = "tbox">Textured box</a></h3><BR>
+I use the following mappings to figure out which parts of the texture image get mapped to which parts of the cube:<BR>
+<img src = "results/faces.jpg"><BR>
+<table border = "1" cellpadding = "5">
+<tr><td><img src = "results/checker_box.jpg"></td></tr>
+<tr><td>raypro <a href = "results/checker_box.scn">checker_box.scn</a> checker_box.jpg -width 512 -height 512</td></tr>
+</table>
+<BR><BR><BR><hr>
+<h2><a name = "shadows">Shadows</a></h2><BR>
+Every time an intersection occurs, cast a ray from the the point of intersection towards each light.  If the ray intersects with another object in the scene before it reaches a light, then do not include diffuse and specular reflections for that light.<BR>
+
+<table border = "1" cellpadding = "5">
+<tr>
+<td><img src = "results/forShadow.jpg"></td>
+<td><img src = "results/forShadow2.jpg"></td>
+<td><img src = "results/forShadow3.jpg"></td>
+</tr>
+<tr>
+<td>raypro <a href = "results/forShadow.scn">forShadow.scn</a> forShadow.jpg</td>
+<td>raypro <a href = "results/forShadow2.scn">forShadow2.scn</a> forShadow2.jpg</td>
+<td>raypro <a href = "results/forShadow3.scn">forShadow3.scn</a> forShadow3.jpg</td>
+</tr>
+</table>
+<BR><BR><BR><hr>
+<h2><a name = "global">Global Illumination</a></h2><BR>
+
+<h2><a name = "specular">Specular Reflection</a></h2><BR>
+Trace a secondary ray from every ray-surface intersection in the direction of perfect specular reflection, compute the irradiance IR for that ray recursively, and include it into your illumination calculation using ks * IR. Rays should be traced up to the specified maximum number of ray intersections (max_depth) or until the luminance of the radiance along a ray is below a threshold (min_luminance)<BR>
+NOTE: I added a feature to the debugger that traces secondary rays to a depth of 1 and draws them in green to show what specular reflections from other objects might look like:<BR>
+<img src = "results/specular_debug.jpg"><BR>
+Here are some results of this operation:<BR>
+<table border = "1" cellpadding = "5">
+<tr>
+<td><img src = "results/dinopet_reflect.jpg"></td>
+<td><img src = "results/dinopet_reflect2.jpg"></td>
+</tr>
+<tr>
+<td>raypro <a href = "results/dinopet_reflect.scn">dinopet_reflect.scn</a> dinopet_reflect.jpg</td>
+<td>raypro <a href = "results/dinopet_reflect2.scn">dinopet_reflect2.scn</a> dinopet_reflect2.jpg<BR>(I changed the direction of the light here, so the shadow is different)</td>
+</tr>
+</table><BR>
+<img src = "results/spec1.jpg"> <img src = "results/spec2.jpg">
+
+<h2><a name = "transmission">Transmission</a></h2><BR>
+Trace a secondary ray from every ray-surface intersection in the direction of perfect transmission (without refraction), compute the irradiance IT for that ray recursively, and include it into the illumination calculation using kt * IT. This is only done for non-opaque surfaces -- i.e., ones where kt is non-zero. Rays are be traced up to the specified maximum number of ray intersections (max_depth) or until the luminance of the radiance along a ray is below a threshold (min_luminance).
+
+<table border = "1" cellpadding = "5">
+<tr>
+<td><img src = "results/transmission.jpg"></td>
+</tr>
+<tr>
+<td>raypro <a href = "results/transmission.scn">transmission.scn</a> transmission.jpg</td>
+</tr>
+</table><BR>
+
+<h2><a name = "refraction">Refraction</a></h2><BR>
+Trace a secondary ray from every ray-surface intersection in the direction of perfect refraction according to Snell's Law (instead of in the direction of perfect transmission), compute the irradiance IT for that ray recursively, and include it into the illumination calculation using kt * IT. This is done for non-opaque surfaces only -- i.e., ones where kt is non-zero. Rays are be traced up to the specified maximum number of ray intersections (max_depth) or until the luminance of the radiance along a ray is below a threshold (min_luminance).<BR><BR>
+Snell's Law: <BR>N<SUB>1</SUB> * sin(theta<SUB>1</SUB>) = N<SUB>2</SUB> * sin(theta<SUB>2</SUB>)<BR>
+Where N1 is the <i>index of refraction</i> of the medium the ray is in currently, and N2 is the index of refraction of the medium into which the ray is entering.<BR>
+<img src = "results/refraction.gif"><BR>
+Re-arrange Snell's Law to get:<BR>
+(N1 / N2) = (sin(theta2)) / (sin(theata1))<BR>
+To to construct the new ray going out (V), use the following formula in terms of L (the vector going to the eye) and N (the normal at the point of intersection):<BR>
+(NOTE: L<SUB>parallel</SUB> is the parallel projection of L onto N, and L<SUB>perp</SUB> is the perpenducular projection of L onto N)<BR>
+<b>V = -L<SUB>perp</SUB> * (n1 / n2) - L<SUB>parallel</SUB> * (sqrt(1 - ||L<SUB>perp</SUB><SUP>2</SUP>) / ||L<SUB>parallel</SUB>||)<BR>
+<table border = "1" cellpadding = "5">
+<tr><td><img src = "results/ref1.jpg"></td>
+<td><img src = "results/ref1.05.jpg"></td>
+<td><img src = "results/ref1.1.jpg"></td>
+</tr>
+<tr>
+<td>1</td><td>1.05</td><td>1.1</td></tr>
+<tr>
+<td><img src = "results/ref1.2.jpg"></td>
+<td><img src = "results/ref1.5.jpg"></td>
+<td><img src = "results/ref1.8.jpg"></td>
+</td>
+<tr><td>1.2</td><td>1.5</td><td>1.8</td></tr>
+</table>
+
+
+<BR><BR><BR><hr>
+<h2><a name = "Scene">Interesting Scene</a></h2><BR>
+<a href = "art/Scene">My Interesting Scene</a> (The main file is <a href = "art/Scene/room.scn">room.scn</a>).  I tried to model my room (a screenshot of this is shown in the art contest submissions)
+
+<BR><BR><BR><hr>
+<h2><a name = "art">Art Contest Submissions</a></h2><BR>
+<ul>
+<li><h2>BLOOPER!</h2><BR>
+<img src = "art/dino_specular_blooper.jpg"></li>
+<li><img src = "art/myroom.jpg"><BR>
+raypro room.scn myroom.jpg</li>
+</ul>
+
+<BR><BR><BR>
+<hr>
+<h2><a name = "points">Expected Total Point Earnings for Assignment 3</a></h2><BR>
+<b>Bold</b> means required<BR>
+<table border = "1" cellpadding = "5">
+<tr><td>Operation</td><td>Points</td></tr>
+<tr><td><b>Generate a ray for each pixel</b></td><td>1</td></tr>
+<tr><td><b>Intersect a ray with a sphere</b></td><td>1</td></tr>
+<tr><td><b>Intersect a ray with an axis-aligned box</b></td><td>1</td></tr>
+<tr><td><b>Intersect a ray with a triangle mesh</b></td><td>2</td></tr>
+<tr><td>Intersect a ray with an axis-aligned cylinder</td><td>2</td></tr>
+<tr><td>Intersect a ray with an axis-aligned cone</td><td>2</td></tr>
+<tr><td><b>Intersect a ray with a scene</b></td><td>1</td></tr>
+<tr><td><b>Handle scene traversals with modeling transformations</b></td><td>1</td></tr>
+<tr><td>Accelerate ray-scene intersection with bounding box checks</td><td>1</td></tr>
+<tr><td><b>Phong Illumination</b></td><td>2</td></tr>
+<tr><td>Texture mapping</td><td>1</td></tr>
+<tr><td><b>Shadow Rays</b></td><td>1</td></tr>
+<tr><td><b>Specular Reflection</b></td><td>2</td></tr>
+<tr><td>Transmission</td><td>1</td></tr>
+<tr><td>Refraction</td><td>2</td></tr>
+<tr><td><b>Make an interesting scene</b></td><td>1</td></tr>
+<tr><td>Art Contest Submissions</td><td>1</td></tr>
+<tr><td>Total</td><td><b>23</b></td></tr>
+</table>
+
+
+
+</ol>
+
+<h2>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>

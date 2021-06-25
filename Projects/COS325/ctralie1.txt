@@ -1,0 +1,10 @@
+7) I modified srconvrt.c and timeshif.c to take an extra parameter, the “p” parameter.  The p parameter will automatically set the expansion factor for the user based on a “pitch offset” that they associate with it; that is, if a user writes –p 2, this will move the output up by two pitch half-steps.  So if the original note contained an E pitch, it would be moved to something that was of an F# pitch one step above that.  The way I reasoned about this was that octaves are obtained by doubling the frequency, and there are 12 halfsteps in an octave.  Therefore, to get to the next halfstep, the frequency is multiplied by a factor of 2^(1/12).  I wrote the following code in srconvrt.c to use this idea:
+if (!strcmp(argv[j],"-p")) {
+final_factor = pow(pow(2.0, 1.0/12.0), 
+atof(argv[j + 1]));
+}
+
+8) I started with three sounds: me saying a breathy “Chris,” Homer Simpson saying “d’oh,” and applause.  I then pitch and time shifted these to try to make recognizable song statements:
+*With the “Chris,” I tried to say it as an “A” sound, so then I shifted it around to do part of the G major scale (G A B C)
+*With the “d’oh,” I tried to make that song that you sometimes hear on the hour with different clocks (I don’t know what the name of it is): A F G C C G A F
+*I cut out the part of the applause that was most constant in pitch, and did an excerpt from “jingle bells” to finish off the 22.5 seconds of my statement.  F# F# F#, F# F# F#, F# A D E F#.., G G G.. GG F# F# F# F#F# A A G E D…

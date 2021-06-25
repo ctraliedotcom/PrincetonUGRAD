@@ -1,0 +1,103 @@
+<html>
+<title>Chris Squared Solidified Proposal</title>
+<body>
+<h1><center><a href = "../../../../">Chris Tralie</a> and Chris Koscielny Solidified Project proposals</center></h1><BR>
+<h1>Old Proposals:</h1><BR>
+<ul><li>
+
+<ol>
+<li><a href = "../index.html#violin">Violin Hero</a></li>
+<li><a href = "../index.html#theremin">Discrete Theremin</a></li>
+<li><a href = "../index.html#skateboard">Virtual Rodney Mullen</a></li>
+</ol>
+</li>
+
+<li>
+<ol>
+<li><b><i><u>**<a href = "http://www.princeton.edu/~ckosciel/hci_proposal_final.html">Conversational Alarm Clock</a></u></i></b></li>
+<li><a href = "http://www.princeton.edu/~ckosciel/hci_proposal.html">*EEG Alarm Clock</a></li>
+<li><a href = "http://www.princeton.edu/~ckosciel/hci_proposal.html">Virtual Orchestral Instrumentalist</a></li>
+</ol></li></ul>
+
+<BR><HR><BR><BR>
+
+<h1>New Idea: Conversational and Brainwave Alarm Clock</h1>
+<img src="conversational_ac.gif">
+<h3>Description</h3>
+<p>Our new proposal combines two of Chris K's original ideas: the conversational alarm clock and the EEG alarm clock. The goal is to have the user select a time that he/she wants to wake up, and to have the program determine the best time for the user to wake up within some interval of the chosen time based on biological signals (based on sleep cycle, which is detected from brainwaves via the EEG, <i>or some other way of determining the sleep cycle</i>).  If there's no "best time," simply start the alarm on the time that the user originally chose.  When the alarm goes off, the user can shut off the alarm by saying "stop." The alarm clock will then go into "conversation mode" where it will converse with the user to fully wake him up and make sure he doesn't go back to sleep. The alarm clock will start by reading the day's weather and top news headlines (via Internet). It will then proceed to play interactive verbal games with the user (e.g. mental tic-tac-toe, yes-no/multiple-choice trivia). If the user makes too many mistakes or is unresponsive (he probably went back to bed), the alarm with make loud/unpleasant sounds to wake him up again. The games will stop when the user gets out of bed and manually turns off the alarm with the mouse.</p>
+
+<h3>Group Members' Responsibilities</h3>
+<p><u><a href = "../../../../">Chris Tralie</a><<BR></u><BR>
+<ul>
+<li>Has experience with web services; could figure out a way to get the daily news, etc. into the program, work on date/time, etc. (NOTE that there are different voices specialized for different actions, like time, so maybe change voice for this)<BR>
+<a href = "http://www.sleepdex.org/stages.htm">http://www.sleepdex.org/stages.htm</a></li>
+<li>Responsible for research about sleep cycles and brainwaves, and programming any DSP related to that</li>
+
+</ul>
+
+
+<u>Chris Koscielny:</u><BR>
+<ul>
+<li>Responsible for voice synthesis experimentation and abstraction for use with other parts of the program</li>
+<li>Work on integration of all the data, decison making processes, transitioning from one part of the program to the other, and determining when the user is "awake"</li>
+
+</ul>
+
+<u>Joint Responsibilities:</u><BR>
+<ul>
+<li>Because we expect speech detection to be difficult, we will both dig through CVS and try to figure out how it works independently.  We will then come together and test it (this may not be a pleasant step in the process, but it's very necessary, and it could use both of our full attention)
+</li>
+<li>We'll each work on our own "sobriety games" and come together at the end to figure out the best way to alternate using them.  Examples: auditory tic tac toe, some sort of a Simon game where the user has to match pitches or tones that the computer generates, or whatever else would "wake the user up."  Note that the games can be like "plugins" into the alarm clock, and the user can enable or disable the games</li>
+</ul>
+
+</p>
+
+<h3>Motivations</h3>
+<p>I sometimes wake up to my loud alarm clock, only to turn it off and fall back to sleep. While my alarm clock successfully jolts me into a mental state capable of turning it off and going back to bed, it fails to wake me up enough to start the day. I hypothesize that the proposed conversational alarm clock will have more success for the following reasons:
+<ol>
+<li>It's preferable to shut off the alarm by saying/shouting "stop" rather than by getting out of bed and manually disabling the entire system (especially on cold days). Therefore, I won't be as tempted to get out of bed, disable the verbal interface, then go back to sleep.</li>
+<li>The verbal interface will serve to gradually wake me up by forcing me to do basic thinking. It will also encourage me to wake up by providing me with useful information (e.g. news, weather). The goal of the interface is to bring me to a conscious mental state so that it won't be unpleasant to get out of bed.</li>
+<li>Combined with the EEG, which should (hopefully) wake the user up at the physiological correct time, the ultimate goal is not only to get the user out of bed, but to have the user feel as refreshed as possible once he/she does, improving overall quality of life.</li>
+</ol>
+Most people with busy and stressful schedules who need to maximize their productivity while awake (99.999% of Princeton students) will benifit from this alarm clock, and if the project is successful, both of us Chrises plan to use it on a daily basis to help us to maximize our productivity at Princeton
+</p>
+
+<h3>Testing</h3>
+<p>Testing will involve a number of volunteer students who will use the program and fill out a brief daily questionnaire. The questionnaire will contain the following questions:
+<ul>
+
+<li>Did you get back into bed after turning off your alarm? (yes/no)</li>
+<li>Approximately how many hours of sleep did you get the night before?</li>
+<li>Are there any relevant conditions that may have influenced your sleep/waking up patterns? (e.g. stress, sickness, etc.)</li>
+</ul>
+The questionnaire should be filled out at night or in the afternoon rather than in the morning so that filling out the survey doesn't affect the waking-up process. Volunteers should fill out surveys for a period using their own alarm clock, and for a period using the conversational alarm clock so that the data can be compared.<BR>
+<HR><BR>
+For more quantitative analysis, have the alarm clock record the average time it takes for the computer to deem the user "awake," and compare them to some recorded time with an ordinary alarm clock.  Look to see if there is a statistically significant difference in time for the user to get up.
+</p>
+
+<h3>Equipment</h3>
+<p>This project will be more software than hardware oriented.  Therefore, all we need for the interactive part of the alarm clock is a computer with speakers and a microphone (we may need to get a microphone that isn't just optimized for close distances like most laptop mics, so that we can detect the user further away from the computer, but we can do this on our own). We will use libraries to synthesize and interpret voice rather than coding everything from scratch (completely unfeasible). <i>One of the libraries we came up with to synthesize voice was the <a href = "http://www.cstr.ed.ac.uk/projects/festival/">Festival Speech Synthesis System </i></a>.  Voice recognition seems like a tougher problem, but we may be able to reuse some of the work that's already been done on <a href = "http://live.gnome.org/GnomeVoiceControl">GNOME Voice Control</a>, which uses <a href = "http://cmusphinx.sourceforge.net/html/cmusphinx.php">CMU Sphinx.</a><BR>
+<ul>
+<li>This project will be developed under C++ (because of Sphynx and Festival) under Ubuntu</li>
+<li>Since this is largely a software project, we will be using SVN to help with code collaboration.  Using StatSVN will also ensure that we're dividing up the coding responsibilities evenly</li>
+</ul>
+
+We need some further advice about the feasibility of EEG sensors.  We found the following link for an EEG "helmet," (but it's pricy)<BR>
+<a href = "http://www.electrodesales.com/cap-only.html">http://www.electrodesales.com/cap-only.html</a><BR>
+Based on an ad-hoc search, we priced EEGs by themselves around ~$50, which would be more feasible monetarilly.  In theory, EEG detection sounds good (since there are so many studies on correlation between brainwaves and sleep cycles).  However, wearing the sensors all night would be logistically difficult (tossing and turning) and possibly uncomfortable.  Therefore, we may want to try to use different bio sensors to deduce sleep cycle, such as heart rate monitoring.
+<BR><BR>
+Perhaps we will also try to have a light that gets gradually brighter as part of the alarm
+</p>
+
+<h3>Timeline</h3>
+
+<p>Week 1: Research speech recognition libraries and learn how to interface with Festival Speech Synthesis and CMU Sphynx. Build simple test programs that use the interface.  Begin research about sleep cycles and brainwave detection.  Determine a list of words and phrases the computer should be able to detect (because it is a very limited vocabulary, another reason why voice detection may not be impossible).</p>
+<p>Week 2: Continue research from week 1, and obtain the EEG sensors.  Try interfacing the EEG sensors to the computer through the basic stamp or some other means, and attempt to visualize real time measurements.</p>
+<p>Week 3: Program the alarm clock and program basic speech recognition/speech synthesis framework.</p>
+<p>Week 4: Implement voice games.</p>
+<p>Week 5: Finish up programming and begin to test.</p>
+<p>Week 6: Test.</p>
+
+
+
+</body></html>

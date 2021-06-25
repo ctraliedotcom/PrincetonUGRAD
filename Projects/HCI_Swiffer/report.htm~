@@ -1,0 +1,646 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 11">
+<meta name=Originator content="Microsoft Word 11">
+<link rel=File-List href="report_files/filelist.xml">
+<link rel=Edit-Time-Data href="report_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>The writeup this time will summarize your experiments, </title>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="place"/>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Chris Tralie</o:Author>
+  <o:LastAuthor>Chris Tralie</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>404</o:TotalTime>
+  <o:Created>2008-12-04T04:09:00Z</o:Created>
+  <o:LastSaved>2008-12-04T04:09:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>2805</o:Words>
+  <o:Characters>15989</o:Characters>
+  <o:Company>Drexel University</o:Company>
+  <o:Lines>133</o:Lines>
+  <o:Paragraphs>37</o:Paragraphs>
+  <o:CharactersWithSpaces>18757</o:CharactersWithSpaces>
+  <o:Version>11.6408</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]><object
+ classid="clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D" id=ieooui></object>
+<style>
+st1\:*{behavior:url(#ieooui) }
+</style>
+<![endif]-->
+<style>
+<!--
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+pre
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<p class=MsoNormal><span style='font-size:26.0pt'>LAB 4: Virtual Etch-A-Sketch
+and <span class=SpellE>Nime</span></span></p>
+
+<p class=MsoNormal>Chris <span class=SpellE>Tralie</span> and Chris <span
+class=SpellE>Koscielny</span></p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><u><span
+style='font-size:18.0pt'>Intro:<o:p></o:p></span></u></b></p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>The purpose
+of this lab was to familiarize us with the link between sensors that acquire
+real world signals, embedded software to do some analog to digital conversion,
+and the eventual software on the computer side to interpret the decoded
+signals.<span style='mso-spacerun:yes'>  </span>We used the Parallax BASIC
+Stamp to acquire signals from various real-world sources, such as
+potentiometers, variable capacitors, switches, etc., and we used the
+“Processing” language (a simplified version of Java optimized for quick
+hacking) to act on this signals on the software side.<span
+style='mso-spacerun:yes'>  </span>The serial protocol was used to link the two
+together.<span style='mso-spacerun:yes'>  </span>The ultimate goal was to
+create a digital “Etch-A-Sketch” and to create a NIME (New <span class=SpellE>Inteface</span>
+for Musical Expression), which was more open-ended and lent itself to
+creativity.<span style='mso-spacerun:yes'>  </span>Inadvertently along the way,
+we learned a lot about good practices, mappings, but we also learned a lot of
+pitfalls with this sort of hardware-software interfacing.<span
+style='mso-spacerun:yes'>  </span>The goal of this <span class=SpellE>writeup</span>
+is to summarize some of the learning process, and to explain the technical
+details of the final product for both the Etch-A-Sketch and the NIME.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><u><span
+style='font-size:18.0pt'>Part 1: Beginning the Etch-A-Sketch:<o:p></o:p></span></u></b></p>
+
+<p class=MsoNormal style='text-indent:.5in'>We started out with two linear knob
+potentiometers, with the idea that one of them would map to an X position and
+the other to a Y position on the 2D plane (the canvas on the software side we
+were rendering).<span style='mso-spacerun:yes'>  </span>The initial challenge
+was linking software on the BASIC stamp to the Processing program so that we could
+store some of the physical readings in <span class=GramE>Processing</span>
+variables.<span style='mso-spacerun:yes'>  </span>Luckily, Processing has its
+own serial library to make the job easier.<span style='mso-spacerun:yes'> 
+</span>But we still had to do a little bit of researching in the beginning to
+synchronize it with the serial port.<span style='mso-spacerun:yes'>  </span>At
+first, we were having issues receiving data from the STAMP into processing,
+because we were using the “DEBUG” command to output the data (which sent
+extraneous serial data since it had formatting instructions, like the carriage
+return).<span style='mso-spacerun:yes'>  </span>We were also using incompatible
+BAUD rates.<span style='mso-spacerun:yes'>  </span>Eventually, we stumbled
+across the following page:</p>
+
+<p class=MsoNormal><a href="http://www.emesystems.com/BS2rs232.htm">http://www.emesystems.com/BS2rs232.htm</a></p>
+
+<p class=MsoNormal><span class=GramE>which</span> helped us to synchronize the
+software/hardware.<span style='mso-spacerun:yes'>  </span>We learned that we
+needed to use the <span class=SpellE><b style='mso-bidi-font-weight:normal'>serout</b></span>
+command to send bytes to <i style='mso-bidi-font-style:normal'>pin 16</i> in
+order for <span class=GramE>Processing</span> to get our data.</p>
+
+<p class=MsoNormal>We started off with a BAUD rate of 2400, quantizing each X
+and Y value to a byte and sending them one after another.<span
+style='mso-spacerun:yes'>  </span>This got us a basic working Etch-A-Sketch,
+but there were a few problems:</p>
+
+<p class=MsoNormal>*The STAMP was continuously outputting alternating X and Y
+data from the potentiometers to the computer, but it wasn’t until the
+Processing program actually started until this data got read.<span
+style='mso-spacerun:yes'>  </span>This means that, depending on the exact moment
+that the Processing code latched onto the serial communication, the left knob
+could correspond to X or Y, and vice versa for the right knob.<span
+style='mso-spacerun:yes'>  </span>This was bad, because we wanted the left <span
+class=GramE>knob<span style='mso-spacerun:yes'>  </span>always</span> to
+control X and the right knob always to control Y (but this would only happen
+50% of the time)</p>
+
+<p class=MsoNormal>*We were limited to 8 bits <span class=GramE>transmission<span
+style='mso-spacerun:yes'>  </span>per</span> value with this scheme, while the
+STAMP can actually quantize the readings of the potentiometer to 12 bits (the
+size of a WORD on this hardware).<span style='mso-spacerun:yes'>  </span>We
+wanted to test higher precision, so this needed to be addressed somehow.</p>
+
+<p class=MsoNormal>*There was no mechanism to clear the screen</p>
+
+<p class=MsoNormal>*We wanted to experiment with polar coordinates</p>
+
+<p class=MsoNormal>So clearly, we needed a more advanced protocol</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><u><span
+style='font-size:18.0pt'>Part 2: Experimenting with Etch-A-Sketch Parameters<o:p></o:p></span></u></b></p>
+
+<p class=MsoNormal style='text-indent:.5in'>In order to get the full 12 bits
+per potentiometer, we made a new protocol for our program on top of what
+Processing gave us.<span style='mso-spacerun:yes'>  </span>We had to sacrifice
+a bit of speed in the process.<span style='mso-spacerun:yes'>  </span>That is, we
+split each potentiometer up into two six bit chunks, which we put into bytes. <span
+style='mso-spacerun:yes'> </span>We used the least significant two bits of each
+communication byte to signify if that byte contained the least significant 6
+bits or the most significant 6 bits of the potentiometer reading (bit 0,
+rightmost bit), and whether it corresponded to an X reading or a Y reading (bit
+1).<span style='mso-spacerun:yes'>  </span>This way, there was no confusion</p>
+
+<p class=MsoNormal style='text-indent:.5in'><b style='mso-bidi-font-weight:
+normal'><!--[if gte vml 1]><v:shapetype id="_x0000_t75" coordsize="21600,21600"
+ o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f"
+ stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1028" type="#_x0000_t75" style='width:400.5pt;
+ height:120pt'>
+ <v:imagedata src="report_files/image001.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=534 height=160
+src="report_files/image002.jpg" v:shapes="_x0000_i1028"><![endif]><o:p></o:p></b></p>
+
+<p class=MsoNormal>We could then have code in the Processing program to
+increment through the four states (LSB X, MSB X, LSB Y, MSB Y) and to reject data
+that deviated from that sequence (and wait to pick the next correct).<span
+style='mso-spacerun:yes'>  </span>This way, it was more robust to errors.</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>With this
+system in place, we could now test a few things.<span
+style='mso-spacerun:yes'>  </span>First, we varied the BAUD rate.<span
+style='mso-spacerun:yes'>  </span>We started low, at a BAUD rate of 600:</p>
+
+<p class=MsoNormal>*This was too slow and <span class=SpellE>laggy</span>,
+because we could only get about 18 position readings per second (~600
+bits/second * 1 byte/ 8 bits * 1 position / 4 bytes ~ 18).<span
+style='mso-spacerun:yes'>  </span>This can lead to aliasing if the user
+oscillates back and forth faster than <span class=GramE>9hz</span> by the
+Sampling Theorem (which is possible).<span style='mso-spacerun:yes'>  </span>It
+also just looked bad.<span style='mso-spacerun:yes'>  </span>So we kept increasing
+the BAUD rate until we got up to 38400, which seemed to be very good.</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>At this
+point, we were ready to test the effect of precision for the X and Y
+readings.<span style='mso-spacerun:yes'>  </span>Note that we were drawing to
+an 800x800 canvas, so technically all we needed was ceil(log<sub>2</sub>(800))
+= 10 bits per reading if we were going to have each possible pixel covered.<span
+style='mso-spacerun:yes'>  </span>So we downed the precision from 12 bits to 10
+bits and didn’t notice any difference.<span style='mso-spacerun:yes'> 
+</span>This meant that we could have added 3 status bits on the end of each
+byte and <span class=SpellE>splitted</span> the least significant and most
+significant parts of each reading into 5 bits (and still kept the transfer rate
+at 2 bytes per position).<span style='mso-spacerun:yes'>  </span>With three
+status bits, we could have encoded 3 degrees of freedom, which could be used
+for extensions of the Etch-A-Sketch in the future.</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>Keeping the
+original settings (with 4 bytes per position), we downed the precision to see
+the effect, and started to notice the quantizing down below 7 bits.<span
+style='mso-spacerun:yes'>  </span>There was a huge quantization problem at 4
+bits (since there were only 16 possible positions to access in the x and y
+directions).<span style='mso-spacerun:yes'>  </span>In the end, we just stuck
+with 12 bits even though this was slightly better precision than needed.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><u><span
+style='font-size:18.0pt'>Part 3: Finalizing the Etch-A-Sketch<o:p></o:p></span></u></b></p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>There were
+still a few features missing from the Etch-A-Sketch that we wanted to add.<span
+style='mso-spacerun:yes'>  </span>Namely, we wanted the Etch-A-Sketch to clear
+when an accelerometer on the board exceeded a certain threshold, and we wanted
+to be able to change between 3 different modes: Cartesian Coordinates (the
+default X and Y mappings, which we started with), Polar Coordinates (one knob
+would be mapped to R, and the other to theta), and “Color &amp; Weight Mode”
+(one knob would be mapped to the grayscale value of the lines being drawn,
+while the other knob would be mapped to the line thickness).<span
+style='mso-spacerun:yes'>  </span>To send these extra parameters, we sent a
+fifth byte (after the four bytes for position data) in each cycle.<span
+style='mso-spacerun:yes'>  </span>The most significant two bits of this byte
+would tell the mode (00 <span class=SpellE><span class=GramE>cartesian</span></span>,
+01 polar, 10 <span class=SpellE>color_weight</span>).<span
+style='mso-spacerun:yes'>  </span>We set the third most significant bit to 0 if
+accelerometer exceeded a certain value (and we wanted to clear the screen).</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>We had a
+capacitive sensor of our own invention, which we’ll explain in further detail
+in the NIME section, that we pressed down on to change the mode.<span
+style='mso-spacerun:yes'>  </span>We kept track of the mode on the STAMP and
+sent it over when ready.<span style='mso-spacerun:yes'>  </span>And then we
+simply read the accelerometer every time the STAMP program was ready to send
+over data, and when it exceeded 300 (by experimentation), we would clear the
+screen on the Processing side.</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>As far as
+the Processing interface goes, we drew the text “Cartesian,” “<span
+class=GramE>Polar,” and “Color &amp; Weight”</span> to the screen to let the
+user know what mode the program was in.<span style='mso-spacerun:yes'> 
+</span>If the user was in the “Color &amp; Weight” mode, then we drew a sample
+line at the bottom of the screen so the user could see what those settings
+looked like (below the canvas…we added 100 extra pixels to display the mode and
+this line).</p>
+
+<p class=MsoNormal>NOTE: The final version of the embedded software can be
+found in <b style='mso-bidi-font-weight:normal'>Sketch_Embedded.bs2<o:p></o:p></b></p>
+
+<p class=MsoNormal>The processing code can be found in <span class=SpellE><b
+style='mso-bidi-font-weight:normal'>etch_processing.pde</b></span><b
+style='mso-bidi-font-weight:normal'><o:p></o:p></b></p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><u><span
+style='font-size:18.0pt'>Part 4: Beginning the NIME<o:p></o:p></span></u></b></p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>First, we
+decided it would be easier if we could use the build-in midi synthesizers on
+our computers instead of hauling everything down to the lab every time to use
+the synthesizers there, so we created a program in Processing to invoke one of
+the midi <span class=SpellE>synths</span> on our computer (<span class=SpellE><b
+style='mso-bidi-font-weight:normal'>midi_processing.pde</b></span>).<span
+style='mso-spacerun:yes'>  </span>We didn’t have to modify much of the code on
+the STAMP; we just had to synchronize the BAUD rates of the stamp with
+Processing and output our data to pin 16 like before.<span
+style='mso-spacerun:yes'>  </span>And we took advantage of the fact that
+Processing was created on top of Java by using Java’s <st1:place w:st="on">MIDI</st1:place>
+class to help us access the <span class=SpellE>synths</span> on our computer.</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>Once we had
+the midi program working, we started experimenting with a rather crazy idea we
+had; we filled a bottle with water, saturated it with salt, stirred it around
+to mix it up, and placed two wires in it.<span style='mso-spacerun:yes'> 
+</span>In this fashion, we created a variable resistor whose resistance would
+change when we blew into it.<span style='mso-spacerun:yes'>  </span>The idea
+was to have this control amplitude or instrument sound.<span
+style='mso-spacerun:yes'>  </span>The pitch would be controlled by an antenna,
+so this would be like a Theremin with a <span class=SpellE>nonconventional</span>
+amplitude control (blowing to control the amplitude).<span
+style='mso-spacerun:yes'>  </span>Unfortunately, neither one of these ideas
+ended up working very well.<span style='mso-spacerun:yes'>  </span>The salt
+solution did change when we blew into it (actually, the resistance went down
+when we disrupted it, which wasn’t expected), but it was extremely difficult to
+control, and often took a very long time to settle back down again (clearly
+unfeasible for an instrument that we want to respond to human interaction in
+real time).<span style='mso-spacerun:yes'>  </span>It was just too frustrating,
+so we abandoned it eventually.</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>We realized
+that the salt solution wasn’t a very good idea to control by blowing, but we
+wondered if perhaps we could control it better if we put a solution of salt in
+a pan and had two wires in it that we could move back and forth (perhaps to use
+this to control pitch, like a linear potentiometer except novel since it
+involved water).<span style='mso-spacerun:yes'>  </span>We anticipated that a
+very precise control could be created from this, since resistance is directly
+proportional to distance (the farther apart the two wires were in the salt
+solution, the higher the resistance should have been).<span
+style='mso-spacerun:yes'>  </span>And when we did this, the resistance did
+increase (according to our <span class=SpellE>multimeter</span>) when the
+distance increased.<span style='mso-spacerun:yes'>  </span>However, the range
+was terrible (for some reason, it only varied from about 3 k to 3.4 k in one
+instance at the extremities of the pan).<span style='mso-spacerun:yes'> 
+</span>We had a very difficult time justifying why the resistance was still 3k
+when the wires were so close to each other, and we were very disappointed with
+this outcome.<span style='mso-spacerun:yes'>  </span>But we had to move on and
+try other sensors.</p>
+
+<p class=MsoNormal style='text-indent:.5in'>At this point, we were still hoping
+to get the antenna working for the pitch.<span style='mso-spacerun:yes'> 
+</span>We tried a bunch of different objects for this.<span
+style='mso-spacerun:yes'>  </span>First, we tried a long, bare wire, but that
+didn’t have any measurable capacitance until we were practically touching
+it.<span style='mso-spacerun:yes'>  </span>Eventually, we modified the idea to include
+two pieces of cardboard covered with aluminum foil, which we could pull towards
+and away from each other (sort of like cymbals, but to control pitch).<span
+style='mso-spacerun:yes'>  </span>Although we got a slightly better range of
+capacitances, the best range was still when the boards were only a couple of
+centimeters apart (very hard to control with them that close together).<span
+style='mso-spacerun:yes'>  </span>So we decided to put some cardboard in
+between the two aluminum boards to prevent them from completely touching, to
+see how putting pressure on the boards with the cardboard in between would end
+up.<span style='mso-spacerun:yes'>  </span>This actually ended up giving us
+such an amazingly good range, that we used this sensor in our final product
+(with computer paper taped onto one of the boards).<span
+style='mso-spacerun:yes'>  </span>We accidentally created an extremely precise
+force sensing capacitor (RC time readings from 600 at rest to 6000 when
+applying most of our body weight, with everything in between).<span
+style='mso-spacerun:yes'>  </span>In our final product, we put this on the
+ground and used it like a pedal to control amplitude</p>
+
+<p class=MsoNormal style='text-indent:.5in'><!--[if gte vml 1]><v:shape id="_x0000_i1027"
+ type="#_x0000_t75" style='width:6in;height:324pt'>
+ <v:imagedata src="report_files/image003.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=576 height=432
+src="report_files/image004.jpg" v:shapes="_x0000_i1027"><![endif]></p>
+
+<p class=MsoNormal style='text-indent:.5in'><span style='mso-tab-count:1'>            </span><b
+style='mso-bidi-font-weight:normal'>Figure 1: The aluminum/paper Force Sensing
+Capacitor “Pedal”<o:p></o:p></b></p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><u><span
+style='font-size:18.0pt'>Part 5: Unto this world, a Magical Musical <span
+class=SpellE>Swiffer</span> is <span class=GramE>Born</span>:</span></u></b><span
+style='font-size:18.0pt'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>So we had a
+good amplitude control, but we were lacking with pitch control now.<span
+style='mso-spacerun:yes'>  </span>We were sitting in Chris T’s room wondering
+what to do, when all of a sudden Chris K spotted a <span class=SpellE>swiffer</span>
+sitting by the wall.<span style='mso-spacerun:yes'>  </span>And the rest is
+history.<span style='mso-spacerun:yes'>  </span>Actually, we still had some
+trials to go through before the final product.<span style='mso-spacerun:yes'> 
+</span>Our first idea was to attach an accelerometer to the top of the <span
+class=SpellE>swiffer</span> and map angular displacement to pitch.<span
+style='mso-spacerun:yes'>  </span>This approach failed, however, because of
+problems with noise in the accelerometer and the difficulty of finding a good
+mapping.<span style='mso-spacerun:yes'>  </span>All we could really do with
+this configuration was to generate many, many notes per second that oscillated
+around a certain pitch (but it was very chaotic).<span
+style='mso-spacerun:yes'>  </span>Because of the lack of control, we decided
+that we needed a better mapping.</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>At this
+point, we decided that an accelerometer would not be a good idea for pitch
+mappings, so we went out to the lab and got an exponential slide potentiometer
+for pitch (but we didn’t want to abandon the <span class=SpellE>swiffer</span>
+idea completely…we knew we still wanted to use it somehow to help with the
+musical expression).<span style='mso-spacerun:yes'>  </span>The first thing we
+did was try to <span class=SpellE>linearize</span> the slide
+potentiometer.<span style='mso-spacerun:yes'>  </span>We originally did this by
+figuring out the leftmost bit that was a 1 (like taking log<sub>2</sub> of the
+reading).<span style='mso-spacerun:yes'>  </span>But because the sensor was not
+perfect and did not cover the full range from 0 to 4095, we were only able to
+get 9 notes out of this instead of the 12 that we should have been able to get
+from a 12-bit <span class=GramE>word<span style='mso-spacerun:yes'>  </span>(</span>the
+potentiometer didn’t go below 10, which eliminated the possibility that the
+leftmost bit would be any less than 4),.<span style='mso-spacerun:yes'> 
+</span>So we ended up having to do something a bit nastier; we carefully
+measured equal increments of 0.5cm (the full range of the potentiometer was 6cm,
+so this gave us 12 distinct notes), and we hard-coded the increments into a
+subroutine <span class=SpellE>getpitch</span> (see <b style='mso-bidi-font-weight:
+normal'>Swiffer_embedded.bs2 </b>for more details).<span
+style='mso-spacerun:yes'>  </span>This wasn’t the most elegant solution, but it
+worked extremely well.</p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>By now, we
+were able to hit up 12 notes pretty cleanly with the slide potentiometer.<span
+style='mso-spacerun:yes'>  </span>And we still controlled the amplitude of
+these notes with the aluminum capacitive sensor we created on the floor like a
+pedal.<span style='mso-spacerun:yes'>  </span>But we wanted to use the <span
+class=SpellE>swiffer</span> in this instrument somehow.<span
+style='mso-spacerun:yes'>  </span>We then noticed that the 12 notes we could
+reach on the slide potentiometer covered an octave.<span
+style='mso-spacerun:yes'>  </span>So why not use the <span class=SpellE>swiffer</span>
+to shift the base note on the potentiometer by an octave?<span
+style='mso-spacerun:yes'>  </span>This is exactly what we did; we started the
+slide potentiometer on a C and had it go up to a <span class=SpellE>Bflat</span>,
+and we shifted the base octave of the C based on the left-right position of the
+<span class=SpellE>swiffer</span>:</p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_i1026" type="#_x0000_t75"
+ style='width:6in;height:324pt'>
+ <v:imagedata src="report_files/image005.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=576 height=432
+src="report_files/image006.jpg" v:shapes="_x0000_i1026"><![endif]></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Figure 2: Moving the <span
+class=SpellE>swiffer</span> w/accelerometer left and right changes octave</b></p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>Now all of a sudden, we were able to get a bunch of really
+cool effects with octaves; jerking the handle back and forth quickly cycled
+through many octaves of the same note at once (something difficult to do on
+traditional instruments).<span style='mso-spacerun:yes'>  </span>So our
+instrument lends itself naturally to pieces with many octaves in them.<span
+style='mso-spacerun:yes'>  </span>This also allowed us to reach many more notes
+(just relying on angular position/gravity leaves at least 8 octaves under
+stable conditions). <span style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='text-indent:.5in'>So at this point, we were almost
+finished, we just <span class=GramE>a had</span> a few finishing touches to
+add.<span style='mso-spacerun:yes'>  </span>When we switched between two notes
+that weren’t directly adjacent to each other, we also hit up all of the half
+steps in between.<span style='mso-spacerun:yes'>  </span>So we created a “button”
+out of two wires and a resistor (when we pressed our finger over the wires, we
+completed the circuit with our finger with some finite resistance forming a
+voltage divider with the resistor in series, changing the value read on port
+AD1).<span style='mso-spacerun:yes'>  </span>When the button was pressed, we
+played notes whenever they changed, but we did nothing when the button was not
+pressed.<span style='mso-spacerun:yes'>  </span>This allowed us to change
+between notes and octaves without the audience hearing every note in between.<span
+style='mso-spacerun:yes'>  </span>One final modification we made was to have
+moving the <span class=SpellE>swiffer</span> forward and backward quickly
+enough change the instrument sound, just to spice things up a little.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><u><span
+style='font-size:18.0pt'>Conclusions, avenues for further research, and some
+nostalgia:<o:p></o:p></span></u></b></p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>In this lab
+(especially with the NIME), we went through many iterations, and found stuff
+that worked well and stuff that just sucked (the salt solution, trying to map
+accelerometer to pitch based on angular position, and expecting jerking not to
+screw it up).<span style='mso-spacerun:yes'>  </span>Overall, we were looking
+for physical mappings that gave the user a good amount of control over
+parameters of the instrument, but that still allowed for a unique form of
+musical expression and instrument sounds.<span style='mso-spacerun:yes'> 
+</span>Our final product had the following advantages to it:</p>
+
+<p class=MsoNormal>*It had the potential to play traditional songs with some
+practice because of the ability to control notes over a few octaves (normally
+about 4-5), but it also lent itself to new forms of musical expression,
+especially those that require rapid fluctuation between octaves of a particular
+note (which I know from experience is hard on the violin)</p>
+
+<p class=MsoNormal>*It had <span class=GramE>a certain</span> physicality to
+it; feeling the position of the <span class=SpellE>swiffer</span> allowed for
+development of muscle memory that helps to learn the instrument, developing
+motion with the thumb for changing the pitch.</p>
+
+<p class=MsoNormal>*Degrees of freedom in convenient places: both arms were
+occupied (one to control pitch, the other to control octave, playing/instrument
+sound), and a leg could control amplitude (the pressure sensor was cheap and
+could be stomped on very hard)</p>
+
+<p class=MsoNormal>*We put a strip with all of the note names on the
+potentiometer, which helped to reduce the learning curve</p>
+
+<p class=MsoNormal>*We even added an earplug to the slide potentiometer to make
+it comfortable </p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>We were both very satisfied with the evolved instrument, but
+there are a few things that could still be improved:</p>
+
+<p class=MsoNormal>*We had some problems with bouncing with the button (and
+making the button two wires is inherently imperfect, since how wet the finger
+is affects the threshold that we get when the button is pressed)</p>
+
+<p class=MsoNormal>*We also had a problem with boundaries; that is, if the
+slide potentiometer was right between two notes, it would start oscillating
+between the two because of noise (so it was better to hit the notes in the
+center).<span style='mso-spacerun:yes'>  </span>We also had this problem with
+the <span class=SpellE>swiffer</span> if we were close to the boundary between
+two octaves (it would oscillate between two octaves).<span
+style='mso-spacerun:yes'>  </span>Perhaps some sort of <span class=SpellE>lowpass</span>
+filter of the octave data could have been applied</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><span style='mso-tab-count:1'>            </span>We were
+very sad to part with our instrument.<span style='mso-spacerun:yes'>  </span>We
+hope to reconstruct it sometime, improve it, and perhaps perfect playing techniques.<span
+style='mso-spacerun:yes'>  </span>Chris T only had about an hour to practice,
+but with regular practicing perhaps this could become a new instrument in an
+orchestral ensemble!</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_i1025" type="#_x0000_t75"
+ style='width:6in;height:324pt'>
+ <v:imagedata src="report_files/image007.png" o:title=""/>
+<!--</v:shape><![endif]--><![if !vml]><img border=0 width=576 height=432-->
+<!--src="report_files/image008.jpg" v:shapes="_x0000_i1025"><![endif]></p>-->
+
+
+
+</div>
+<BR><BR>
+<hr>
+<a href = "../../">Home</a>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+
+</html>

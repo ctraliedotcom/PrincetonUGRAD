@@ -1,0 +1,110 @@
+<html>
+<title>Number Systems</title>
+<body text="black" bgcolor="white">
+<center><h1>Intro to Number Systems</h1></center><BR>
+<ul>
+<li><a href="#base10">Counting in base 10</a></li>
+<li><a href="#binary">Counting in binary</a></li>
+<li><a href="#octalhex">Counting in octal and hexadecimal</a></li>
+<li><a href="#other">Other odds and ends</a></li>
+</ul>
+
+<a name="base10"><b><u><tt>Counting in base 10</tt></u></b></a>
+<p>
+Most of us are used to counting in what as known as "base 10."  That is, every digit in our representation of numbers is a <i>value multiplied by a power of ten that serves as a placeholder</i>.  Take 31337, for example:</p>
+<center>
+<table bgcolor="yellow" border="1">
+<tr><td>"Ten Thousands" Place (10<SUP>4</SUP>)</td><td>"Thousands" Place (10<SUP>3</SUP>)</td><td>"Hundreds" Place (10<SUP>2</SUP>)</td><td>"Tens" Place (10<SUP>1</SUP>)</td><td>"Ones" Place (10<SUP>0</SUP>)</td></tr>
+<tr><td><center>3</td><td><center>1</td><td><center>3</td><td><center>3</td><td><center>7</td></tr>
+
+</table></center><p>
+Hopefully, if you didn't notice it already, you now realize that each placeholder <i>increases by one order of magnitude from right to left</i>, starting at 0 at the rightmost position (for integer numbers), and that the value tells how many of a particular type of placeholder you have.  Hence, 31337 is technically <b>3x10<SUP>4</SUP> + 1x10<SUP>3</SUP> + 3x10<SUP>2</SUP> + 3x10<SUP>1</SUP> + 3x10<SUP>0</SUP></b>, but we would never write it that way.
+<BR><BR>
+<a name="binary"><b><u><tt>Counting in binary</tt></u></b></a>
+<p>A slight problem exists when trying to represent numbers electronically.  Since it is excruciatingly difficult to represent numbers in base 10 using a computer, everything is represented in base 2, or <b>binary</b>, in digital electronics.  This is much more straightforward, as it means that every digit is composed of a tiny switch that can either be <b>ON</b>(1) or <b>OFF</b>(0).  It is important to note that the word "digital," therefore, actually means that something can only have two values (whereas "analog" means that something can have a continuous range of values).  Since we no longer have one base with which to represent numbers, it is now important to specify which one we are using.  We do this by putting a <i>subscript with the number of the base below the string in question</i>.  For instance, "fifteen" is 15<SUB>10</SUB>, but it is also 1111<SUB>2</SUB> (binary: 1+2+4+8).  Let's look at some other examples of binary numbers:</p>
+<ol>
+<u>Convert the following numbers from binary to base 10:</u>
+<BR><li>10110<SUB>2</SUB><BR>
+Answer:<BR><center>
+<table bgcolor="yellow" border="1">
+<tr><td>"Sixteens" Place (2<SUP>4</SUP>)</td><td>"Eights" Place (2<SUP>3</SUP>)</td><td>"Fours" Place (2<SUP>2</SUP>)</td><td>"Twos" Place (2<SUP>1</SUP>)</td><td>"Ones" Place (2<SUP>0</SUP>)</td></tr>
+<tr><td><center>1</td><td><center>0</td><td><center>1</td><td><center>1</td><td><center>0</td></tr></table>
+</center>The answer is 1x2<SUP>4</SUP> + 0x2<SUP>3</SUP> + 1x2<SUP>2</SUP> + 1x2<SUP>1</SUP> + 0x2<SUP>0</SUP> = 16+4+2 = <b>22<SUB>10</SUB></b></li>
+<li>1101001010111<SUB>2</SUB><BR>
+Answer:
+(With long numbers like this, it is usually easier to work from right to left)<BR>
+1+2+4+16+64+512+2048+4096 = <b>6743<SUB>10</SUB></b><BR>Notice how many more digits it takes to represent a quantity in base 2 than it does to represent the same quantity in base 10.  This will be addressed later.</li>
+<li>101<b>.</b>11<SUB>2</SUB><BR>
+Answer: This problem is a bit trickier than the other ones.  Hopefully, you noticed the decimal point after the 101.  Just as in base ten, the digit directly to the left of the decimal point has a placeholder value of the base raised to the zero power.  As usual, the power of the placeholder's base decreases by one with every move to the right, and it increases by one with every move to the left.  Hence, we get something like this:<BR>
+<center><table bgcolor="yellow" border="1">
+<tr><td>"Fours" Place (2<SUP>2</SUP>)</td><td>"Twos" Place (2<SUP>1</SUP>)</td><td>"Ones" Place (2<SUP>0</SUP>)</td><td>"Halves" Place (2<SUP>-1</SUP>)</td><td>"Fourths" Place (10<SUP>-2</SUP>)</td></tr>
+<tr><td><center>1</td><td><center>0</td><td><center>1</td><td><center>1</td><td><center>1</td></tr></table></center><BR>
+1x2<SUP>2</SUP> + 0x2<SUP>1</SUP> + 1x2<SUP>0</SUP> + 1x2<SUP>-1</SUP> + 1x2<SUP>-2</SUP> = <b>5.75<SUB>10</SUB></b></li>
+</ol>
+<BR><BR>
+<a name="octalhex"><b><u><tt>Counting in octal and hexadecimal</tt></u></b></a>
+<p>
+As you probably noticed in example two of the "counting in binary" section, it is rather cumbersome to express large values in binary.  Luckily, there is a sort of "shorthand" system available for long binary strings.  This is where <b>octal</b> (base 8) and <b>hexadecimal</b> (base 16) come in, for <i>their placeholders are powers of two</i>.  In octal, each digit has a placeholder of power 8, and its value can range from 0 to 7.  In hexadecimal, each digit has a placeholder of power 16, and its value can range from 0 to F (16).  It might seem strange that a digit of a number is a letter, but it would be ambiguous if we had two numbers in one place (then how would we know where one digit began and another one ended?).  Hence, hex counting goes as follows:</p><b>1...2...3...4...5...6...7...8...9...A...B...C...D...E...F...10...11...etc....</b>
+<p>So why are octal and hex so useful?  Well, recall one of the fundamental rules of exponents: (a<SUP>n</SUP>)<SUP>k</SUP> = a<SUP>n*k</SUP>.  This means that for every n octal digits, 3n binary digits are needed [8<SUP>n</SUP>=(2<SUP>3</SUP>)<SUP>n</SUP>=2<SUP>3n</SUP>], and for every n hex digits, 4n binary digits are needed [16<SUP>n</SUP>=(2<SUP>4</SUP>)<SUP>n</SUP>=2<SUP>4n</SUP>].  Hence, it is easy to convert from binary to hex or octal and vice versa.  Let's look at some examples:</p>
+<ol>
+<li>Convert the following from binary to octal: 101111110001<SUB>2</SUB><BR>
+Answer: (For every three binary digits, there is one octal digit)<BR>
+<table><tr><td><table bgcolor="yellow" border="1"><tr><td>Binary</td><td>101</td><td>111</td><td>110</td><td>001</td></tr>
+<tr><td>Octal</td><td><center>5</td><td><center>7</td><td><center>6</td><td><center>1</td></tr></table></td>
+<td>Therefore, the answer is <b>5761<SUB>8</SUB></b></td></tr></table>
+Check by converting each to base 10: <BR><u>Binary:</u> 1+16+32+64+128+256+512+2048 = <b>3057<SUB>10</SUB></b> <BR><u>Octal:</u> 1 + 8x6 + 64x7 + 512x5 = <b>3057<SUB>10</SUB></b><BR>This checks out</li>
+<li>Convert the following from binary to hexadecimal: 10101110111100111100<SUB>2</SUB>
+<BR>Answer: (For every four binary digits, there is one hex digit)
+<table><tr><td><table bgcolor="yellow" border="1"><tr><td>Binary</td><td>1010</td><td>1110</td><td>1111</td><td>0011</td><td>1100</td></tr>
+<tr><td>Hex</td><td><center>A</td><td><center>E</td><td><center>F</td><td><center>3</td><td><center>C</td></tr></table></td><td>Therefore, the answer is <b>AEF3C<SUB>16</SUB></b></td></tr></table>
+Check by converting each to base 10: <BR><u>Binary:</u> 4+8+16+32+256+512+1024+2048+8192+16384+32768+131072+524288 = <b>716604<SUB>10</SUB></b><BR>
+<u>Hex:</u> 12 + 16x3 + 256x15 + 4096x14 + 65536x10 = <b>716604<SUB>10</SUB></b></li>
+<li>Convert the following from octal to hexadecimal: 6547312<SUB>8</SUB><BR>
+Answer: (First, convert the string to binary.  Then, convert the new binary string to hexadecimal)
+<table><tr><td>
+<table bgcolor="yellow" border="1"><tr><td>Octal</td><td><center>6</td><td><center>5</td><td><center>4</td><td><center>7</td><td><center>3</td><td><center>1</td><td><center>2</td></td></tr>
+<tr><td>Binary</td><td>110</td><td>101</td><td>100</td><td>111</td><td>011</td><td>001</td><td>010</td></tr></table></td><td>In binary, this string is 110101100111011001010<SUB>2</SUB></td></tr></table>
+<table><tr><td>
+<table bgcolor="yellow" border="1"><tr><td>Binary</td><td>0001</td><td>1010</td><td>1100</td><td>1110</td><td>1100</td><td>1010</td></tr>
+<tr><td>Hex</td><td><center>1</td><td><center>A</td><td><center>C</td><td><center>E</td><td><center><center>C</td><td><center>A</td></tr></table></td><td>In hexadecimal, our final answer is <b>1ACECA<SUB>16</SUB></b></td></tr></table><BR>
+Check by converting each to base 10:<BR>
+<u>Octal:</u> 2+ 8x1 + 64x3 + 512x7 + 4096x4 + 32768x5 + 262144x6 = <b>1756874<SUB>10</SUB></b><BR>
+<u>Hex:</u> 10 + 16x12 + 256x14 + 4096x12 + 65536x10 + 1048576x1 = <b>1756874<SUB>10</SUB></b><BR>
+When converting from hex to octal or vice versa, it is much easier to use binary as an intermediate step than it is to use base 10 (and less error-prone).</li></ol>
+<a name="other"><b><u><tt>Other odds and ends</tt></u></b></a>
+<ul><li>Sometimes, it is useful to know the range of values available with a certain number of allocated bits, especially with different variable types that use different amounts of memory.  This is where a useful identity can come in:<BR>
+<table border="1"><tr><td><img src="filledbitsidentity.gif" alt="1 + 2 + 4 + ... + 2^(n-1) = 2^n - 1"></td>
+<td><b>Proof by Induction:</b><BR>
+<u>Base Case (n=1):</u> 1 = 2-1 (TRUE)<BR>
+<u>Inductive Step:</u> Assume 1 + 2 + 4 + ... + 2<SUP>n-1</SUP> = 2<SUP>n</SUP> - 1
+<ul>
+<li>1 + 2 + 4 + ... + 2<SUP>n-1</SUP> + 2<SUP>n</SUP> =? 2<SUP>n+1</SUP> - 1 (verify for n+1 case)</li>
+<li>(1 + 2 + 4 + ... + 2<SUP>n-1</SUP>) + 2<SUP>n</SUP> =? 2<SUP>n+1</SUP> - 1 </li>
+<li>2<SUP>n</SUP> - 1 + 2<SUP>n</SUP> =? 2<SUP>n+1</SUP> - 1  (substitution of the assumption)</li> 
+<li>2(2<SUP>n</SUP>) - 1 =? 2<SUP>n+1</SUP> - 1  </li> 
+<li>2<SUP>n+1</SUP> - 1 = 2<SUP>n+1</SUP> - 1  </li>
+</ul></td></tr></table>
+Let's find out the maximum value of an unsigned char, which is 8 binary digits (bits) long.  Its leftmost placeholder is 2<SUP>7</SUP>, so it will support values from 0 to 2<SUP>8</SUP> - 1, or <b>255</b>.  Including zero, this is 256 different values possible.</li>
+<li>Here is an algorithm that I always use to convert form base 10 to binary (with some modification, this algorithm can also be written to convert between any two bases, but you will rarely need to do that on the ACSL contest):
+<BR>X = what's left of base 10 value, n = power of current binary bit
+<ol>
+<li>Find the smallest value of n for which X - 2<SUP>n</SUP> < 0, and set n equal to that value</li>
+<li>Subtract 1 from n</li>
+<li> If X-2<SUP>n</SUP> >= 0 now, then write a <b>1</b> in the 2<SUP>n</SUP> place and subtract 2<SUP>n</SUP> from the current value of X<BR>
+Otherwise, write a <b>0</b> in the 2<SUP>n</SUP> place
+<li> If n>0, GOTO step 2<BR>Otherwise, we have completely translated the string from base 10 to binary</li></ol><BR>
+Let's take 300<SUB>10</SUB>, for instance.  The smallest n power of 2 that goes over 300 is 2<SUP>9</SUP> (512), so set n=8.  Now, put a 1 in the leftmost place, because 2<SUP>8</SUP> (256) goes into 300.  We now have 44 left to account for.  Put a zero in the 2<SUP>7</SUP> and 2<SUP>6</SUP> places, and put a 1 in the 2<SUP>5</SUP> place.  We now have 12 left to account for (44-32 = 12).  Put a zero in the 2<SUP>4</SUP> place, and put a 1 in both the 2<SUP>3</SUP> and 2<SUP>2</SUP> places.  Nothing is left over, so fill in the last two places with a zero: <b>100101100<SUB>2</SUB></B></li></ul> 
+<BR>
+<center><h1><a href="index.html"><--BACK</a><!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->

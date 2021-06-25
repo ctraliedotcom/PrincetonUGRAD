@@ -1,0 +1,13 @@
+1)  I would like to try to deduce the impulse response of an arbitrary 3D environment that's modeled in the computer using ray tracing techniques.  I will make an interactive program with OpenGL that lets the user choose a viewpoint in a 3D scene and renders the scene.  The user can also specify several "beacons" in the room, which are the sources of sound.  I will then cast rays from those beacons in arbitrary directions around the room until they reach the user's ear, and I will record the time lag and the amplitude attenuation whenever that happens (perhaps using a Monte Carlo method, but I'd still have a lot of research to do).  I will then figure out how to reconstruct an approximate impulse response from that data.
+
+If this works well, I would like to do two separate impulse responses: one for both ear (placed symmetrically to the left and right of the camera based on actual measurements), and to make stereo audio resulting from the process.  This way, the user will be able to deduce "where" the beacons are relative to their view position (binaural sensing).
+
+I was digging around for a while, and found that Princeton's very own Tom Funkhouser (my graphics professor) has, ironically, already done a lot of research on this topic.  I suspect that if I am allowed to go through with this, that I will have to try to read and understand some of his papers, because I know he talks a lot about optimizing such techniques (what I have proposed is certainly not real-time, but I think it could be really accurate).
+
+
+----------------------------------------------
+2) I would like to explore the possibilities of directional instrument body impulse responses in NBody.  Similarly to #1, I would create an interactive environment in OpenGL where the user can choose the viewpoint.  I could experiment with interpolating between the impulse responses of different measurement points that were made (based on how close the camera is to them), and if this ends up being successful, I definitely could make that real time since the measurements were made beforehand (as opposed to me trying to deduce them using ray tracing), and I would also try to do a binaural setup
+
+----------------------------------------------
+
+3) I like the pitch detector idea for different animals.  I'd be interested in trying that idea, and also extending it to somehow be able to communicate with the birds (maybe to make a convincing call that causes the bird to do a certain action, by studying the spectral shape of the bird calls)

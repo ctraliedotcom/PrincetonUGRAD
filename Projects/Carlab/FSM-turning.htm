@@ -1,0 +1,225 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoCaption, li.MsoCaption, div.MsoCaption
+	{margin-top:6.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:12.0pt;
+	font-family:"Calibri","sans-serif";
+	font-style:italic;}
+p.MsoList, li.MsoList, div.MsoList
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+span.Absatz-Standardschriftart
+	{mso-style-name:Absatz-Standardschriftart;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	font-family:"Tahoma","sans-serif";}
+p.Heading, li.Heading, div.Heading
+	{mso-style-name:Heading;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Arial","sans-serif";}
+p.Index, li.Index, div.Index
+	{mso-style-name:Index;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body bgcolor=white lang=EN-US>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><span style='font-size:16.0pt;line-height:115%'>Turning
+detection and location finite state machine</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>5/5/2010</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Our turning
+detection algorithm took the average of the last 15 measured steering duty
+cycles taken at every Hall sensor pulse and checked to see whether it was below
+or above set values. For example, if the average steering duty cycle was below
+a certain value (we initially guessed halfway between completely left and
+center, between 0.108 and 0.126) then we would make a note that the car was “in
+a turn”. The reason for averaging was so that we could account for “wobbling”
+of the car as it corrected itself on straightaways, and be certain that when we
+thought the car was in a turn it was actually in a turn. After the average of
+the steering fraction would go back close enough to center, we would note that
+the car had “completed a turn” and use this knowledge for our finite state
+machine for determining location.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Another
+feature of the turning detection algorithm was that it would store the number
+of “post-turn” hall ticks it counted until the next turn. There were two
+reasons for doing so: the first was to control for noise. If a car was coming
+out of a turn so that the average went back close to center but then
+immediately “wobbled” there was a chance that the average would have been
+thrown off again, so we would only count turns which were made after a short
+number of post-hall ticks had been completed (we decided on 5). One concern of
+ours was that this might have interfered with one part of “C” on the track were
+there are turns very close to each other, but the threshold was high enough to
+stop noise and low enough so that it detected each of these individual turns.
+The second reason for counting post-turn ticks was for use in our finite state
+machine, for detecting long straightaways.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>5/6/2010</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>After
+testing the turning detection for the first time it didn't seem to work, but we
+noticed that it thought that it would immediately turn left. Debugging through
+serial by outputting the mean values of the steering fraction at every hall
+tick showed very small initial values and we deduced that we forgot to
+initially the array to all center values of 0.126 (they were automatically
+initialized to 0 so the algorithm though it started out very very left). After
+fixing this we tested it and it was a success with a few minor glitches due to
+us simply guessing where to put the bounds. The plot below shows the turning
+duty cycles output at every hall tick, and we recalibrated the bounds based on
+this plot to have left turns be below 0.112 and right turns be above 0.140 and
+then the turning detection worked great.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'>Plot of the steering
+fraction (multiplied by 1000) vs. hall tick count
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=18 height=0></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=560 height=420 src="FSM-turning_files/image001.gif"></td>
+ </tr>
+</table>
+
+<br clear=ALL>
+</p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal style='page-break-before:always'><span style='font-size:
+12.0pt;line-height:115%'>5/5/2010</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>The finite
+state machine we used to determine the location of the car is posted below.
+Once it reaches a “stop state” with a letter on it, it transitions to a second
+state machine which simply follows the order of the track according to the
+turns the car is supposed to make. If the car ever performs an unexpected
+maneuver (if for example a turn is not detected when the car turns, throwing
+off the state machine), it returns to the start state of the original state
+machine. The state machine below is for the car turning counter-clockwise and
+the pieces of the track are defined in an image on the next page.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>In addition
+to the finite state machine, we measured the total number of ticks which the
+car made in a single loop around the track by outputting each tick to serial
+and programmed in twice that number so the car would stop after two loops
+around the track.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=544
+height=482 src="FSM-turning_files/image002.gif"><br clear=ALL>
+<span style='font-size:12.0pt;line-height:115%'>In the state machine, L stands
+for a detected left turn, R is a detected right turn and S is a long straight,
+measured by a large number of post-hall ticks</span></p>
+
+<p class=MsoNormal>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=123 height=0></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=371 height=370 src="FSM-turning_files/image003.gif"></td>
+ </tr>
+</table>
+
+<br clear=ALL>
+</p>
+
+</div>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+
+</html>

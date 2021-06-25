@@ -1,0 +1,5 @@
+*Java Automatic Musical Composer<BR>( &#169 2006 )
+3/15/2006
+<a href="../jre-1_5_0_04-windows-i586-p.exe"><img src="../MyPrograms/java.JPG"></a>
+For my science fair project this year, I decided to combine my love of music (I play the violin) with my love of programming, math, and physics.  The end result is a Java program (over 2000 painstaking lines of code :-D ) that can analyze the sound wave coming through a microphone and determine what notes are played on the violin.  Based on this information and parameters chosen by the user, such as key signature, tempo, and time signature, sheet music is drawn to the screen.<BR><b>NOTE: I cannot upload the actual program for free download like I usually do (sorry).</b>  It is <b>copyrighted</b> (as of 10/13/2006) , and I don't want to risk decompiling, etc.  If you would really like to use it eventually, though, then you can still contact me, and I will try to get a copy to you personally.
+Much work that could still be done, such as adaptation for other instruments and better rhythm analysis

@@ -1,0 +1,120 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><span style='font-size:22.0pt;line-height:115%'>Reliable,
+Quick Calibration of PID Speed Controller</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>We
+calibrated the PID controller using the Ziegler-Nichols method.  This required
+us to use solely proportional control and to identify the k<sub>p</sub> at
+which the speed control first beings to oscillate.  To speed calibration up, we
+were able to change k<sub>p</sub> up and down through the wireless serial so
+that we could look at the result on the fly without having to redownload the
+entire code each time (the whole process of the full recalibration only takes
+about 10 minutes total, which is useful when we need to swap in new hardware
+and conditions change).  We recalibrated the car for the race to go about twice
+as fast (roughly 6 ft/sec) and found the first k<sub>p</sub> to be about <b>0.05</b>.</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Once this
+value is found we need to figure out the period of oscillation.  To do this, we
+send the time in 1/10<sup>th</sup> milliseconds between hall pulses over
+through serial and plotted it in Matlab.  The time of the period can then be
+found by adding up all of these time intervals over the length of the period. 
+Here is a matlab plot of the times, with the identified period highlighted with
+two red lines:</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'><img
+width=409 height=307 id="Picture 0" src="ZieglerNichols_files/image001.jpg"
+alt="pid_zieglernichols.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>The period
+here was identified to be about 1.1 seconds.  We then use the following
+equations to determine the proportional, integral, and derivative coefficients:</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>k<sub>u</sub>
+= 0.05, p<sub>u</sub> = 1.1, k<sub>p</sub> = 0.6k<sub>u</sub>, k<sub>i</sub> =
+2k<sub>p</sub> / p<sub>u</sub>, k<sub>d</sub> = k<sub>p</sub>p<sub>u</sub> / 8</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>NOTE: This
+got our car to go about twice the speed it did before, but it didn’t work
+reliably during the race because we were never able to recalibrate turning well
+enough to compensate.  Our original values that worked extremely reliably for 3
+ft/sec (including compensating perfectly for bumps, etc) were:</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>K<sub>u</sub>
+= 0.09, k<sub>p</sub> = 1.3027</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>Which means
+that:</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>K<sub>p</sub>
+= 0.048                    k<sub>i</sub> = 0.0737                   k<sub>d</sub>
+= 0.0078</span></p>
+
+</div>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+
+</html>

@@ -1,0 +1,193 @@
+<html>
+<title>Chris Tralie COS 426 Assignment #3</title>
+<body>
+<h2>
+<a href = "part2.html">Go to Part 2 of this Assignment --></a><BR>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+
+<center><h1>COS 426 Assignment #3:Ray Tracing (Part 1)</h1><BR>
+<h2>Chris Tralie<BR>
+Platform: Windows Vista SP1 Using Microsoft Visual Studio 2005<BR>
+<a href = "http://www.cs.princeton.edu/courses/archive/spr09/cos426/assn3/">Assignment Specification</a></h2></center><BR>
+
+<ul>
+<li><a href = "#basic">Basic Ray Generation</a>
+<ul><li><a href = "#raypixel">Generate a ray for each pixel</a></li></ul></li>
+<li><a href = "#intersect">Ray-Primitive Intersections</a>
+<ul>
+<li><a href = "#raysphere">Intersect a ray with a sphere</a></li>
+<li><a href = "#raybox">Intersect a ray with an axis-aligned box</a></li>
+<li><a href = "#raymesh">Intersect a ray with a triangle mesh</a></li>
+<li><a href = "#raycylinder">Intersect a ray with an axis-aligned cylinder</a></li>
+<li><a href = "#raycone">Intersect a ray with an axis-aligned cone</a></li>
+</ul>
+</li>
+<li><a href = "#rayscene">Ray-Scene Intersection</a>
+<ul>
+<li><a href = "#rayscenegraph">Intersect a ray with a scene graph</a></li>
+<li><a href = "#modeling">Handle scene traversals with modeling transformations</a></li>
+</ul>
+</li>
+<li><a href = "#points">Expected Point Earnings</a></li>
+</ul>
+
+
+<h2><a name = "basic">Basic Ray Generation</a></h2>
+
+<h3><a name = "raypixel">Generate a ray for each pixel</a></h3><BR>
+Create an R3Ray through points on a regular grid of pixels on the view plane, as defined by the camera parameters (eye point, towards direction, up direction, xfov, and yfov).<BR>
+NOTE: xfov and yfov are the half-angles along the "left" direction and "up" direction, respectively.<BR>
+<img src = "results/raycast.gif"><BR>
+For this discussion, assume the pixel through which the ray is constructed is at coordinates <i>(i,j)</i><BR>
+To determine the ray boundary along the "x" direction (left/right), add and subtract (<b>right</b>*tan(xfov) + <b>towards</b>) to the camera's position<BR>
+P1 = P0 + towards - tan(xfov)*right (left boundary)<BR>
+P2 = P0 + towards + tan(xfov)*right (right boundary)<BR><BR>
+FinalPoint = P1 + ((i + 0.5)/width) * (P2 - P1)  (interpolate between the left and right boundary to figure out the direction of the ray through the current pixel at (i,j) on the viewing plane)<BR><BR>
+Now the camera needs to be moved up along the "up" direction based on j.  Do a similar process by adding to final point:<BR>
+FinalPoint = FinalPoint + up * (j - height/2) / (height/2) * tan(yfov);<BR>
+<i>Repeat this process for all pixels on the grid</i><BR><BR>
+<b>I made a debugging routine in rayview so that if the user presses "R," then these rays are drawn from the camera position and saved (a 10x10 pixel grid is assumed so that only 100 example rays have to be calculated and re-rendered each time).  Then user can then move the camera around and view the rays cast from that position from a different angle.  I thought this was easier than manipulating two different cameras at once</b><BR><BR>
+<img src = "results/raycastgl.gif">
+
+<BR><BR><BR>
+<hr>
+<h2><a name = "intersect">Ray-Primitive Intersections</a></h2><BR>
+<i>In these examples, I cast the rays and find the intersections.  If an intersection occurs, I draw the pixel as white.  Otherwise, the pixel is black.  This is a preliminary step to more complicated lighting schemes later.</i><BR>
+
+<h3><a name = "raysphere">Intersect a ray with a sphere</a></h3><BR>
+<PRE>void R3Intersects::rayIntersectSphere(R3Ray* ray, R3Sphere* sphere)</PRE>
+Figure out where the ray intersects the surface of the sphere (if it does), and the position, normal, and parametric value (t) at the first intersection point.<BR>
+Here's an algorithm I pulled from one of the lecture slides:<BR>
+<table>
+<tr><td><img src = "results/raysphereslideshow.jpg"></td></tr>
+<tr><td><center>Picture courtesy of Tom Funkhouser</center></td></tr>
+</table>
+
+<BR>
+<ul>
+<li>tca is the distance to the center projected onto V.  If this is negative, it means that the ray is facing away from the sphere and, therefore, does not intersect</li>
+<li>d^2 is the perpendicular distance from the ray to the center of the sphere</li>
+<li>thc is the other side of the right triangle that's formed between r and d, and it's used to help determine the two possible t's of intersection along the sphere.  Take the closest in this implementation intersection (tca - thc).</li>
+<li>The normal is along the direction P - O</li>
+</ul><BR>
+<table>
+<tr><td><img src = "results/rayviewsphereintersect.jpg"></td>
+<td><img src = "results/raysphereintersect.jpg"></td>
+</tr></table><BR>
+<b>NOTE: My rayview draws the normals in red</b>
+<BR><BR><BR>
+
+<h3><a name = "raybox">Intersect a ray with an axis-aligned box</a></h3><BR>
+<PRE>void R3Intersects::rayIntersectBox(R3Ray* ray, R3Box* box)</PRE>
+Intersect a ray with a box.  The normals are also axis-aligned<BR><BR>
+<img src = "results/rayviewboxintersect.jpg"><BR>
+<img src = "results/rayboxintersect.gif"><BR><BR><BR>
+
+<h3><a name = "raymesh">Intersect a ray with a triangle mesh</a></h3><BR>
+<PRE>void R3Intersects::rayIntersectTriMesh(R3Ray* ray, R3Mesh* mesh)</PRE>
+Loop through all of the triangles in the triangle mesh, and check, one-by-one, to see if the ray intersects it.  For each face, first, do a ray-plane intersection.  If the intersection occurs, check to see if it is within the triangle's boundaries.  Do this by creating a triangular prism between the ray's endpoint and the triangle, and determining if the ray-plane intersection point is within that prism.  If an intersection does occur, then the normal of the intersection is simply the normal of that face, which has already beeen calculated (assuming that the face's vertices have been specified in counter-clockwise order).<BR><BR>
+<table><tr>
+<td><img src = "results/rayviewmeshintersect.jpg"></td>
+<td><img src = "results/raymeshintersect.gif"></td></tr></table>
+
+<BR><BR><BR>
+<h3><a name = "raycylinder">Intersect a ray with an axis-aligned cylinder</a></h3><BR>
+<PRE>void R3Intersects::rayIntersectCylinder(R3Ray* ray, R3Cylinder* cylinder)</PRE>
+Determine the intersection between a ray and an axis-aligned cylinder that has a height <b>h</b>, a radius <b>r</b>, and a center <b>c</b>.  Note that the axis of the cylinder is assumed to be the <b>y-axis</b>.<BR>
+If the endpoint of the ray is above the top of the cylinder, then it's possible for an intersection with the top circle of the sphere to occur, so check this first if this is the case.  Likewise, if the endpoint of the ray is below the bottom of the cylinder, then it's possible for an intersection with the bottom circle of the sphere to occur, so check this.  If these intersections do occur, then their normals are (0, 1, 0) and (0, -1, 0), respectively.<BR><BR>
+If neither one of the circle intersections occurs, then proceed to calculate the intersection along the rest of the cylinder.  Treat it as if it were an infinite cylinder first, and then check to see if the calculated intersection is within the boundaries determined by the height.<BR><BR>
+To do this, follow the same exact algorithm as in the ray-sphere case, except do it in 2D along the XZ plane only, so it turns into a ray-circle intersection.  That is, project the ray onto the XZ plane and do an intersection between that projected ray and a circle centered at the cylinder's center and with the cylinder's radius.  If this intersection occurs, then the normal will be the intersection point minus the center of the cylinder, projected onto the XZ plane.  Also, when calculating what t is (to help determine the point of intersection), divide the t between the projected ray and circle by the cosine of the angle between the original ray and the XZ plane to get the correct value (effectively un-doing the projection).<BR><BR>
+If there is an intersection point, check to make sure it is within the height boundaries before accepting it.<BR><BR>
+
+<table>
+<tr><td><img src = "results/rayviewcylinderintersect.jpg"></td>
+<td><img src = "results/raycylinderintersect.gif"></td></tr></table>
+
+<BR><BR><BR>
+<h3><a name = "raycone">Intersect a ray with an axis-aligned cone</a></h3><BR>
+<PRE>void R3Intersects::rayIntersectCone(R3Ray* ray, R3Cone* cone)</PRE>
+Intersect a ray with an axis-aligned (along the y-axis) cone, which has radius <b>r</b>, height <b>h</b>, and endpoint <b>yend</b>.<BR>
+<img src = "results/cone.gif"><BR>
+First of all, if the ray has an endpoint below the bottom circle of the cone, check to see if the ray intersects it (exact process as in the cylinder case).  If it does, then the process is finished and the normal is (0, -1, 0).  Otherwise, proceed to calculate the intersection along an infinite cone, and then make sure the intersection is within the height boundaries:<BR><BR>
+To satisfy the locus of points along an infinite, double-ended cone, the point has to be along a circle parallel to the XZ plane with varying radius based on height.  The radius given based on height y is (r / h) * (yend - y).  Let <b>k = r/h</b>, and let this new radius be <b>rnew</b>.  So to satisfy the cone, <BR>
+x<SUP>2</SUP> + z<SUP>2</SUP> = rnew<SUP>2</SUP><BR>
+x<SUP>2</SUP> + z<SUP>2</SUP> = k<SUP>2</SUP>*(yend - y)<SUP>2</SUP><BR><BR>
+
+Now plug in the ray (X0 + t*Vx, Y0 + t*Vy, Z0 + t*Vz) and solve for t:<BR><BR>
+
+(X0 + tVx)<SUP>2</SUP> + (Z0 + tVz)<SUP>2</SUP> = k<SUP>2</SUP>*(y0 + tVy - yend)<SUP>2</SUP><BR>
+(X0 + tVx)<SUP>2</SUP> + (Z0 + tVz)<SUP>2</SUP> = k<SUP>2</SUP>*((y0 - yend) + tVy)<SUP>2</SUP><BR>
+Let yk = y0 - yend.  Then, expanding and collecting terms, the quadratic equation turns into this:<BR>
+<b>t<SUP>2</SUP>(Vx*Vx + Vz*Vz - k*k*Vy*Vy) + 2t(Vx*X0 + Vz*Z0 - k*k*yk*Vy) + (X0*X0 + Z0*Z0 - k*k*yk*yk) = 0</b><BR>
+
+So now it's just a matter of applying the quadratic formula and solving for t.  If the discriminant is negative or t turns out to be negative, then an intersection did not occur.<BR><BR>
+<img src = "results/conenormal.gif"><BR>
+To calculate the normal, first subtract the cone's center from the ray's endpoint, and project it along the XZ plane.  To determine the y-component of the normal, multiply the magnitude of the xz part of the normal by tan(A) (as shown in the diagram above), where tan(A) is (r/h).<BR><BR>
+<table>
+<tr><td><img src = "results/rayviewconeintersect.jpg"></td><td><img src = "results/rayconeintersect.gif"></td></tr>
+<tr><td><img src = "results/rayviewconeintersect2.jpg"></td><td><img src = "results/rayconeintersect2.gif"></td></tr>
+</table>
+
+<BR><BR><BR>
+<hr>
+<h2><a name = "rayscene">Ray-Scene Intersections</a></h2><BR>
+
+<h3><a name = "rayscenegraph">Intersect a ray with a scene graph</a></h3><BR>
+<PRE>void R3Intersects::rayIntersectScene(R3Ray* ray, R3Scene* scene)<BR>
+void R3Intersects::rayIntersectNode(R3Ray* ray, R3Node* node, R3Scene* scene, R3Matrix transforms)</PRE>
+Implement a version of R3Intersets that takes in a ray and a scene as arguments and returns whether or not the ray intersects the scene, and if so what is the scene graph node, position, normal, and parametric value t at the first intersection point.  This function should traverse the scene graph hierarchy recursively, intersecting the ray with all nodes, and returning the intersection with minimal parametric value (t) along the ray.<BR><BR>
+I used rayIntersectScene to start the recursive calls to rayIntersectNode.  At each node, more calls are made to rayIntersectNode for every child of the node.  The transformations between each node in the scene graph are multiplied together as the recursion goes along.  The function checks to make sure all of the t values are between specified min and max view distances by projecting every ray onto the center direction of the view frustrum.<BR><BR>
+This is how I was able to get all of the black/white pictures above, so no screenshot is needed for now<BR><BR><BR>
+
+<h3><a name = "modeling">Handle scene traversals with modeling transformations</a></h3>
+I keep a matrix that's the product of all of the transformations that have been done so far going along the scene graph.  Every time the recursion goes a step deeper, multiply this matrix on the right by the newest transformation.  Before checking the ray-primitive intersection at that step, multiply the ray by the inverse of the accumulation transformation matrix.  Then, after the intersection has been performed, multiply the calculated intersection point and the normal by the accumulation matrix to put them back in the regular world coordinates, and recalculate t (since scaling may have occurred).<BR><BR>
+Here's an example below, using <a href = "results/hierarchy.scn">hierarchy.scn</a>, which uses such transformations to describe different objects (mostly just translations in this case).<BR>
+<table>
+<tr><td><img src = "results/rayviewhierarchy.jpg"></td>
+<td><img src = "results/rayhierarchyintersect.gif"></td></tr></table>
+
+<BR><BR><BR>
+<hr>
+<h2><a name = "points">Expected Point Earnings For Part 1</a></h2><BR>
+<b>Bold</b> means required<BR>
+<table border = "1" cellpadding = "5">
+<tr><td>Operation</td><td>Points</td></tr>
+<tr><td><b>Generate a ray for each pixel</b></td><td>1</td></tr>
+<tr><td><b>Intersect a ray with a sphere</b></td><td>1</td></tr>
+<tr><td><b>Intersect a ray with an axis-aligned box</b></td><td>1</td></tr>
+<tr><td><b>Intersect a ray with a triangle mesh</b></td><td>2</td></tr>
+<tr><td>Intersect a ray with an axis-aligned cylinder</td><td>2</td></tr>
+<tr><td>Intersect a ray with an axis-aligned cone</td><td>2</td></tr>
+<tr><td><b>Intersect a ray with a scene</b></td><td>1</td></tr>
+<tr><td><b>Handle scene traversals with modeling transformations</b></td><td>1</td></tr>
+<tr><td>Total</td><td><b>11</b></td></tr>
+</table>
+
+
+
+</ol>
+
+<h2>
+<a href = "part2.html">Go to Part 2 of this Assignment --></a><BR>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>

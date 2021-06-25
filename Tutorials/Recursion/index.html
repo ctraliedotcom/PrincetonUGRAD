@@ -1,0 +1,284 @@
+<html>
+<title>Recursion</title>
+<body text="black" bgcolor="white">
+<center><h1>Recursion</h1></center><BR>
+<ul>
+<li><a href="#whatis">Recursive functions and ACSL examples</a></li>
+<li><a href="#factvsfib">Factorials and the Fibonacci sequence</a></li>
+<li><a href="#determinant">The Determinant of a square matrix</a></li>
+<li><a href="#towers">The Towers of Hanoi</a></li>
+<li><a href="#fractals">Fractals and related applets</a></li>
+<li><a href="#sources">Outside Source Bibliography</a></li>
+</ul>
+
+<a name="whatis"><b><u><tt>Recursive functions and ACSL examples</tt></u></b></a>
+<p>Something is said to be recursive if it is "self-similar."  Hence, <b>recursive functions</b> are functions that <i>call themselves</i>.  Recursive functions can be written mathematically, as you will see, but they are also supported in many programming languages, such as C++ and Java.  It is easiest to understand what a recursive function is by looking at some examples.  The following examples express the recursive functions both mathematically and in C++ syntax:</p>
+<ol>
+<li>Find f(6) for the following function:<BR>
+<table border="1" bgcolor="yellow"><tr><td>
+<table><tr><td>f(x)=</td><td><img src="grouping.gif" height="100%"></td>
+<td><table cellpadding="5"><tr><td>f(x-1)+ 2x</td><td>when x>2</td> </tr>
+<tr><td>2</td><td>when x<=2</td></tr>
+</table></td></tr></table></td>
+<td><code><b>int</b> example1(<b>int</b> x){<BR><b>if</b>(x>2){<BR><b>return</b> example1(x-1) + 2*x;}<BR><b>else</b>{<BR><b>return</b> 2;}<BR>}</code></td></tr></table>
+
+<BR>
+Here are the steps below:<BR>
+<ul><li>f(6) = <b>f(5)</b> + 2(6) <ul><li>f(5) = <b>f(4)</b> + 2(5)
+<ul><li>f(4) = <b>f(3)</b> + 2(4)<ul><li>f(3) = <b>f(2)</b> + 2(3)
+<ul><li>f(2) = 2</li></ul><li>f(3) = 2 + 2(3) = <b>8</b></li></ul>
+<li>f(4) = 8 + 2(4) = <b>16</b></li></ul>
+<li>f(5) = 16 + 2(5) = <b>26</b></li></ul>
+<li>f(6) = 26 + 2(6) = <b><u>38</u></b></li></ul><BR>
+The answer is <b>38</b>.  To arrive at this answer, we first took f(6).  Since 6>2, we had to figure out what f(6-1), or f(5), was before we could come up with a definitive, simplified answer.  To figure out what f(5) was, we needed to figure out what f(4) was ; for f(4), f(3) was needed, and for f(3), f(2) was needed.  Finally, when we got to f(2), we reached a point where we had a simplified numerical expression without a another recursive call intertwined.  This is sometimes known as the <b>stopping state</b> of the recursion, for no more recursive calls are made after this point.<BR>The rest of the work after this point is straightforward.  Since we know what f(2) is, we can now simplify f(3), which allows us to simplify f(4), and so on until we arrive back at f(6).<BR><BR>
+</li>
+<li>Here is an example from the 1996 ACSL senior contest #1, which can be found at <a href="http://www.acsl.org" target="_blank">acsl.org</a><BR><BR>
+Find f(10,5) for the following function:<BR>
+
+<table border="1" bgcolor="yellow"><tr><td>
+<table><tr><td>f(x,y)=</td><td><img src="grouping.gif" height="100%"></td>
+<td><table cellpadding="5"><tr><td>f(x-2,y+1) + 3</td><td>if x > y</td> </tr>
+<tr><td>f(x+1,y-3) + 2</td><td>if x < y</td></tr>
+<tr><td>5</td><td>otherwise</td></tr>
+</table></td></tr></table></td>
+<td><code><b>int</b> example2(<b>int</b> x, <b>int</b> y){<BR><b>if</b>(x > y){<BR><b>return</b> example2(x-2,y+1) + 3;}<BR><b>else if</b>(x < y){<BR><b>return</b> example2(x+1,y-3) + 2;}<BR><b>else</b>{<BR><b>return</b> 5;}<BR>}</code></td></tr></table><BR>
+Here are the steps:<BR>
+<ul><li>f(10,5) = <b>f(8,6)</b> + 3 (because 10>5)
+<ul><li>f(8,6) = <b>f(6,7)</b> + 3 (because 8>6)
+<ul><li>f(6,7) = <b>f(7,4)</b> + 2 (because 6<7)
+<ul><li>f(7,4) = <b>f(5,5)</b> + 3 (because 7>4)
+<ul><li>f(5,5) = <b>5</b> (because 5=5 <i>this is our stopping state</i>)</li></ul>
+<li>f(7,4) = 5 + 3 = <b>8</b></li></ul>
+<li>f(6,7) = 8 + 2 = <b>10</b></li></ul>
+<li>f(8,6) = 10 + 3 = <b>13</b></li></ul>
+<li>f(10,5) = 13 + 3 = <b>16</b></li></ul><BR>
+Working carefully, it was possible to determine exactly how to calculate the recursive calls based on the relationship between x and y.  Hopefully, you can see by this example that recursive calls aren't just limited to a single parameter</li>
+</ol>
+
+<BR><BR><a name="factvsfib"><b><u><tt>Factorials and the Fibonacci sequence</tt></u></b></a>
+<p>Two well-known examples of recursion are <b>factorials</b> and the <b>Fibonacci sequence</b>:<BR>As you may already know, the factorial of a number is the product of all of the natural numbers from 1 to the number in series, and it is signified by an exclamation point.  For instance, <b>6!</b> = 1*2*3*4*5*6 = <b>720</b>.  To avoid all of this wordiness, it is really quite simple to define the factorial in terms of itself as follows:</p><BR>
+<table border="1" bgcolor="yellow"><tr><td>
+<table><tr><td>X! = </td><td><img src="grouping.gif" height="100%"></td>
+<td><table cellpadding="5"><tr><td>X * (X-1)!</td><td>when X>0</td> </tr>
+<tr><td>1</td><td>when X=0</td></tr>
+</table></td></tr></table></td></tr></table><BR>
+Using our previous example with this model, f(6) = 6*f(5) = 6*5*f(4) = 6*5*4*f(3) = 6*5*4*3*f(2) = 6*5*4*3*2*f(1) = 6*5*4*3*2*1*f(0) = 720<BR><BR></li>
+<hr><BR><BR>
+The Fibonacci sequence is a very special type of sequence that can be found in nature and that is recursive by definition.  It can be derived by using combinatorial methods.  Specifically, we need to figure out the number of different ways to cover a board with <b>N</b> spaces with squares (take up one space) and dominoes (take up 2 spaces).  Let's go through that thought process right now (squares are blue, dominoes are green, and gray is uncovered):<BR><BR>
+<table border="2" cellpadding="5"><tr><td>N</td><td><center>Different boards & Explanations</center></td></tr>
+<tr><td>0</td> <td>There is only <b>one way</b> to cover a non-existent board, and that is to not cover it at all (don't get hung up on this case...it's just important for establishing the recursive pattern later)</td></tr>
+<tr><td>1</td><td>There is also only <b>one way</b> to cover this board: by using a single square</td></tr>
+<tr><td>2</td><td>There are <b>two ways</b> to cover this board:<BR>
+<table border="1"><tr><td><center><b>Case 1:</b> </center></td><td><center><b>Case 2:</b> </center></td></tr><tr>
+<td>
+<table><tr><td bgcolor="blue" width="25" height="25"></td><td bgcolor="blue" width="25" height="25"></td></tr></table>
+</td><td><table><tr><td bgcolor="green" width="50" height="25"></td></tr></table></td></tr></table>
+One way, we place a square in the first place, and the only way to cover the rest of the board is by placing another square in the remaining position.  The other way, we place a domino in the first square, and we have no place left.</td></tr>
+<tr><td>3</td><td>
+We can start out by establishing two cases for what to lay down first:<ul>
+<li>In the first case, we place a square in the first position:<BR>
+<table><tr><td bgcolor="blue" width="25" height="25"></td><td bgcolor="gray" width="25" height="25"><td bgcolor="gray" width="25" height="25"></td></td></tr></table><BR>
+This leaves two positions uncovered.  We already know how many different ways there are to cover two blank positions (refer to N=2).  Therefore, there are 2 ways to finish covering a board with a square in the first position:
+<table><tr><td bgcolor="blue" width="25" height="25"></td><td bgcolor="blue" width="25" height="25"><td bgcolor="blue" width="25" height="25"></td></td></tr></table> OR 
+<table><tr><td bgcolor="blue" width="25" height="25"></td><td bgcolor="green" width="50" height="25"></td></td></tr></table><BR></li>
+
+<li>In the second case, we place a domino in the first position:<BR>
+<table><tr><td bgcolor="green" width="50" height="25"></td><td bgcolor="gray" width="25" height="25"></td></td></tr></table><BR>
+This only leaves one position uncovered.  According to N=1, there is only one way to cover one position, and that is with a square.  Therefore, the only possible combination here is the following:<BR>
+<table><tr><td bgcolor="green" width="50" height="25"></td><td bgcolor="blue" width="25" height="25"></td></td></tr></table></ul>
+<BR>
+<i>The total number of ways to cover a board of length three is the number of ways to cover the board if a square is placed in the first position <b>plus</b> the number of ways to cover the board if a domino is placed in the first position.  This is </i> 1 + 2, <i>or</i> <b>three ways</b></td></tr>
+<tr><td>4</td><td>Just as we did with case 3, place either a square or a domino in the first position, and figure out how many different combinations exist within the two cases:<BR>
+<ul>
+<li>Placing a square in the first place leaves three spaces open:<BR>
+<table><tr><td bgcolor="blue" width="25" height="25"></td><td bgcolor="gray" width="25" height="25"></td><td bgcolor="gray" width="25" height="25"></td><td bgcolor="gray" width="25" height="25"></td></tr></table><BR>
+From N=3, we already know how to cover the remaining spaces, so there are 3 combinations possible in this case (apply them in the order that they were discovered in case 3):<BR>
+<table><tr>
+<td bgcolor="blue" width="25" height="25"></td><td bgcolor="blue" width="25" height="25"></td><td bgcolor="blue" width="25" height="25"></td><td bgcolor="blue" width="25" height="25"></td></tr></table>
+<table><tr>
+<td bgcolor="blue" width="25" height="25"></td><td bgcolor="blue" width="25" height="25"></td><td bgcolor="green" width="50" height="25"></td></tr></table>
+<table><tr>
+<td bgcolor="blue" width="25" height="25"></td><td bgcolor="green" width="50" height="25"><td bgcolor="blue" width="25" height="25"></td></td></tr></table>
+</li>
+<li>Placing a domino in the first places leaves two spaces open:<BR>
+<table><tr><td bgcolor="green" width="50" height="25"></td><td bgcolor="gray" width="25" height="25"></td><td bgcolor="gray" width="25" height="25"></td></tr></table>
+From N=2, we already know that the only two ways we can cover the remaining space is either by placing two squares or by placing a domino there:
+<table><tr><td bgcolor="green" width="50" height="25"></td><td bgcolor="blue" width="25" height="25"></td><td bgcolor="blue" width="25" height="25"></td></tr></table>
+<table><tr><td bgcolor="green" width="50" height="25"></td><td bgcolor="green" width="50" height="25"></td></tr></table><BR>
+<i>Hence, there are <b></i>five ways<i></b> to cover a board of length four</td></tr></table><BR>
+By now, a recursive pattern should be evident for counting these boards (or, at least I hope it is, because I'm getting really tired of writing all of the HTML code to make those colored blocks).  After establishing the base cases of 0 and 1, we can count the boards for any N>1 by placing a square and then counting the number of ways to fill the spaces left, or by placing a domino and counting the number of ways to fill spaces left.  As a mathematical formula, the Fibonacci sequence goes like this:<BR><BR>
+<table border="1" bgcolor="yellow"><tr><td>
+<table><tr><td>F<SUB>n</SUB> = </td><td><img src="grouping.gif" height="100%"></td>
+<td><table cellpadding="5"><tr><td>F<SUB>n-1</SUB> + F<SUB>n-2</SUB></td><td>when n>1</td> </tr>
+<tr><td>1</td><td>when n=0 or n=1</td></tr>
+</table></td></tr></table></td></tr></table><BR>
+Where F<SUB>n-1</SUB> counts the number of ways with a square in the first place, and F<SUB>n-2</SUB> counts the number of ways with a domino in the first place.<BR>
+The sequence, therefore, goes  1,1,2,3,5,8,13,21,34,etc.
+
+<BR><BR><BR><a name="determinant"><b><u><tt>The Determinant of a square matrix</tt></u></b></a>
+<p>Another very common mathematical operation that can be defined recursively is the Determinant of a square matrix.  Before going on, recall how to do expansion by <b>minors</b>.  If you had the following 3x3 matrix <b>M</b> (pretend that there are square brackets around the numbers):<BR>
+<table cellpadding="2"><tr><td>1</td><td><td>4</td><td>7</td> </tr>
+<tr><td>3</td><td><td>9</td><td>2</td> </tr>
+<tr><td>6</td><td><td>2</td><td>3</td> </tr>
+</table>Then <B>M<SUP>{2,1}</SUP></b> (a minor) would be a 2x2 matrix, excluding all of the elements of <B>M</b> in row 2 and column 1:<BR>
+<table cellpadding="2" frame="vsides"><tr><td>4</td><td><td>7</td></td></tr>
+<tr><td>2</td><td><td>3</td></td></tr></table><BR>
+If you've done this before, then you probably know how to take <b>|M|</b> (the two straight lines on either end signify the determinant) or the determinant of any 3x3 matrix<BR>
+<table><tr><td><table cellpadding="2" frame="vsides"><tr><td>1</td><td><td>4</td><td>7</td> </tr>
+<tr><td>3</td><td><td>9</td><td>2</td> </tr>
+<tr><td>6</td><td><td>2</td><td>3</td> </tr>
+</table></td><td> = 1*</td><td> 
+<table cellpadding="2" frame="vsides"><tr><td>9</td><td><td>2</td></td></tr>
+<tr><td>2</td><td><td>3</td></td></tr></table></td><td> - 4*</td><td>
+<table cellpadding="2" frame="vsides"><tr><td>3</td><td><td>2</td></td></tr>
+<tr><td>6</td><td><td>3</td></td></tr></table></td>
+<td> + 7*</td><td>
+<table cellpadding="2" frame="vsides"><tr><td>3</td><td><td>9</td></td></tr>
+<tr><td>6</td><td><td>2</td></td></tr></table></td>
+<td> = </td><td>1*(9*3 - 2*2) - 4*(3*3 - 6*2) + 7*(3*2 - 6*9)</td><td> = </td><td><b>-301</b></td>
+
+</tr></table><BR><BR>
+If you think carefully about the process that we just went through to calculate the determinant, then the recursive equation becomes more evident:<BR>
+<BR><table border="1">
+<tr><td>For an <b>n</b> x <b>n</b> matrix <b>M</b>, <b>k</b> is any constant less than or equal to <b>n</b> and greater than or equal to 1, <b>M<SUB>kj</SUB></b> simply means the element in row k and column j, and <b>M<SUP>{k,j}</SUP></b> is the minor of row k and column j</td></tr> 
+<tr><td><img src="determinant.gif"></td></tr><tr><td> (we used k=1 in our example)</td></tr></table><BR><BR>
+The recursive calls, then, are the determinants of each minor in the sum.  The stopping states occur with 1x1 matrices, whose Determinants are simply defined as the only value in the matrix (e.g. |6| = 6).<BR>
+<BR>Now, let's apply that general equation to the example that we did earlier using specific cases for 3x3 and 2x2 Determinants:<BR>
+<table><tr><td>Let <b>k</b>=1,</td><td> <b>M=</b></td><td><table cellpadding="2"><tr><td>1</td><td><td>4</td><td>7</td> </tr>
+<tr><td>3</td><td><td>9</td><td>2</td> </tr>
+<tr><td>6</td><td><td>2</td><td>3</td> </tr>
+</table></td></tr></table><BR>
+
+<table><tr><td>
+|<b>M</b>| = </td><td>(-1)<SUP>2</SUP>(1)*</td><td> 
+<table cellpadding="2" frame="vsides"><tr><td>9</td><td><td>2</td></td></tr>
+<tr><td>2</td><td><td>3</td></td></tr></table></td><td> + (-1)<SUP>3</SUP>(4)*</td><td>
+<table cellpadding="2" frame="vsides"><tr><td>3</td><td><td>2</td></td></tr>
+<tr><td>6</td><td><td>3</td></td></tr></table></td>
+<td> + (-1)<SUP>4</SUP>(7)*</td><td>
+<table cellpadding="2" frame="vsides"><tr><td>3</td><td><td>9</td></td></tr>
+<tr><td>6</td><td><td>2</td></tr></table></td>
+</tr></table>
+<BR>|<B>M</B>| = 1[ (-1)<SUP>2</SUP>(9)*|3| + (-1)<SUP>3</SUP>(2)*|2| ] -4[ (-1)<SUP>2</SUP>(3)*|3| + (-1)<SUP>3</SUP>(2)*|6| ] + 7[ (-1)<SUP>2</SUP>(3)*|2| + (-1)<SUP>3</SUP>(9)*|6| ]<BR>
+<BR>|<B>M</B>| = (9*3 - 2*2) - 4(3*3 - 2*6) + 7(3*2 -9*6) = <b>-301</b> 
+
+<BR><BR>A while back, I wrote some code in C++ to take care of the determinant of a matrix (I needed it for some 3D calculations I was doing in a video game).  It goes as follows:<BR><BR>
+<img src="determinantCode.jpg" border="1"><BR><BR>
+Obviously, this code wouldn't just work if you plopped it into a program.  I had already defined an entire matrix class around these functions, and I didn't even show you the code for the getMinor(Matrix* , k, j) function.  But I think it proves the point that recursive functions are relatively easy (not to mention elegant) to implement in programs, even for seemingly tedious operations (this would work for any n x n matrix that memory could conceivably  support).
+
+<BR><BR><BR><a name="towers"><b><u><tt>The Towers of Hanoi</tt></u></b></a>
+<BR><center><table><tr><td><center><img src="Hanoiklein.jpg"></td></tr>
+<tr><td><b>A picture of a Towers of Hanoi brain teaser puzzle</b></td></tr>
+<tr><td><center>Picture courtesy of <a href="http://en.wikipedia.org" target="_blank">Wikipedia</a></td></tr>
+</table></center>
+<p>The "Towers of Hanoi" is a classic puzzle game that has been around for millennia.  It consists of three pegs with a number of different discs stacked on top of each other such that a disc is never below another disc that is larger than itself.  The object of the game is to move all of the discs from the left peg to the right peg, moving one disc at a time and making sure never to put a larger disc on top of a smaller disc.<BR><BR>
+To come up with a recursive equation for the number of moves needed, let's look at some cases:<BR>
+<ul><li><b>Case 1</b>: This is easy; we simply move the one disc from the left peg to the right peg <i>(1 move)</i></li>
+<li><b>Case 2:</b> First, move the smallest disc on top to the middle peg.  Then, take the remaining disc (the larger one) on the left peg and move it to the right peg.  Lastly, put the smallest disc that is now on the middle peg on top of the larger disc on the right peg.  This takes <i>(3 moves)</i>
+</ul><BR>
+Now that we have a base case, let's look at the problem for any <b>N</b> number of discs.  First, pretend that we know everything there is to know about the number of moves that it takes to move <b>N-1</b> discs (H<SUB>N-1</SUB>, where H is the function that describes the number of steps needed for a given number of discs).  We can use this information to figure out how many moves it will take to move N discs by using the following logic:<BR>
+<ol><li>First, move the (N-1) discs currently on top of the largest disc from the left peg to the center peg.  This takes <i>H<SUB>N-1</SUB> steps.</i></li>
+<li>Now that there are no smaller discs on top of the largest disc and the right peg is open, move the largest disc to the right peg.  This takes <i>1 step</i></li>
+<li>Now that we can move smaller discs on top of the large disc on the right peg legally, move the N-1 discs currently on the center peg to the right peg on top of the largest disc.  This takes <i>H<SUB>N-1</SUB> steps.</i></li>
+</ol>
+As you can see, it takes 2H<SUB>(N-1)</SUB> + 1 steps to move N discs from the left peg to the right peg:<BR>
+
+<table border="1" bgcolor="yellow"><tr><td>
+<table><tr><td>H<SUB>n</SUB> = </td><td><img src="grouping.gif" height="100%"></td>
+<td><table cellpadding="5"><tr><td>2H<SUB>n-1</SUB> + 1</td><td>when n>1</td> </tr>
+<tr><td>1</td><td>when n=1</td></tr>
+</table></td></tr></table></td></tr></table><BR>
+Plugging this in for case 2, we see that the answer is 2(1) + 1, or 3, which is what we got before.<BR><BR>There may have been some ancient Hindu prophecy that if a whole bunch of Brahmin priests were working on this puzzle at all hours of the day with 64 discs from the beginning of time, then the world would end as soon as they solved the puzzle.  Luckily, we don't have much to worry about if we look at the recursion:<BR>
+<ul><li>H<SUB>64</SUB> = 1.844674407 x 10<SUP>19</SUP> (thank you TI calculators)</li>
+<li>If a priest made a move every second, and there are 31536000 seconds in a year (365*24*3600), then this would take at least 5.848424174 x 10<SUP>11</SUP> (nearly 585 billion) years to complete.  Just for a comparison, the universe is only about 13.7 billion years old.  Also, keep in mind that the recursive solution is the shortest solution possible.</li></ul><BR>
+I made an applet to solve the Towers of Hanoi problem graphically for any number of discs (obviously, don't choose too many, or you might be sitting in front of your computer for a while).  Click here to see the <a href="RecursionApplets/Hanoi.java">source code</a>.  The most important part is highlighted below:<BR>
+<center><img src="hanoisource.jpg" border="1"><BR>
+<applet codebase="RecursionApplets" code="HanoiLauncher.java" width="300" height="50"></applet>
+</center><BR>
+By the way, if we wanted to avoid recursive calculations (it takes a long time to go through all of the iterations for large numbers), we can come up with a "closed-form" expression for the number of steps.  That is, if <b>n</b> represents the number of discs present, then <b>2<SUP>n</SUP>-1</b> represents the number of steps.  This is clearly easier than using the recursive equation, but the recursive equation describes the behavior of the puzzle better (and is obviously better for writing programs that simulate that behavior).
+
+<BR><BR><BR><a name="fractals"><b><u><tt>Fractals and related applets</tt></u></b></a><BR><BR><p>
+Fractals are complex, beautiful images that are the epitome of self-similarity.  They have ties to chaos theory, limit theory, and all sorts of other branches of mathematics.  You can find out more about them at <a href="http://classes.yale.edu/fractals/" target="_blank">http://classes.yale.edu/fractals/</a>, which I highly recommend.  I'm only going to go through here and talk about what different examples look like, why they are self-similar, and how to write code to generate them (I've made applets to draw every one).  However, you can learn more about fractal dimensions, etc. on your own if it interests you.  Here we go....</p><BR><BR>
+<ol>
+<li> <u>The Sierpinski Gasket</u>:<BR>
+The Sierpinski Gasket is generated by taking a colored equilateral triangle and connecting the midpoints of the three sides.  This forms four new congruent, equilateral triangles that are similar to the original one (they are all half of its size).  Color the three outer triangles black, and leave the middle one uncolored.  Then, repeat the process for each of the three colored triangles.  Now, you should have 9 colored triangles.  Repeat the process for these 9 triangles, and continue to repeat the process for all of the colored triangles formed onto infinity for infinite precision (or until you run out of adequately sized pixels, like I do in my applets).<BR>
+<b><a href="RecursionApplets/dogasket.html">Click here</a> to see this process being carried out graphically.</b><BR>
+As you can see, each recursive call branches out on a new colored, equilateral triangle, and the shape is self-similar in many ways.<BR>
+<BR>A related fractal is the Sierpinski Carpet, which involves creating a bunch of similar, colored rectangles.  I have created an applet below using the <a href="RecursionApplets/chaosgame.html" target="_blank">random algorithm</a> to generate the Sierpinski Triangle and the Sierpinski Carpet.  The source code can be found in <a href="RecursionApplets/Triangle.java">Triangle.java</a> and <a href="RecursionApplets/Carpet.java">Carpet.java</a><BR><BR>
+<applet codebase="RecursionApplets" code="SierpinskiLauncher.class" width="300" height="50"></applet><BR>
+<b>NOTE: The more points you draw, the more precise the drawings of each shape will be</b> (fractals are infinitely precise theoretically)<BR>
+<b>NOTE ALSO: This Sierpinski Triangle can also be generated by coloring in all of the odd numbers in Pascal's Triangle.</b>
+<BR><BR></li>
+<li><u>The Koch Curve:</u><BR>
+To create a Koch Curve, first start out with a line segment of length L.  Then, divide the line segment up into three equal parts of length L/3.  From the two points where the line segments meet, construct an equilateral triangle by drawing lines 120 degrees from the left and right line segments and marking off their intersection.  Remove the base of this equilateral triangle, which was originally the middle of the three line segments.  Continue this process on the four new line segments.<BR>
+<b><a href="RecursionApplets/dokoch.html">Click here</a> to see this process being carried out graphically.</b><BR><BR>
+I also made an applet to draw this shape, although the picture does a good enough job of showing it.  I would just like to highlight the recursive part of the program:<BR>
+<table bgcolor="yellow" border="1"><tr><td><code>
+	public void drawCurve(<b>double</b> length){<BR>
+         <b>double</b> newLength=length/3;<BR>
+           <b>if</b>((<b>int</b>)length==minPixelLength){//This is the stopping state limited<BR>
+           //by the resolution on the screen.  In reality, though, the process<BR>
+           //would continue on infinitely<BR>
+                  pencil.move(length);<BR>
+                  <b>return;</b>//No more recursive calls occur after this point<BR>
+               }<BR>
+               drawCurve(newLength);//This is the recursive call to the leftmost segment<BR>
+               pencil.turn(60);<BR>
+               drawCurve(newLength);//This will draw the left side of the peak of the equilateral triangle<BR>
+               pencil.turn(-120);<BR>
+               drawCurve(newLength);//This will draw the right side of the peak of the equilateral triangle<BR>
+               pencil.turn(60);<BR>
+               drawCurve(newLength);//This draws the rightmost line segment<BR>
+    }<BR>
+    
+    </code></td></tr></table>
+<b><a href="RecursionApplets/Koch.java">Click here</a> for the full source code</b><BR><BR>
+</li>
+<li><u>Julia Sets</u>:<BR><BR>
+Julia Sets are created with the following recursive equation:<BR>
+<table bgcolor="cyan" border="1" cellpadding="5"><tr><td><h2><b>z<SUB>n+1</SUB> = z<SUB>n</SUB><SUP>2</SUP> + c</b></h2></td></tr></table>Where z and c (a chosen constant) are both complex numbers.  <BR><BR>
+To create a Julia set, different values of z<SUB>0</SUB> are chosen and iterated through the recursive function until they "escape."  This usually means that the points after z<SUB>n</SUB> are beyond a certain distance from the origin on the complex plane, which is usually 2 (this is the <b>r</b> value in polar coordinates, or (real component<SUP>2</SUP> + imaginary component<SUP>2</SUP>)<SUP>1/2</SUP> in rectangular coordinates).  We choose to color that particular z<SUB>0</SUB> a very light color if the point escaped quickly, or a darker color if it didn't escape at all.  Let's look at an example:
+<BR><BR>
+Let c=-1 and z<SUB>0</SUB>=1.1i<BR>
+z<SUB>1</SUB> = (1.1i)<SUP>2</SUP> -1 = <font color="red">-2.21</font><BR>
+z<SUB>2</SUB> = (-2.21)<SUP>2</SUP> -1 = <font color="red">3.8841</font><BR><BR>
+In this case, it only takes until z<SUB>1</SUB> until we have escaped, and the z values move off very quickly towards infinity after this.  Hence, since it only took one step for this value of z<SUB>0</SUB> to escape, we would color the pixel at (0,1.1i) white.<BR><BR>
+Here is the applet that I made to draw these Julia Sets by doing tons of these calculations for different values of z<SUB>0</SUB>:<BR><BR>
+<applet codebase="RecursionApplets" code="JuliaLauncher.class" width="200" height="170"></applet><BR><BR>
+<ul><li>
+<b>"t l" is the complex number for the top left corner of the rectangular area of the fractal, and "l r" is the complex number for the lower right corner (these set the bounds to be checked).</b></li>
+<li>Try different values of c for different patterns</li>
+<li>Choose a higher resolution for the width and the height to get more precision</li>
+<li>If you continually zoom in on certain interesting-looking areas, you will see that the fractal has infinite precision (you can keep zooming in as long as you like, and the pattern will never end!)</ul>
+<BR>
+Go to <a href="RecursionApplets/JuliaSet.java">JuliaSet.java</a> for the source code<BR>
+Just in case the applet doesn't work for you for some reason (please let me know if this is the case, and tell me the error), here are some screenshots of my program in action:<BR>
+<img src="RecursionApplets/juliapictures.jpg" border="1"><BR><BR><BR>
+<a name="sources"><b><u><tt>Outside Source Bibliography</tt></u></b></a><BR>
+<ol>
+<li><a href="http://www.acsl.org" target="_blank">ACSL</a> official test question</li>
+<li><i>Discrete Math: Pennsylvania Governor's School for the Sciences 2006</i> by Douglas E. Ensley</li>
+<li><a href="http://classes.yale.edu/fractals/" target="_blank">Fractal Geometry</a> course notes at Yale University</li>
+<li><i>Mathematics for 3D Game Programming & Computer Graphics</i> by Eric Lengyel</li>
+<li><a href="http://mathworld.wolfram.com" target="_blank">Mathworld</a> (Mathematica's documentation)</li>
+</ol>
+<BR>
+
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>

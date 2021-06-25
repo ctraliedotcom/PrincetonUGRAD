@@ -1,0 +1,226 @@
+<html>
+<body>
+<hr>
+<h1><b>NOTE: A Newer version of this tutorial may exist.  <a href = "../../../../Teaching/DukeDusty2">Click here</a> to go to the never version</b></h1>
+<hr>
+<center><h1><b>SLAM and Global Navigation on the iRobot Roomba using ROS</b></h1></center>
+<a href = "../../">Chris Tralie</a><BR><BR>
+25 August 2010
+
+<hr>
+This is an incremental tutorial to <a href = "http://www.ai.sri.com/~gerkey">Brian Gerkey's</a> tutorial a few years ago called <a href = "http://www.ai.sri.com/~gerkey/roomba/index.html?sess=235412ffdc02b680ed3a9b63a77dc4b2">Mapping with the iRobot Roomba</a>, which explained how to do offline map-building using the <a href = "http://playerstage.sourceforge.net/">Player</a> development environment on a Gumstix board.  Our group at Duke used the <a href = "http://www.ros.org/wiki/">ROS Robot Operating System</a> running on an EEEPC Netbook to do SLAM and Global Navigation.  This page will explain how to get these up and running on our environment and will give some videos / results.<BR><BR>
+<BR><b>Note</b>: The robot platform is also set up with two RFID antennas, which I will mention for completeness, but no RFID techology is required for the map building and navigation capabilities presented in this tutorial.<BR><BR>
+
+Contents:
+<ul>
+<li><a href = "#components">Components</a></li>
+<li><a href = "#assembly">Robot Assembly and TF</a></li>
+<li><a href = "#teleoperation">Robot Teleoperation Using VNC</a></li>
+<li><a href = "#packages">Downloading and Installing ROS Packages</a></li>
+<li><a href = "#SLAM">Performing and Visualizing Online SLAM (with video)</a></li>
+<li><a href = "#offlinemap">Building A More Accurate Map Offline (with results)</a></li>
+<li><a href = "#navigation">Global Navigation (with video)</a></li>
+</ul>
+
+<hr>
+<h2><b><a name = "components">Components</a></b></h2><BR>
+
+<ul>
+<li>An IRobot Create(r) robot</li>
+<li>An Asus EeePC running Ubuntu Linux 10.04 Desktop Edition</li>
+<li>A <a href = "http://www.acroname.com/robotics/parts/R325-URG-04LX-UG01.html">Hokuyo URG-05LX-UG01</a> urglaser powered and read through the USB port</li>
+<li>A standard Logitech USB Webcam</li>
+<li>A <a href = "http://www.thingmagic.com/embedded-rfid-readers/mercury5e">ThingMagic Mercury(r) 5e RFID Reader</a></li>
+<li>Two RFID Antennas</li>
+<li>A single 4-port USB hub</li>
+</ul>
+
+
+<BR>
+
+
+<p>
+The 4 USB devices (the IRobot Create, the USB webcam, the Hokuyo urglaser, and the RFID reader) were all connected to the USB hub, which was plugged into a single port on the netbook.  It was convenient to use <a href = "http://reactivated.net/writing_udev_rules.html">udev</a> to link the USB device aliases to constant names.  This way, the aliases wouldn't be switched every time the devices got unplugged, and it was easier to make ROS launch files without having to change the port IDs for the different hardware devices.  <a href = "10-ROBOT.rules">Click here</a> to view the udev file that I made for the devices.</p>
+
+<p>
+The Hokuyo and the webcam are powered by the netbook's battery via the USB ports.  The RFID reader needs 5V and is powered externally by the iRobot Create's battery.  To accomplish this, I attached a 16V to 5V stepdown converter to a plug that plugs into the iRobot Create's expansion bay (shown below)  <BR>
+
+<img src = "irobot_plug.png">
+<BR>
+
+With the Hokuyo running, the netbook's battery life is reduced to about 3.5 hours.  I always unplug the Hokuyo and the RFID reader plug before charging to charge the robot and the netbook more efficiently.
+
+
+</p>
+
+<hr>
+<h2><b><a name = "assembly">Robot Assembly and TF</a></b></h2><BR>
+
+<img src = "lowres_dukedusty2.png"><BR>
+<b>[High res pictures needed]</b>
+<BR><BR>
+
+I used ROS's built-in <a href = "http://www.ros.org/wiki/tf">TF Transformation system</a> to specify the orientation of all components with respect to the robot base (which are static on this platform).  The position and orientation of the components are as follows:<BR>
+<ul>
+<li>A 1 square foot plastic platform is mounted on the create 13cm above the ground in a diamond formation (with corners at the front and back of the IRobot Create)</li>
+<li>The Hokuyo laser is centered 14cm in front of the center of the platform facing forward</li>
+<li>The USB camera is positioned 20.5cm in front of the center of the platform and 3.5cm to the left of center facing forward.</li>
+<li>The two RFID readers are placed symmetrically to the left and right of center, each facing 45 degrees away from center</li>
+</ul><BR>
+<img src = "assembly_diagram.png"><BR>
+It is important to specify these transformations as accurately as possible so the map-builder can rectify the offset from the center of odometry.  The static transformations described are specified at the bottom of <a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/navigate/navigate_robot_setup.launch">this configuration file</a> (note that the rotations had to be specified as quaternions).  <a href = "http://www.ros.org/wiki/tf#static_transform_publisher">Click here</a> to see the format for specifying static TF transformations.
+
+</ul>
+
+<BR><BR>
+<a href = "TF_Frames.pdf">Click here</a> to see the TF transformation tree printed from ROS during runtime.
+
+<hr>
+<h2><b><a name = "teleoperation">Robot Teleoperation Using VNC</a></b></h2><BR>
+I communicated with the robot through Duke's wireless network primarily using remote desktop.  I used both Ubuntu's built-in remote desktop server and <a href = "http://www.tightvnc.com/">TightVNC</a> to clone additional GNOME desktops.  There was some lag but it was still possible to program and set off launch files.<BR><BR>
+One thing to note is that running <a href = "http://www.ros.org/wiki/rviz">RVIZ</a>, an important visualization program that's used both for map building and navigation, requires GL extensions.  This means that it can't be run through one of the :1, :2, :3, etc. TightVNC virtual desktops; it has to be run on the actual desktop that is being displayed on the screen (Ubuntu's primary remote desktop server).
+
+<BR><BR>
+
+<hr>
+<h2><b><a name = "packages">Downloading and Installing ROS Packages</a></b></h2><BR>
+
+<p>
+The first step is to install the ROS base system onto Ubuntu 10.04 following <a href = "http://www.ros.org/wiki/cturtle/Installation/Ubuntu">these instructions</a>.  I used the <b>ros-cturtle-pr2all</b> option.  Then there are three additional third-party packages that need to be installed.  Download each one and place it in some directory where ROS can find it (type roscd to get to the root of ROS), and then type <i>rosmake [package name]</i> to build:<BR>
+<ol>
+<li>The Brown <a href = "http://www.ros.org/wiki/irobot_create_2_1">irobot_create_2_1</a> ROS package built over the <a href = "http://www.irobot.com/filelibrary/create/Create%20Open%20Interface_v2.pdf">iRobot Create Open Interface</a>.  This package has a node that serves as a communication driver for the Roomba.  It subscribes to the <b>cmd_vel</b> topic which is of type <a href = "http://www.ros.org/doc/api/geometry_msgs/html/msg/Twist.html">Twist</a>.  This means that it can directly actuate drive commands sent from the navigation stack that are specified in meters/sec and radians/sec.  Visit <a href = "http://www.ros.org/wiki/navigation/Tutorials/RobotSetup#Base_Controller_.28base_controller.29">this link</a> for more information on the drive commands sent from the navstack.<BR>
+Another nice feature of this package is that it keeps track of odometry information and publishes the TF transform from <b>odom</b> to <b>base_link</b> automatically, so I didn't have to write my own node to keep track of odometry<BR><BR></li>
+<li>Install the package <a href = "http://www.ros.org/browse/details.php?name=irobot_create_rustic">irobot_create_rustic</a>.  This is another driver package for the iRobot Create, but it doesn't automatically subscribe to cmd_vel and its drive commands aren't consistent with the way <b>Twist</b> is defined in meters/sec and radians/sec.  I couldn't find a mapping from this driver's drive command units to what the navstack was expecting, which made it impossible for the robot to navigate.  So this isn't the main driver that I use  But this driver still does have odometry information so it could be useful for other purposes outside of navigation, especially since it comes with a nice teleoperation GUI made with wxWidgets.<BR><BR></li>
+<li>The <a href = "http://www.ros.org/wiki/hrl_rfid">hrl_rfid</a> library from Georgia Tech's Healthcare Robotics Lab.  This package has a driver node that allows me to communicate with the Mercury(r) 5e RFID reader and to query the environment with two antennas at once.<BR>
+<b>NOTE:</b> You will need to download the entire hrl repository (not just hrl_rfid) because there are some other tools there that hrl_rfid uses.  <a href = "http://gt-ros-pkg.googlecode.com/svn/trunk/hrl/">Click here</a> to be redirected to that repository.  
+
+</li>
+</ol>
+
+</p>
+
+<p>
+The next step is to download and compile my packages, which are found in the following googlecode repository: <a href = "http://code.google.com/p/dukedusty2/">http://code.google.com/p/dukedusty2/</a>.  Map-building and navigation are done in the <i>createbot</i> package.
+
+</p>
+
+<BR><BR>
+
+<hr>
+<h2><b><a name = "SLAM">Performing and Visualing Online SLAM (with video)</a></b></h2><BR>
+Follow these steps to do online SLAM:<BR>
+<ol>
+<li>
+I created a launch file in <i>createbot/map_building</i> called <a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/map_building/build_map.launch">build_map.launch</a> that needs to be configured and launched first.  Configure it for your needs by tweaking the parameters which are explained <a href = "http://www.ros.org/wiki/gmapping">here</a> on the ROS web site.  Then launch that file (<i>roslaunch build_map.launch</i>).  It will wait for laser scans and tf transforms from odom to base_link (the odometry estimates) and then it will begin to construct a map.<BR><BR>
+</li>
+
+<li>Now launch my second launch file, createbot/map_buliding/<a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/map_building/explore.launch">explore.launch</a> (<i>roslaunch explore.launch</i>), which subscribes to the laser scanner using the <a href = "http://www.ros.org/wiki/hokuyo_node">hokuyo_node</a>, subscribes to the roomba using the <a href = "http://www.ros.org/wiki/irobot_create_2_1">irobot_create_2_1</a> driver, and subscribes to the camera using the <a href = "http://www.ros.org/wiki/usb_cam">usb_cam</a> node.  Note that I also specify the static TF transforms for the camera and the laser here (no RFID is necessary for map building).<BR>
+I also launch a program that I wrote called "ObstacleAvoid" implemented in <i>createbot/src/<a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/src/ObstacleAvoid.cpp">ObstacleAvoid.cpp</a></i>.  This program basically mimics the roomba's original functionality of exploring open space while trying to avoid obstacles.  It is possible to override the automatic drive commands by executing another program I made in <i>createbot/navigate/manualdrive</i>, which accepts basic teleoperation commands.  Press the space bar and ENTER to toggle between manual and automatic drive mode once this program is launched.  Use WASD controls (plus ENTER) to make the robot go forward, left, backward, and right.  This way, the user can let the robot go automatically for a while exploring open space, but then redirect it manually to a new area.  Manual teleoperation is also obviously useful for helping the robot to avoid obstacles that the laser scanner cannot see<BR><BR>
+Here's a video of the roomba running explore.launch using the automatic program ObstacleAvoid.cpp (no user intervention):<BR>
+<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/OX6D57G8hFo?fs=1&amp;hl=en_US&amp;color1=0x006699&amp;color2=0x54abd6"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/OX6D57G8hFo?fs=1&amp;hl=en_US&amp;color1=0x006699&amp;color2=0x54abd6" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><BR>
+(<a href = "roomba_driving.wmv">Click here</a> to download original video file)
+
+<BR><BR>
+</li>
+
+<li>Once <b>build_map.launch</b> and <b>explore.launch</b> have been launched in that order, it's time to use RVIZ to visualize what's happening.  Type <b>rosrun rviz rviz</b>, and open the RVIZ configuration file <i>createbot/map_building/<a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/map_building/slam_rviz.vcg">slam_rviz.vcg</a></i>.  I set it up so that laser scans are overlayed on top of the map
+
+</li>
+
+</ol>
+Here's a video of this process in action:<BR><BR>
+<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/4ROuJ7vskt8?fs=1&amp;hl=en_US&amp;color1=0x006699&amp;color2=0x54abd6"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/4ROuJ7vskt8?fs=1&amp;hl=en_US&amp;color1=0x006699&amp;color2=0x54abd6" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><BR>
+(<a href = "slam.mpeg">Click here</a> for the original video file)
+
+<BR><BR>
+On the left there is a panel displaying real-time input from the camera.  On the right, the map-building in progress is visible with the laser scans being drawn in white on top for reference.
+
+<BR><BR>
+
+<hr>
+<h2><b><a name = "offlinemap">Building A More Accurate Map Offline (with results)</a></b></h2><BR>
+
+If you try to do online SLAM, you may be disappointed with the results of the map.  This is because the processor can't build the map at full efficiency and navigate at the same time.  When I actually cared about accuracy with the maps, I built them offline after taking data.  <a href = "http://www.ros.org/wiki/slam_gmapping/Tutorials/MappingFromLoggedData">This tutorial</a> explains how to do this with a "bag file" (ROS log file for laser scans and TF odometry).  Basically do the same exact thing as online map-building except save step 1 (the map buliding launch file) for later when playing back the data.  I also generally choose to play the data back more slowly so the processor has a chance to process all of the particles (<i>rosbag play <b>-r</b> rate logfile.bag</i>, where "rate" is the fraction of the speed at which to play back logfile information, I often used 0.25 to play back at quarter speed).
+
+<BR><BR>
+Here are some results that I got:<BR><BR>
+<table border="1">
+<tr><td><img src = "apartmentmap.jpeg"></td></tr>
+<tr><td>A map of my apartment in central campus Duke.  The gaps in the common room (biggest room on the right) are due to couches and chairs sitting there</td></tr>
+</table><BR><BR>
+
+<table border="1">
+<tr><td><img src = "3sides_hallway.jpg"></td></tr>
+<tr><td>A map of my the hallway outside of our lab in the Duke Fitzpatrick building.</td></tr>
+</table><BR><BR>
+
+<table border="1">
+<tr><td><img src = "loop_closure.jpg"></td></tr>
+<tr><td>A map of my the hallway outside of our lab in the Duke Fitzpatrick building.  This time I tried to drive it around and do loop closure, which wasn't perfect here because of the large drift of the odometer readings and the glass in the upper side of the rectangle (that made it difficult for the laser scanner)</td></tr>
+</table><BR><BR>
+
+<table border="1">
+<tr><td><img src = "hallway_bend.jpg"></td></tr>
+<tr><td>A map of a much larger section of the Fitzpatrick Hallway that shows the results of compounded odometry drift over time (the sides should be straight).</td></tr>
+</table><BR><BR>
+
+Overall the results aren't bad, and they can be improved even more if the map building is done offline on a fast computer (I'll post those results here once I extract the files from my broken laptop).
+
+<BR><BR>
+
+<hr>
+<h2><b><a name = "navigation">Global Navigation (with video)</a></b></h2><BR>
+
+<hr>
+<b>Update 6/21/2011<BR>
+<i>My deepest apologies to those who tried to use the tutorial before this date, it seems like there was a mistake that went undiscovered for months.  Apparently I accidentally left behind an identity transformation between /map and /base_link in the navigate_robot_setup.launch file, which would lead to a contradiction if the AMCL node was trying to come up with its own transformation between /map and /base_link.  This transformation has been removed now and everything should work now.  Many thanks to the <a href = "http://answers.ros.org/question/1101/robot-setup-tf-setup-for-navigation">people in the ROS community</a> who discovered this error.
+</i>
+</b>
+<hr>
+
+Follow these steps to do global navigation:<BR>
+<ol>
+<li>
+Configure the robot first with a bunch of parameters for local and global navigation, such as the min/max velocity and acceleration, the footprint of the robot, etc.  I followed the tutorial <a href = "http://www.ros.org/wiki/navigation/Tutorials/RobotSetup#Navigation_Stack_Setup">here</a> to set up my robot with ROS's navigation stack.  My parameter configuration files are found in <i>createbot/navigate</i> and they are <a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/navigate/base_local_planner_params.yaml">base_local_planner_params.yaml</a>, <a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/navigate/costmap_common_params.yaml">costmap_common_params.yaml</a>, <a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/navigate/global_costmap_params.yaml">global_costmap_params.yaml</a>, and <a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/navigate/local_costmap_params.yaml">local_costmap_params.yaml</a>.<BR><BR> </li>
+
+<li>Execute the launch file I created in <i>createbot/navigate/<a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/navigate/navigate_robot_setup.launch">navigate_robot_setup.launch</a></i>.  This launch file starts driver nodes for the Hokuyo laser and the roomba, and it sets up the static TF transform tree that I explained before<BR><BR></li>
+
+<li>Now execute the launch file I created in <i>createbot/navigate/<a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/navigate/move_base_navigate.launch">move_base_navigate.launch</a></i>.  This launch file starts a node for the map, a node that does Adaptive Monte Carlo Localization (<a href = "http://www.ros.org/wiki/amcl">AMCL</a>), and a <a href = "http://www.ros.org/wiki/move_base">move_base</a> node that does path planning based on the parameters that were set in step 1<BR><BR></li>
+
+<li>Once both of those launch files have finished initializing, launch <a href = "http://www.ros.org/wiki/rviz">rviz</a> (<b>rosrun rviz rviz</b>) and open my RVIZ configuration file in <i>createbot/navigate/<a href = "http://dukedusty2.googlecode.com/svn/trunk/createbot/navigate/navigate_rviz.vcg">navigate_rviz.vcg</a></i>.  This configuration file sets up panels in rviz that display the map, path planning information, local obstacles, and other useful navigation visualization tools.  It also provides the ability to select locations/orientations on the map as goals for the robot to reach.  I created this configuration file following a <a href = "http://www.ros.org/wiki/navigation/Tutorials/Using%20rviz%20with%20the%20Navigation%20Stack">video tutorial on ROS's web site</a>.  Watch that video to see how to command the robot to navigate using RVIZ.<BR><BR></li>
+
+</ol>
+
+Here is a video I made showing my experiences with the navigation stack:<BR><BR>
+
+<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/R63Ut5zbWPE?fs=1&amp;hl=en_US&amp;color1=0x006699&amp;color2=0x54abd6"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/R63Ut5zbWPE?fs=1&amp;hl=en_US&amp;color1=0x006699&amp;color2=0x54abd6" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object><BR>
+(<a href = "navigate.wmv">Click here</a> to download original video file</a>)
+
+<BR><BR>
+A few things to point out:<BR>
+<ul>
+<li>This video is a bit laggy because there was a lot that the processor had to deal with as it was taking this video</li>
+<li>Just as before with mapping, the left panel displays real-time input from the camera, and the right shows the map</li>
+<li>At :10, I select an initial 2D pose estimate of the robot with respect to the map.  A bunch of purple arrows are drawn around there, which represent the particles in the AMCL filter that's maintained over the robot pose.  The purple arrows are redrawn as adaptive resampling takes place with new inputs and elapsing time</li>
+<li>At :14 I select a navigation goal, and a global path (drawn in green) is calculated</li>
+<li>At 0:48 I stepped in front of the robot and it was able to find a local path around to avoid hitting into me.  At 1:04 someone stepped out of an office with a bike and the same local obstacle-avoidance behavior was demonstrated successfuly.</li>
+<li>All throughout the video red dots are drawn where laser scans detect obstacles, and blue circles are drawn around as "inflated obstacles," whre the center of the robot should never intersect to avoid hitting things</li>
+</ul>
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>

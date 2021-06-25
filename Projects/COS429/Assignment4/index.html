@@ -1,0 +1,132 @@
+<html>
+<title>Chris Tralie COS 429 Assignment #4</title>
+<body>
+<h2>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+<hr>
+<center><h1>COS 429 Assignment #4: Classification</h1><BR>
+<h2>Chris Tralie<BR>
+Platform: Windows 7 using Matlab 7.9.0 (R2009b)<BR>
+<a href = "http://www.cs.princeton.edu/courses/archive/fall09/cos429/assignment4.html">Assignment Specification</a></h2></center><BR>
+
+<ul>
+<li><a href = "#purpose">Purpose</a></li>
+<li><a href = "#kmeans">Matlab's K-Means Function</a></li>
+<li><a href = "#results">Initial Results</a></li>
+<li><a href = "#corner">Trying to Improve Results with Corner Detection</a></li>
+<li><a href = "#conclusions">Conclusions</a></li>
+<li><a href = "#code">Code Summary</a></li>
+</ul>
+
+<h2><a name = "purpose">Purpose</a></h2>
+<p>
+The purpose of this assignment was to explore the use of Naive Bayes model for image classification.  <a href = "bayes.pdf">Click here</a> for a description of this model
+</p>
+
+<h2><a name = "kmeans">Matlab's K-Means Function</a></h2>
+<p>
+<ul>
+<li>I used Matlab's built-in kmeans classifier to create my codebook of the images.  When I first started using it, I noticed that it kept saying that one of the clusters it was updating on was empty after a certain phase.  To fix this, I used the 'singleton' option, which "creates a new cluster consisting of the one observation furthest from its centroid."</li>
+<li>The kmeans clustering algorithm accepts n p-dimensional vectors in an nxp matrix.  This means that I needed to unroll the 11x11 2D image samples into a 1x121-D vector.  Note that no information or expression is lost this way; it's just the format that matlab requires</li>
+</ul>
+</p>
+
+<h2><a name = "results">Initial Results</a></h2>
+<p>
+NOTE: My program has the following syntax:<BR><BR>
+<code><b>ImClassify(number of patches, number of codewords in the codebook, distance type (either 'sqEuclidean' or 'cityblock'), use corner information:1/0)</b></code><BR>
+<ul>
+<li>The distance type tells whether the k-means clustering algorithm (and, subsequently, the codebook lookup comparison) should use squared Euclidean distance or "cityblock" distance (absolute norm distance, or the sum of components) as a similarity metric.  <i>I actually found that this didn't make a huge difference; it seems there is no way to get around the curse of dimensionality.  Therefore, I just stuck with Euclidean distance in most of my tests</i>.</li>
+<li>When the "using corner information" parameter is a 1, I try to make the majority of the sampled spots "corners" using techniques from assignment 1.  This is because I expect corners to be more often points of interest than just random samples.  I will explain this addition in more detail later; at first I just used random samples (set the last parameter to 0).</li>
+</ul>
+
+Overall, the results are not great.  This is to be expected, since we're only taking 10 training images per class.  They are at least better than consistently random (which would be 0.1, assuming each image had an equal probability of falling into any 1 of the 10 classes).  This is a start.  Varying a few parameters can help:<BR><BR>
+<b>NOTE: In the confusion matrix results below, an entry in row x column y corresponds to the probability of classifying an object in class x as being part of class y.  This means that the probabilities should sum to 1 within a column.<BR>
+ALSO NOTE: In the confusion matrices, the objects are listed in alphabetical order from row 1 to row 10 and column 1 to column 10: {airplane, butterfly, camera, helicopter, lotus, panda, pizza, pyramid, snoopy, yin_yang}
+</b><BR>
+
+<ol>
+<li>Fixing the number of random 11x11 samples per image to 50 (both for creating the codebook and for classifying), and varying the number of entries in the codebook:
+<BR><BR>
+<table border = "1">
+<tr><td>Codebook entries</td><td>Confusion Matrix</td></tr>
+<tr><td>20<BR><a href = "results/50_20.png">Click here to see the patches in the codebook</a></td><td><a href = "results/50_20.txt">Correctly classified 23% of time</a></td></tr>
+<tr><td>50<BR><a href = "results/50_50.png">Click here to see the patches in the codebook</a></td><td><a href = "results/50_50.txt">Correctly classified 29.5% of time</a></td></tr>
+<tr><td>100<BR><a href = "results/50_100.png">Click here to see the patches in the codebook</a></td><td><a href = "results/50_100.txt">Correctly classified 32.5% of time</a></td></tr>
+<tr><td>200<BR><a href = "results/50_200.png">Click here to see the patches in the codebook</a></td><td><a href = "results/50_200.txt">Correctly classified 27.5% of time</a></td></tr>
+</table>
+
+Increasing the number of codewords in the codebook helps up to a point, and then it just gets to be too many (since the space is so high dimensional).  The best number of patches seems to be about 100.<BR><BR>
+</li>
+
+<li>
+Fixing the number of codewords to 100 and varying the number of random patches:
+<table border = "1">
+<tr><td>Random patches taken</td><td>Confusion Matrix</td></tr>
+<tr><td>20<BR><a href = "results/20_100.png">Click here to see the patches in the codebook</a></td><td><a href = "results/20_100.txt">Correctly classified 28.5% of time</a></td></tr>
+<tr><td>50<BR><a href = "results/50_100.png">Click here to see the patches in the codebook</a></td><td><a href = "results/50_100.txt">Correctly classified 32.5% of time</a></td></tr>
+<tr><td>100<BR><a href = "results/100_100.png">Click here to see the patches in the codebook</a></td><td><a href = "results/100_100.txt">Correctly classified 31.5% of time</a></td></tr>
+</table>
+Varying the number of samples also helps initially, because the probability that important features get picked up with random samples increases with the number of samples taken.
+</ol>
+</p>
+
+
+<h2><a name = "corner">Trying to Improve Results with Corner Detection</a></h2>
+<p>
+To try to improve the results, I tried to give the Naive Bayes a "push in the right direction" by picking up on some features first when sampling patches (instead of doing it completely randomly).  I decided to use my <a href = "../Assignment1/#corner">corner detector from assignment 1</a>.  If there weren't enough strong corners, I simply filled in the rest of the patches with random samples.  But this way at least, I hoped to make better use of my samples (especially when using a sparser set).  Here are some of the results I got (fixing codebook size to 100):<BR><BR>
+<table border = "1">
+<tr><td>Random patches taken</td><td>Random</td><td>Using Corner Information</td></tr>
+<tr><td>20</td><td><a href = "results/20_100.txt">28.5% correctly classified</a><hr><a href = "results/20_100.png">Click here</a> to see codebook</a></td><td><a href = "results/20_100_corner.txt">29% correctly classified</a><hr><a href = "results/20_100_corner.png">Click here</a> to see codebook</td></tr>
+<tr><td>50</td><td><a href = "results/50_100.txt">32.5% correctly classified</a><hr><a href = "results/50_100.png">Click here</a> to see codebook</a></td><td><a href = "results/50_100_corner.txt">38% correctly classified</a><hr><a href = "results/50_100_corner.png">Click here</a> to see codebook</a></td></tr>
+<tr><td>100</td><td><a href = "results/100_100.txt">31.5% correctly classified</a><hr><a href = "results/100_100.png">Click here</a> to see codebook</a></td><td><a href = "results/100_100_corner.txt">43.5% correctly classified(!!)</a><hr><a href = "results/100_100_corner.png">Click here</a> to see codebook</a></td></tr>
+</table>
+It appears that using the corner detector actually does boost performance, as it consitently beats out random sampling.  Looking at the codebooks, it's not hard to see why.  In particular, compare the codebooks with 50 and 100 samples between using corners and not using corners.  The random ones (without corners) have many more patches that are constant shades of grey (without much other detail) or just one edge, which I would argue are much less descriptive than the patches that have a lot "going on" in the codebooks that use corners.
+
+<h2><a name = "conclusions">Conclusions</a></h2>
+<p>
+Using Naive Bayes on a really small data set sucks.  A few things that can improve it slightly are choosing the number of codewords to be around 100 and increasing the number of random patches taken (though this has diminishing returns).  Also, using corner information (instead of just taking random patches) can significantly boost performance.<BR>
+Also, butterflies are the hardest images to recognize.
+</p>
+
+<BR><BR>
+<h2><a name = "code">Code Summary</a></h2>
+<table border = "1"><tr><td>Filename</td><td>Description</td></tr>
+<tr><td>CannyGradient.m</td><td>CannyGradient filter from assignment 1 (used with corner detection)</td></tr>
+<tr><td>CornerFind.m</td><td>The corner finder from assignment 1, slightly modified to return corner centers in descending order or strength</td></tr>
+<tr><td>estimateClass.m</td><td>Given an image, a codebook, and a histogram associated with the codebook for each class, this function returns the class that the image most likely belongs to</td></tr>
+<tr><td>getRandPatch.m</td><td>Returns a random 11x11 grayscale patch from an image as a 121-D vector</td></tr>
+<tr><td>ImClassify.m</td><td>The main program that goes through and loads all of the images, and connects the different phases of the image classification pipeline</td></tr>
+<tr><td>OutputCodeBook.m</td><td>Outputs the codebook from the current session as a PNG image (this is how I generated the codebooks for viewing in my data section above)</td></tr>
+<tr><td>randuint.m</td><td>Return a random unsigned 32-bit integer in a certain range</td></tr>
+<tr><td>TrainCodeBook.m</td><td>Given a set of training images, create a codebook and histogram associated with that codebook for each class</td></tr>
+</table>
+
+<BR>
+<hr>
+<h2>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>
+
+<tr><td>

@@ -1,0 +1,38 @@
+<html>
+<body>
+
+<center><h1>ARFF Files / Results</h1></center><BR><BR>
+
+<p>
+I ran 10 batch tests giving alignment scores for the 1161 blobs against the 42 meshes.  I then created an ARFF file for each test.  The order of the blobs tested is presented from top to bottom in <a href = "blobs.txt">this file</a>.  They were tested against all of the meshes in the order presented in <a href = "meshes.txt">this file</a>.
+</p>
+
+<p>
+The name of the arff file indicates what type of batch test was run.  In each test, I sampled a maximum of 100 points from the point cloud and did ICP alignment to each of the 42 mesh models with that subset.  Then I chose an cutoff epsilon to say whether the aligned points were close enough to the mesh (the ratio of close enough points is the score), and I chose to do either 6D or 3D.  For example, take the arff file <b>test100_0.200.arff</b>.  This file means that 6D alignment was done with a cutoff epsilon of 0.2 meters.  The file <b>test100_3D_0.050.arff</b> means that 3D alignment was done with a cutoff epsilon of 0.05 meters.
+</p>
+
+<p>
+Once I generated an ARFF file, I did Naive Bayes using Weka and got the probability matrix for classification.  I stored this probability matrix in a text file, and I created precision recall graphs from it.  This process is described in more detail <a href = "../index.html#precisionrecall">here</a>.
+
+</p>
+
+<a href = "arff_files.zip">Click here</a> to download all of the arff files and the Naive Bayes probability matrices for each arff file.
+
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>

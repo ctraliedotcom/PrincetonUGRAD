@@ -1,0 +1,1 @@
+The different JPEG files here give a screenshot of where the user is looking when the associated mp3 files are made.

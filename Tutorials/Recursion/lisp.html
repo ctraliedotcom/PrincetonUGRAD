@@ -1,0 +1,195 @@
+<html>
+<title>LISP Programming</title>
+<body text="black" bgcolor="white">
+<center><h1>LISP Programming</h1></center><BR>
+<ul>
+<li><a href="#whatis">Introduction</li>
+<li><a href="#install">Setting up Clisp in Windows (used for examples)</li>
+<li><a href="#basics">The Basics: Atoms, Lists, arithmetic operators, T, Nil, and the Set command</li>
+<li><a href="#listoperators">List operators: cons, car, cdr, and setf</a></li>
+<li><a href="#logicoperators">Logic operators</a></li>
+<li><a href="#functions">Function definitions</a></li>
+<li><a href="#recursion">Recursive function examples</a></li>
+</ul>
+<BR><BR>
+<a name="whatis"><b><u><tt>Introduction</tt></u></b></a>
+<p>
+<center><img src="startlisp.jpg" alt="LISP under Cygwin"></center><BR>
+LISP is a seasoned, high-level programming language that is especially good for artificial intelligence.  It is mostly used as an <b>interpreted language</b> (a program is running to interpret programming commands), but most versions of LISP will also let you compile your code into binary executable files as well.<BR><BR>  You may be wondering where this language got its name (no, it's not because the people who administer the ACSL exams have a speech impediment).  It's actually because LISP is a "list processing" programming language.  Everything in LISP, including functions, variables, and operators, are stored in lists.  Because LISP has been around since the 1950s, many different versions are in existance.  The one I like to use is called "CLisp," which is short for "Common Lisp."  A whole bunch of people have gotten together and agreed on some standards to put into this version.  Common Lisp is very similar to ACSL lisp, but there are a few minor differences.  When I do my examples, I will point out any differences between what you may see on the ACSL contest and what you'll end up writing if you code LISP for real<BR><BR>The ACSL exam only goes into the basics of LISP programming, but I'm going to add on a bit more to the typical curriculum so that you may even be able to use it to write your programs for the contest.  LISP also gives me the opportunity to review recursion, as you will soon see.</p><BR><BR>
+
+
+<a name="install"><b><u><tt>Setting up Clisp in Windows (used for examples)</tt></u></b></a>
+<p>
+Most people who use LISP use it under a Linux terminal.  These people will simply have to find the common lisp source, unzip it, compile it, and run it.  Even if you're using Windows (you like to take risks, Bill Gates has personally threatened your life, or if you're like me and just can't get your new video card to work under Linux for some reason), you can still run it.  The best way to do this is to download and install a sort of "Linux Emulator" called <a href="http://www.cygwin.com/" target="_blank">Cygwin</a>.  Cygwin is awesome, because it lets you run nearly any program native to Linux under Windows (and, like everything in the <a href="http://www.sourceforge.net" target="_blank">open-source community</a>, it's completely free).  For this lesson, we're the most interested in installing the <b>"CLisp"</b> package, but I'm going to ask you to install some other packages that will help in later lessons.  Follow the steps below to get the emulator working:<BR>
+<ol>
+<li>First, download the <a href="http://cygwin.com/setup.exe">setup.exe</a> installer executable from cygwin.com</li>
+<li>Start <b>setup.exe</b>, click "next," and choose to install from the internet (<i>NOTE: You must maintain a live internet connection during this installation</i>)</li
+<li>Choose a directory to which to install Cygwin, and choose a directory to which the compressed packages will be downloaded</li>
+<li>Choose an internet connection type and a <b>mirror</b> from which to download all packages</li>
+<li>Once you have found a working mirror, a package selection screen should pop up that looks like this:<BR>
+<img src="cygwinpackageselect.jpg"><BR>
+Ensure that the following packages are checked off (in addition to what's already there):<ul><li>Under <u>Base</u> <ul><li>bash: The GNU Bourne Again SHell</li>
+<li>coreutils</li>
+<li>findutils</li>
+<li>tar: a GNU file archiving program</li>
+<li>zlib</li></ul></li>
+<li>Under <u><b>Devel</b></u><ul><li>autoconf</li>
+<li>All of the <i>automake</i> packages</li>
+<li><b><h2>clisp: An ANSI Common Lisp implimentation</h2></b> (this is the whole reason we're doing this, so <b>DON'T FORGET TO CHECK THIS ONE OFF!!</b>)</li>
+<li>cmake</li>
+<li>ctags</li>
+<li>gcc-core: C compiler</li>
+<li>gcc-g++: C++ compiler</li>
+</ul></li>
+<li>Under <u>Doc</u><ul><li>man</li><li>perl_manpages</li><li>xpdf</li></ul></li>
+<li>Under <u>Editors</u><ul><li>emacs</li><li>gvim</li><li>hexedit</li><li>nano</li><li>nedit</li><li>vim</li><li>xemacs</li></ul>
+<li>Under <u>Interpreters</u><ul><li>clisp</li><li>Perl</li><li>xemacs</li></ul>
+<li>Everything under <u>KDE</u> (4 items total)</li>
+<li>Under <u>Web</u><ul><li>links</li><li>naim :-D</li><li>wget</li></ul>
+</li>
+<li>Check off everything under <u>X11</u> if you have room on your hard drive</li>
+<li>Obviously, if there's anything else you want to check off, you don't have to ask my permission to do it.  There's lots of cool, free Linux software out there; I've merely highlighted a few of the most pedagogical packages.
+</li>
+<li>Click "next" and wait for everything to download and install.  When all is said and done, you should have a shortcut to clisp somewhere in your start menu/on your desktop.  Every time you click on the shortcut to Cygwin, a beautiful Linux terminal should pop up that looks like this:<BR>
+<img src="startcygwin.jpg"><BR>
+Type <b>clisp</b>, hit ENTER, and you're ready to start interpreting some LISP commands.</li></ol>
+
+</p><BR><BR>
+<a name="basics"><b><u><tt>The Basics: Atoms, Lists, arithmetic operators, T, Nil, and the Set command</tt></u></b></a>
+<p>As I said before, everything in LISP is a list.  These lists all have elements, which are known as "atoms."  Unlike variables in languages such as C++ and Java, LISP atoms aren't a particular variable type such as <b>short</b> or <b>double</b>. Instead, they can be just about anything that you want them to be.  Here is an example list below:<BR><BR>
+<table border="1" bgcolor="yellow" cellpadding="5"><tr><td><code>(A CHRIS 3.141 90 EXCELLENT -111)</td></tr></table><BR>
+So hopefully you've noticed that a list has all of its atoms inside of parentheses, that each atom is separated by a space, and that atoms can be words, characters, floating point numbers, or integers (and a whole other host of things).  <BR><BR>If you typed that list into the clisp interpreter, it wouldn't really do much; it would just yell at you.  This is because LISP likes to <b>evaluate</b> everything that you give to it.  When it looks at the list (A CHRIS 3.141 90 EXCELLENT -111), it first tries to evaluate A.  But A isn't a function, and it's not a variable (yet), so the interpreter spits back an error message when you hit ENTER.  The easiest way to explain how this process works is to launch into some examples<BR>
+<ol>
+<li><BR><table border="1" bgcolor="yellow" cellpadding="5"><tr><td>
+<code>>(+ 4 5)
+<BR>9</td></tr></table><BR>
+This list actually evaluates to something.  First, the interpreter looks at <b>+</b>, which is a <b>function</b> set up to add numbers together (function calls in lists are single elements as well).  The interpreter now expects two more parameters that can be evaluated, and it finds them: 4 and 5.  All numbers by themselves evaluate automatically to the values that they represent, and they cannot be used as variable names for this reason.<BR>
+NOTE: In ACSL, + will be ADD, * will be MULT, - will be SUB, / will be DIV, etc.  Most of them are pretty self-explanatory, but I thought I should point that out anyway.<BR>
+NOTE ALSO: You can give the + function any number of arguments, even 1.  For instance (+ 4) returns 4, and (+ 1 2 3 4) returns 10.<BR></li>
+<li><BR>
+<table border="1" bgcolor="yellow" cellpadding="5"><tr><td><code>
+> (- 4 6)<BR>
+-2<BR>
+> (/ 100 25)<BR>
+4<BR>
+> (+ (* 3 (/ 60 10)) -4 6)<BR>
+20</code></td></tr></table><BR>
+Note that (- 4 6) translates to "4 - 6" in <b>infix</b> (what we're used to).  It's the same thing with (/ 100 25), which is 100/25.  Having the operator before the operands is known as "prefix" form, and it will be covered in more depth in a later lesson.<BR>
+Also look at how the set of <b>nested lists</b> (+ (* 3 (/ 60 10)) -4 6) is evaluated.  After it sees the + sign, the interpreter knows it needs to evaluate the first parameter list (* 3 (/ 60 10)) before it can go on.  This inner list evaluates to 3 * (60/10), 3*6, 18.  Then, the + operator can add 18, -4, and 6.<BR><BR>
+</li>
+<li>In this example, we're going to try to look at how to bind values to variables.  In LISP, you don't have to declare variables; almost everything is a potential variable (except for functions, constants, and the like that are already bound).  However, "variables" are usually no good unless they are bound to something and can be evaluated.<BR><table border="1" bgcolor="yellow" cellpadding="5"><tr><td><code>
+> (set A 3)<BR>
+*** - EVAL: variable A has no value<BR>
+> (eval A)<BR>
+*** - EVAL: variable A has no value<BR>
+> (set 'A 3)<BR>
+3<BR>
+> (eval A)<BR>
+3<BR>
+> (setq A 42)<BR>
+42<BR>
+> (eval A)<BR>
+42</td></tr></table><BR>
+This example shows how LISP tries to evaluate everything that you give it.  Usually, the <b>set</b> function is used to bind values to variables.  At the beginning, we were trying to give A the value of integer 3 by typing (set 3).  However, this ironically doesn't work, because A is not bound to anything yet when the function is first called.  When the Lisp interpreter first sees this list, it says something like this:<BR> "okay, we're using the set function, so look for two parameters.  First parameter (the variable) is A.  Evaluate A...WHAAAM!!  A doesn't have a value yet, so everything quickly deteriorates.  When we use the <b>eval</b> function to see what's in A, we get the same error, because the set function did not complete properly (hence, A is still unbound).<BR>
+To tell LISP to avoid evaluating something for the time being, we put a <b>quote</b> (<b>'</b>) before it.  This is why (set 'A 3) actually work.  LISP now sees the quote when it looks at the variable parameter of the set function, so it knows to ignore A.  Then, it sees 3, which evaluates to 3 (big surprise there), and it stores 3 in A (or "binds" 3 to A, as I have been saying).<BR>
+Programmers are lazy, forgetful people sometimes, so LISP also has the function <b>setq</b> which automatically builds the quote into the first parameter.  This way, you can just write <b>setq</b> instead of <b>set '</b> every time you want to bind a variable to something new.<BR><BR>
+NOTE: When the <b>set</b> function has finished evaluating, it returns whatever you just set the variable to.  Hence, the list (setq A (setq B 10)) would set both A and B to 10.<BR><BR></li>
+<li>Okay, so now we know how to store a single value into a variable to make it an atom.  But what the heck do we do if we want to store a list into a variable?  Let's look at some examples:
+<table border="1" bgcolor="yellow" cellpadding="5"><tr><td><code>
+>(setq testlist (+ 2 3))<BR>
+5<BR>
+>testlist<BR>
+5<BR>
+>(setq testlist '(+ 2 3))<BR>
+(+ 2 3)<BR>
+>(eval 'testlist)<BR>
+(+ 2 3)<BR>
+>(eval testlist)<BR>
+5<BR>
+>(setq cool '(HEY THIS IS A REALLY COOL LIST THAT ISN'T GOING TO BE EVALUATED))<BR>
+(HEY THIS IS A REALLY COOL LIST THAT ISN'T GOING TO BE EVALUATED)<BR>
+>(eval cool)<BR>
+*** - EVAL: undefined function HEY
+</td></tr></table><BR>
+Once again, we have to make good use of the <b>quote (')</b>.  As you can see by the first example, the omission of the quote before the list to which we are trying to bind the "testlist" variable caused the list to be evaluated before it was stored.  Luckily, putting the quote before the list in question solves this problem.  You should also notice that later, when using the <b>eval</b> function, the quote is still needed if we want to view the contents of the list without evaluating it. <BR>I just threw in the last example to show that you don't have to have functions in the list for it to be stored, but you may not be able to evaluate it later.<BR><BR></li>
+<li>One thing that I should definitely mention before we go on is the existance of the special constants <b>T</b> and <b>NIL</b>:<BR>
+<table border="1" bgcolor="yellow" cellpadding="5"><tr><td><code>
+>(setq A 7)<BR>
+7<BR>
+>(setq B '(TEST LIST WITH 3))<BR>
+(TEST LIST WITH 3)<BR>
+>(atom A)<BR>
+T<BR>
+>(atom B)<BR>
+NIL<BR>
+>(atom '(3.141 IS ALMOST PI))<BR>
+NIL<BR>
+>(atom +)<BR>
+NIL<BR>
+>(atom 4)<BR>
+T</td></tr></table><BR>
+The <b>atom</b> function is a boolean function evaluates to <b>true</b> if its parameter is an atom, and <B>false</B> if the parameter is not an atom.  In LISP, though, boolean values true and false are <b>T</b> and <b>NIL</b> respectively.  Hence, the atom function returns NIL when it is given a list or a function (these are not atoms).<BR>
+NOTE: <b>NIL</b> is equivalent to an empty list <B>()</b>.<BR>
+NOTE ALSO: The ACSL exam may actually use "true" instead of T, so watch out for this</li></ol></p><BR><BR>
+
+
+<a name="listoperators"><b><u><tt>List operators: cons, car, cdr, and setf</tt></u></b></a>
+<p>Now that we know how to store lists into variables, we need to figure out how to change their contents without having to overwrite them every single time.  There are four main functions that you should remember, and I will cover them through some different examples:<BR>
+<ol>
+<li><b><u>CONS</u></b>: The <b>cons</b> function is used to build lists.  It adds something onto the end of a list you give it.  Let's look at some examples:<BR><BR>
+<table border="1" bgcolor="yellow" cellpadding="5"><tr><td><code>
+>(setq A '(THIS IS))<BR>
+(THIS IS)<BR>
+>(cons A '(A LIST))<BR>
+((THIS IS) A LIST)<BR>
+>(cons 1 (cons 2 (cons 3 NIL)))<BR>
+(1 2 3)</td></tr></table><BR><BR>
+This is pretty self-explanatory; cons takes a list as a first parameter, and it adds the second parameter to the end of the list.  Just pay special attention to what's happening in the second example with the nested lists and NIL.  First, the inner list evaluates to (3), because it's adding 3 to ().  Then, 3 is added onto the end of 2, giving the list (2 3).  Finally, the outer cons function is reached, and (2 3) is added to 1, giving (1 2 3).<BR><BR></li>
+
+<li><b><u>CAR and CDR</u></b>: The <b>car</b> function returns the first atom of a list, while <b>cdr</b> returns a list containing everything but the first element:<BR><BR>
+<table border="1" bgcolor="yellow" cellpadding="5"><tr><td><code>
+>(setq testlist '(THIS IS A TEST LIST))<BR>
+(THIS IS A TEST LIST)<BR>
+>(car testlist)<BR>
+THIS<BR>
+>(cdr testlist)<BR>
+(IS A TEST LIST)<BR>
+>(car (cdr (cdr testlist)))<BR>
+A<BR>
+>(cons 'THAT (cdr testlist))<BR>
+(THAT IS A TESTLIST)<BR>
+>(atom (car testlist))<BR>
+T<BR>
+>(atom (cdr testlist))<BR>
+NIL<BR>
+>(cdr '(1))<BR>
+NIL<BR>
+>(eval 'testlist)<BR>
+(THIS IS A TEST LIST)<BR>
+>(setq testlist (cdr testlist))<BR>
+(IS A TEST LIST)<BR>
+>(eval 'testlist)<BR>
+(IS A TEST LIST)
+</td></tr></table><BR><BR>
+<ul><li>The first two examples are straightforward, as they follow from the definition of the functions.  (car (cdr (cdr testlist))) returns the third element, or "A," from testlist, because the inner cdr functions have dropped the first two elements, making A the first element by the time the car function is called.</li><li>
+In the fourth example, cons is used in conjunction with cdr to replace the first element "THIS" with "THAT" in the returned list.</li><li>
+The two examples with the <b>atom</b> function show that car always returns an atom, but cdr usually doesn't.</li><li>
+The evaluation of the list (cdr '(1)) shows that if the cdr function is called on a list with only one atom, then an empty list (), or "NIL," is returned.</li>
+<li>The last slew of statements stress a very important point about how LISP returns function values.  Even though the car, cons, and cdr functions have been used multiple times on "testlist," no permanent changes have been made to that variable.  This is why we have to use the setq function to overwrite testlist if we want to store the results of these functions at any point in time.  If you are familiar with C++ or Java, this is equivalent to doing x=x+1, or x++ to increment x.  Simply saying x+1 would not make a permanent change to any variable in this instance.</li>
+</ul><BR>
+NOTE: For those of you familiar with linked lists and pointers, the car function is a pointer to the first element in a linked list, while cdr is a pointer from that element to the next element and the rest of the list.  Cdr returns a sublist, which also has a car pointer to its first variable (and so on and so forth).<BR><BR>
+</li>
+<li>If cons, car, and cdr were the only list-operating functions we knew, we would be able to get by.  However, it would be a real pain to try to replace atoms at an arbitrary position within a list, because you would have to break the list up into a bunch of little pieces and try to combine them all again later (this gets very ugly very quickly).  If you enjoy subjecting yourself to mental anguish, then I suggest trying this sometime.  However, I strongly recommend using the <b>setf</b> function instead (the ACSL conveniently forgets to mention this function).<BR><BR>
+<u><b>SETF</b></u>: Given a list, a position within a list, and an atom, this function replaces the atom currently in the list at the given position with the atom specified, and it <i>stores the new list in memory.</li><!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->

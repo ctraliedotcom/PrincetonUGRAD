@@ -1,0 +1,56 @@
+body{
+	background-color : #FFFFFF;
+	foreground-color: 
+}
+
+a {
+	color : #0000FF;	
+}
+
+a:visited {
+	color : #0000FF;	
+}
+
+DIV#navigation{
+	margin: 5px 2px 2px 2px;
+	background-color : Black;
+	padding:10px;
+	font : x-large Arial, Helvetica, sans-serif;
+	text-align: center;
+}
+
+DIV#navigation a{
+	color : #FF9900;
+	background-color: Black
+}
+DIV#navigation a:hover{
+	color : #FF0000;
+	background-color: Black;
+}
+
+DIV#picture {
+position:absolute
+left: 0px;
+padding: 2px;
+width: 400px;	
+}
+
+DIV#main{
+position:absolute;
+left: 430px;
+	padding: 2px;
+	font : normal small Arial, Helvetica, sans-serif;
+	width : 380px;
+	color : Black;
+	vertical-align : top;
+	text-align : left;
+}
+
+DIV#classes_main {
+	padding: 2px;
+	font : normal small Arial, Helvetica, sans-serif;
+	color : Black;
+	vertical-align : top;
+	text-align : left;
+}
+

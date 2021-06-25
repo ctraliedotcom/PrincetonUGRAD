@@ -1,0 +1,138 @@
+<html>
+<title>Beat Compose: COS 325 Chris Tralie</title>
+<body>
+
+<hr>
+<h1><b>NOTE: A Newer version of this tutorial may exist.  <a href = "../../../../Teaching/RissetBeats">Click here</a> to go to the never version</b></h1>
+<hr>
+
+<h2>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+<hr>
+<center><img src = "title.jpg"><BR>
+<h1>COS 325: Midterm Project 2009</h1><BR>
+<h2>Chris Tralie</h2><BR><BR></center>
+
+<ul>
+<li><a href = "#Purpose">Purpose</a></li>
+<li><a href = "#Experimentation">Some Experimentation in ChucK</a></li>
+<li><a href = "#ExperimentC">Some Experimentation in C</a></li>
+<li><a href = "#CPP">The Final Product: An Improvement in C++</a></li>
+<li><a href = "#Results">Results</a>
+
+<ul><li><a href = "#statement">My 66.6 second musical statement</a></li></ul>
+
+</li>
+<li><a href = "#Code">Code Summary</a></li>
+<li><a href = "#Conclusion">Conclusions</a></li>
+<li><a href = "#References">References</a></li>
+</ul>
+
+<a name = "Purpose"><h2><u>Purpose</u></h2>
+<p>&nbsp&nbsp&nbsp&nbsp&nbsp My work here is inspired by some of Jean-Claude Risset's work with beats as a form of musical expression.  In this particular project, I set out to use the concept of beating frequencies to compose music.  The idea is to add together <i>many</i> cosine waves that are very close together in frequency for each note in a song, such that at particular points in time, that note will stand out (all of the adjacent frequencies in a note will come together; for instance, a 440.0hz, 440.1hz, and 440.2hz signal will have two beats every 10 seconds, one between the 440hz and 440.1hz cosines, and one between the 440.1hz and the 440.2hz).  What makes this unique is that all the program needs to do is determine the sine waves right at the beginning, and then just let them go for all time without changing anything (the system is completely time-invariant).  The song should repeat infinitely, with different notes standing out chosen ahead of time.
+<BR>&nbsp&nbsp&nbsp&nbsp&nbsp I'm doing this because it seems like a neat way to make music; it relies solely on beats, which I expect will give rise to a unique timbre.  Also, the whole thing is time-invariant (which seems cool to me since, intuitively, most songs seem hightly time-varying).  The challenge will be to determine the phases for each sine wave and the number of sine waves needed such that each note will only "play" once at the correct time in a chosen interval, and so that the attack on each note will be distinct (and the notes won't just blur together all over the place).
+
+</p>
+
+<h2><u><a name = "Experimentation">Some Experimentation in ChucK</a></u></h2>
+<p>
+I started out in ChucK with sine oscillators to do some experimentation.  Before I could go to far, I had to do some math:<BR>
+<ul>
+<li>Let <b>L</b> be the length of the song in seconds, and <b>T</b> be the "hitting time" of a particular note</li>
+<li>Note that, by the trig multiplication identities,<BR>
+<img src = "beatequation.jpg"><BR>
+So this means that two frequencies that are really close together (separated by dtheta), can be viewed as a frequency that's the average of the two, modulated by a sine/cosine with a frequency equal to the difference over two.  This means that the envelope will reach an extrema (positive or negative) with a frequency exactly equal to the difference between the two.  So, in essance, a "beat" is heard with frequency equal to the difference between the two</li>
+<li>The first thing to do is to make sure that each note will only "occur" (stand out sharply) once per time interval.  This means that the beat should reach an extrema with a period equal to the time interval (L).  Therefore, using the math above combined with the fact that period = 1/frequency, the frequency separation should be 1/L for frequencies that cover a note, for that note to occur <i>exactly</i> once in the interval.</li>
+<li>The next challenge is to determine the phase needed to get the beat to occur at an exact time, T, during the interval L.  Since a beat will occur at time zero for two close frequencies added together with no phase, each frequency that contributes to the beat needs to be time-shifted by T.  For a sine that's defined to be sin(2PI*F*(t-T)), the phase should be <b>-2Pi*F*T</b> for this to happen</li>
+<li>The only challenge remaining is to determine how many frequencies close to a base frequency are enough to get the sharp attack needed at the chosen time.  I determined this by experimentation, using <a href = "Code/midterm.ck">the following ChucK code</a> that I wrote, which allowed me to specify arbitrary frequencies, song length (L), time of attack of each note (T), and the number of close-together frequencies per note.  I first started out with just two frequencies per note (only one beat), but found that the beat occurred way too gradually and it was difficult to pick out exactly when the note's amplitude was supposed to peaking if I didn't know ahead of time.  I usually determine this experimentally on a case-by-case basis.  If the tempo of the piece is faster, then more beats will be needed, since the notes need to reach a peak faster.  There will also be more beats needed if the piece is longer, since the period of the beats goes up, making them more gradual (so more interference is needed at the exact point).  I have a five-second example using this scheme coded into that ChucK file currently.</li>
+</ul>
+</p>
+
+<h2><u><a name = "ExperimentC">Some Experimentation in C</a></u></h2>
+<p>
+&nbsp&nbsp&nbsp&nbsp&nbsp I created a program in C that takes four arguments: an input file that has a musical score, the length of the output song in seconds, the number of cosines to add together for each note, and the output wav filename.<BR>  The format of the input files was as follows: 
+<ul><li>At the top of each file, put an integer that says how many notes will be in the piece</li>
+<li>Every subsequent line has "notename, length," where <i>notename</i> is an integer that's the offset in halfsteps from a 440 A (so, for instance, the G right below that would be -2), and <<i>length</i> is an integer representing the length in sixteenth notes (or some other fundamental unit of rhythm the composer wants) of each note.  For example, the following input file:<BR>
+<table border = "1">
+<tr><td>
+<code>
+8<BR>
+-7, 4<BR>
+-5, 4<BR>
+-3, 4<BR>
+-2, 4<BR>
+-7, 2<BR>
+-5, 2<BR>
+-3, 2<BR>
+-2, 2
+
+</code>
+</td></tr>
+</table>
+will play (D E F# G first slowly as quarter notes, then D E F# G at double the speed as eighth notes).</li></ul>
+<BR>
+&nbsp&nbsp&nbsp&nbsp&nbsp As usual, the program has a function that converts between halfstep offsets of a 440 A and a frequency (using the frequency multiplier of 2^(1/12) for every halfstep up), and this step needs to be done for each note.  To determine the time of attack for each note (which is used to help determine the phase, as I explained before), first the total number of sixteenth notes is counted, and then the time the song user specified is divided by that number.  This quotient then gives the length of a sixteenth note.  The first note occurs at time zero, and the next note occurs at the (length of a sixteenth note) * (the length of the first note in sixteenth notes), and so on.  With the time of attack, the phase for each frequency in a note can be calculated as -2PI*f*T, where f is the frequency of each cosine in a note and T is the time of attack.<BR>
+
+&nbsp&nbsp&nbsp&nbsp&nbsp Once all of the frequencies and phases have been determined for each note, they are added one by one to the final signal.  After all frequencies have been added, the signal is rescaled to prevent clipping<BR>
+<a href = "Code/midterm.c">Here is the code I wrote to do all of this</a>
+
+<h2><u><a name = "CPP">The Final Product: An Improvement in C++</a></u></h2>
+&nbsp&nbsp&nbsp&nbsp&nbsp Although the previous solution in C completed the task correctly, it ended up being extremely inefficient.  As I mentioned, the user specifies how many cosines should be added together for each note.  So literally, the number of frequencies needed would be (the number of notes) * (the number of frequencies for each note).  This means that if it takes roughly a second to fill my 66.6 second musical statement (160 notes) with 4 cosines, and I used 500 cosines per note, then it will take (160 notes)*(500 cosines / note) / (4 cosines / sec) * (1 minute / 60 sec) * (1 hour / 60 minutes) = <b>5.56 hours</b>(!) to calculate.<BR><BR>
+&nbsp&nbsp&nbsp&nbsp&nbsp I realized that if I want n cosines per note, then I should really only have to use n cosines for every distinct note played in the piece.  This is because the sum of two cosines of the same frequency will also be a cosine of the frequency, just at a different amplitude and phase.  For instance, if a piece has the structure (F# F# G A A G F# E D D E F# F# E E), there are only 5 distinct notes there (D E F# G A), so I should only need to have the (number of cosines per note) * (5 distinct notes) cosines for the whole piece, as opposed to (number of cosines per note) * (15 total notes) cosines.  For really long pieces, the compression will be even higher, since it's likely that each note will be used dozens of times over.<BR><BR>
+&nbsp&nbsp&nbsp&nbsp&nbsp I was able to merge the same notes at different times together by using phasors.  To accomplish this, I switched over to C++ so that I could use an STL map as a table for my phasors.  That is, I created a map with keys as a frequency, and the values as an object phasor.  This way, as I was going through all of the frequencies from note to note, I could check to make sure that the frequency hadn't already been used, and if it had, I would simply add a phasor to it.  Another improvement I made was to have the "close by" frequencies for each note spaced evenly on both sides of the note.  Before, I simply added a factor of 1/songlength to get each successive frequency<BR>
+<a href = "Code/midterm.cpp">Here is the C++ code I ended up with after these modifications</a>
+
+<h2><u><a name = "Results">Results</a></u></h2>
+Here are some example executions of my program with different scores and different parameters, including my eventual "66.6 second musical statement."<BR><BR>
+<a href = "Results">Click here for all result files</a><BR><BR>
+<table border = "1" cellpadding = "5">
+<tr><td><center>Name</center></td><td><center>Score File</center></td><td><center>Command</center></td><td><center>Output File</center></td><td><center>Total Number of Cosines</center></td><td><center>Cosine Table</center></td></tr>
+
+<tr><td>G Arpeggio (10 sec)</td><td><a href = "Results/arpeggio.txt">arpeggio.txt</a></td><td>beatsynth arpeggio.txt 10.0 100 arpeggio.wav > arpeggio.freq</td><td><a href = "Results/arpeggio.wav">arpeggio.wav</a></td><td>700</td><td><a href = "Results/arpeggio.freq">arpeggio.freq</a></td></tr>
+
+<tr><td>G Arpeggio (5 sec)</td><td><a href = "Results/arpeggio.txt">arpeggio.txt</a></td><td>beatsynth arpeggio.txt 5.0 100 arpeggio5.wav > arpeggio5.freq</td><td><a href = "Results/arpeggio5.wav">arpeggio5.wav</a></td><td>700</td><td><a href = "Results/arpeggio5.freq">arpeggio5.freq</a></td></tr>
+
+<tr><td>G Arpeggio (2.5 sec)</td><td><a href = "Results/arpeggio.txt">arpeggio.txt</a></td><td>beatsynth arpeggio2.5.txt 2.5 100 arpeggio.wav > arpeggio2.5.freq</td><td><a href = "Results/arpeggio2.5.wav">arpeggio2.5.wav</a></td><td>700</td><td><a href = "Results/arpeggio2.5.freq">arpeggio2.5.freq</a></td></tr>
+
+<tr><td>Happy Birthday (10 sec)</td><td><a href = "Results/birthday.txt">birthday.txt</a></td><td>beatsynth birthday.txt 10.0 60 birthday.wav > birthday.freq</td><td><a href = "Results/birthday.wav">birthday.wav</a></td><td>480</td><td><a href = "Results/birthday.freq">birthday.freq</a></td></tr>
+
+<tr><td><a name = "statement">"Wanna Be Startin Something"</a><BR>Michael Jackson<BR><b>My 66.6 second musical statement</b></td><td><a href = "Results/wanna.txt">wanna.txt</a></td><td>beatsynth wanna.txt 66.6 500 wanna.wav > wanna.freq</td><td><a href = "Results/wanna.wav">wanna.wav</a></td><td>6000</td><td><a href = "Results/wanna.freq">wanna.freq</a></td></tr><BR>
+
+</table><BR>
+Note that I needed far more cosines per note in the last example, because it was 66.6 seconds long.  This means that the adjacent beat frequencies I produced were very slow (since I only wanted them to occur once every 66.6 seconds).  Since the beat frequencies were slower, they reached a peak much more gradually.  This means that I needed to add much more of them together to get the sharp attack needed.
+
+<h2><u><a name = "Code">Code Summary</a></u></h2>
+<a href = "Code">Click here for all code</a><BR>
+<table border = "1" cellpadding = "5"><tr><td><center>Code File</center></td><td><center>Purpose</center></td></tr>
+<tr><td><a href = "Code/midterm.ck">midterm.ck</a></td><td>To test out basic concepts before moving onto more complicated code</td></tr>
+<tr><td><a href = "Code/midterm.c">midterm.c</a></td><td>A first (inefficient) implementation of the final product, to test synthesizing output based on a musical score</td></tr>
+<tr><td>(*)<a href = "Code/midterm.cpp">midterm.cpp</a></td><td>A refined version of the program that merges identical frequencies into phasors for more efficient processing</td></tr>
+</table>
+
+<h2><u><a name = "Conclusion">Conclusions</a></u></h2>
+<p>
+&nbsp&nbsp&nbsp&nbsp&nbsp This design met the specifications for using beating cosine waves to have notes of precise frequency "pop out" at precise times during a song.  What makes this method of composition so neat is that technically, all notes are being played all the time throughout the entire song; but as each note goes to be played, it pops out of the background at just the right time.  This makes for a really cool, almost underwater effect.  Because the attacks of the notes are not infinitely precise (it takes some time for the beats to rise to a peak), the music does sound rather blurry.  Also, because all notes are in the background simultaneously, the music has an etheral, other-worldly timbre to it.  What makes that even cooler is, as the note gets close to peaking, the listener can sort of anticipate it, because other beats that are created nearby begin to increase in amplitude (this is especially obvious when the piece is about to jump way up in pitch).<BR><BR>
+&nbsp&nbsp&nbsp&nbsp&nbsp Since this was merely a demonstration of a concept, there are lots of extensions that could be made if this were to be refined as an actual composition tool.  One of the first things I would do would be to extend the program to play chords.  Nothing special should have to be done, other than allowing two+ notes to play at the same time (all of the math should be the same).  Also, I came up with my own specification for creating musical scores.  But it would be more natural to allow my program to read midi files, so that, in effect, my program turns into a midi synthesizer (especially with the note-on commands, it should be easy to figure out exactly when the attacks of each note are).  In terms of perceptual quality, perhaps I would add the capability for users to specify harmonic patterns for each note, so that they could sound richer and perhaps even sound like actual instruments in a weird way.  Lastly, I would create a basic pitch detection program that goes through (using the FFT, presumably) an input sound file and looks for 4-5 peaks in frequency every small increment in time, and that I could feed that information to my beat synthesizer (to resynthesize the most important notes from the input sound as beats).
+
+<h2><u><a name = "References">References</a></u></h2><BR>
+<a href = "http://www.sgi.com/tech/stl/Map.html">C++ STL reference</a><BR>
+<a href = "http://www.cs.princeton.edu/courses/archive/spring09/cos325/src/waveio.h">Perry Cook's waveio.h</a><BR><BR>
+<hr>
+<h2>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2><!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->

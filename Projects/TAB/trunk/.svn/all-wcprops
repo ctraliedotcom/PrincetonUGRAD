@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/svn/TAB/!svn/ver/22/trunk
+END
+weather.c
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/TAB/!svn/ver/12/trunk/weather.c
+END
+speak.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/TAB/!svn/ver/22/trunk/speak.cpp
+END
+weather.h
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/TAB/!svn/ver/6/trunk/weather.h
+END
+play.c
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/TAB/!svn/ver/18/trunk/play.c
+END
+alarm.wav
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/TAB/!svn/ver/17/trunk/alarm.wav
+END
+speak.h
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/TAB/!svn/ver/19/trunk/speak.h
+END
+sphinx_recognition.c
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/TAB/!svn/ver/22/trunk/sphinx_recognition.c
+END
+play.h
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/TAB/!svn/ver/18/trunk/play.h
+END
+news.c
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/TAB/!svn/ver/18/trunk/news.c
+END
+sphinx_recognition.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/TAB/!svn/ver/18/trunk/sphinx_recognition.h
+END
+test.c
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/TAB/!svn/ver/18/trunk/test.c
+END
+number_game.c
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/TAB/!svn/ver/22/trunk/number_game.c
+END
+news.h
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/TAB/!svn/ver/18/trunk/news.h
+END
+alarmconfig.c
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/TAB/!svn/ver/18/trunk/alarmconfig.c
+END
+config
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/TAB/!svn/ver/22/trunk/config
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/TAB/!svn/ver/22/trunk/main.c
+END
+number_game.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/TAB/!svn/ver/22/trunk/number_game.h
+END
+alarmconfig.h
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/TAB/!svn/ver/12/trunk/alarmconfig.h
+END
+alarm.fsg
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/TAB/!svn/ver/18/trunk/alarm.fsg
+END
+makefile
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/TAB/!svn/ver/18/trunk/makefile
+END
+alarm.dict
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/TAB/!svn/ver/22/trunk/alarm.dict
+END

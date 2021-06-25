@@ -1,0 +1,63 @@
+<html>
+<title>Chris Tralie Project Proposal</title>
+<body>
+<center><h1>325 Project Proposal Spring 2009</h1><BR>
+<h2>Chris Tralie</h2><BR></center>
+
+<h2>
+Idea 1: Ray-Tracing for a Binaural Impulse Response<BR>
+<img src = "diagram.jpg"><BR></h2>
+<table border = "1" cellpadding = "5">
+<tr><td>Description</td>
+<td>I will attempt to determine the impulse response of arbitrary 3D environments modeled in the computer based on a position of a "beacon" (the sound source) and the position of a listener (the sound receiver who gets the impulse response of the sourcee).  As a simple example of this concept, what will it sound like if I put a boombox in the upper left corner of a room and I'm standing towards the front-center?  I sketched that scenario out in the above picture.  Sound waves from the boombox will bounce off of many different points of the wall and lose energy before reaching my ears after some delay (so it's not as simple as just figuring out how far away the object is...the environment we're in has a lot of effect on the acoustics).  This can be modeled as a feed-forward impulse response from the boombox to the listener's ears.  And one would expect the impulse response at each ear to be slightly different.  Therefore, I would do such an impulse response for both ears (<i>All in 3D, of course</i>).<BR><BR>
+So the ultimate goal would be to have the user choose a listening position within the 3D environment that's set up beforehand, and to choose a position of the sound source, which I'll call the <b>beacon</b>.  I will then figure out what is heard at each ear if an impulse is sent out from the beacon.  I can then convolve sounds with those impulse responses to make it sound like things are emanating from the boombox, propagating through space, and reaching the ears.  And hopefully since I did a different response for each ear, I can create two-channel audio that makes it sound like the sound source is at a certain position position in space relative to the user (binaural sensing, much like the <a href = "http://www.youtube.com/watch?v=IUDTlvagjJA">virtual barbershop</a> example).
+
+</td></tr>
+<tr><td>Motivation</td><td>I know there are simpler methods for modeling delay and for doing binaural position sensing, but I have a feeling this would sound really cool and convincing, and I think I could model much more complicated scenarios in a convincing way.  This method would probably not be real-time, so the user would have to recalculate the impulse response every time the position of the beacon or listener changes, but I think I could make it really accurate and get lots of cool effects that simpler real-time models would miss (part of the project/research would be to assess the qualitative difference between this and simpler models).
+
+</td></tr>
+<tr><td>Techical Problems to Solve</td>
+<td>So the next question is, how the heck am I going to figure out the impulse response?  This seems like a very difficult problem since sound propagates in all directions from the source and can bounce off of a continuous amount of points on the wall.  My plan is to use reverse ray-tracing methods that I learned in computer graphics to solve this problem.  That is, I will trace rays in many different directions from both ears and bounce them around the scene with energy loss until they reach the sound source, at which point the path is completed and I can make a point in the impulse response.  What makes this different is that I need to know the path length since the speed of sound is so much less than the speed of light (and time matters, hence the impulse response).  <b>Also, I will probably have to do some sort of inverse square thing with the sound that I didn't have to worry about as much with the light</b><BR><BR>
+In addition to figuring out how many rays are enough and in what directions to send them out, I'll need to figure out how to reconstruct the impulse response from all of the information I get.  It seems possible that two delays could be very close to each other in time, perhaps well smaller than twice the period of the fastest sample rate we can do.  So I'll probably have to find the closest interval and treat it as if it were uniformly sampled, then resample.  But this isn't such a trivial problem, so I'll have to explore the mathematics here and to see if resampling the empirically-calculated impulse response has an effect on the accuracy.<BR><BR>
+Normally, this would be too monumental of a task for just one moth of work.  However, I do already have a basic codebase I can start with from my <a href = "http://www.cs.princeton.edu/courses/archive/spring09/cos426/assn3/">last computer graphics assignment</a>.  This assignment already set up a system for reading in "scene files" in a certain syntax (a system I would adapt to describe the rooms I'm working in), and it allows me to specify transformations of many basic primitives, such as spheres, cones, rectangular boxes, and 3D meshes.  I would add parameters to these scene files like how much sound a surface absorbs, and I will need to specify the position of the beacons somehow in the scene files as well (or to allow the user to update them in real time independently of the scene files).  I would probably also add the option to create 3D Bézier splines in the environment to model more complicated things accurately (if time permits).  Also, there is a basic renderer already written for this assignment that can allow the user to interact and choose a position within the scene.  I will tweak this a bit, but it gives me a huge jump start.<BR><BR>
+I know Tom Funkhouser has done research about this already, so I'll probably have to read some of his papers
+
+</td></tr>
+
+<tr><td>Cool Testing Scenarios</td>
+<td>One of the reasons I want to do this is because I can imagine some crazy testing scenarios that would sound.  I have a feeling that the testing will be a huge component of this project<BR>
+<ul>
+<li>Make a basic model of a lecture hall</li>
+<li>Make a room that's the upper half of an ellipsoid to try to model a "whisper chamber"; place the beacon and one of the foci of an ellipsoidal cross-section, and place the listener at the other focus.  See how perturbing the position of the listener slightly from that focus affects the impulse response (my prediction is that it would be drastic, and so that could be really neat)</li>
+<li>If this gets complicated enough, I could eventually have multiple beacons and test the inteference between them by sending the same signal through, just like we talked about earlier</li>
+</ul>
+
+</td></tr>
+
+<tr><td>Timeline for Completion</td><td> 
+Week 1: Adapt the ray tracer code from my graphics assignment to meet the specifications for this assignment (adding stuff, cutting out unnecessary stuff), and do some preliminary research.  Try to make an interactive program with Opengl that lets the user choose a position of the listener and the beacon in the environment (perhaps switch back and forth between the listener and beacon and use WDSA control with mouse to help them move and choose a position...this will all be an adaptation of my 426 code for my ray tracer that's already there)<BR><BR>
+
+Week 2: Numerically determine a set of delays and gains by casting rays from each ear and tracing them until they hit a single beacon.<BR><BR>
+
+Week 3: Figure out how to determine a uniformly sampled impulse response from the set of delays and gains, and create the capability to convolve sounds with this impulse response ("playing" things through the beacon).  See if the directional aspect of the project works<BR><BR>
+
+Week 4: Come up with some really cool testing scenarios and record results.  That is, try to model whisper chambers, lecture halls, concert halls, huge outdoor settings with trees (in which case an "amplification factor" may need to be applied to the impulse response in order to hear anything), etc.  Interpret the results, and complete the writeup.  Also, if time permits, try to add multiple beacons.<BR><BR>
+Week 5:  Finish writeup and create musical statement
+</td></tr>
+
+</table><BR><BR>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body></html>

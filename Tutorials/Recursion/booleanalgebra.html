@@ -1,0 +1,204 @@
+<html>
+<title>Boolean Algebra</title>
+<body text="black" bgcolor="white">
+<center><h1>Boolean Algebra</h1></center><BR>
+<ul>
+<li><a href="#whatis">Introduction (AND, OR, and NOT)</li>
+<li><a href="#thetruth">Truth tables</li>
+<li><a href="#XOR">The EXCLUSIVE OR operator</li>
+<li><a href="#Demorgan">De Morgan's Laws</li>
+<li><a href="#propident">Other properties and identities</li>
+<li><a href="#ACSL">ACSL examples</li>
+<li><a href="#sources">Outside Source Bibliography</li>
+</ul>
+<BR><BR>
+<a name="whatis"><b><u><tt>Introduction (AND, OR, and NOT)</tt></u></b></a>
+<p>
+Boolean algebra is a type of algebra involving variables that can only have two states: <b>1</b> (true) or <b>0</b> (false).  It follows, then, that there are only a finite number of value combinations for different variables, unlike variables from the set of real numbers, which can have an infinite number of states.  This will become important soon when we look at "truth tables."  First, though, let's define a few important operators: <b>AND</b>, <b>OR</b>, and <b>NOT</b>:<BR>
+<ul><li><u><b>AND</b></u><BR>
+When the AND operator is applied to two variables, the result can only be <i>true</i> if the both the first variable <b>and</b> the second variable are true.  <BR>For instance, if I paid for a hamburger <b>and</b> a cheese steak at the food trucks for lunch, my request would only be satisfied if I got both of them (of course, I would never do that, because I am a healthy eater).  If I only got a hamburger, I only got a cheese steak, or I got neither, then I would have to ask for a refund (the result would be <i>false</i> in these three cases).  Notice that there are only 4 (2<SUP>2</SUP>) cases for two variables.<BR>
+<ol><li>AB</li>
+<li>A*B</li>
+<li>A /\ B</li>
+<li>A && B</li>
+</ol>
+Above are four different ways to write "A and B."  <u>The ACSL exam usually uses the first one</u> (and maybe the second one sometimes). I have most often seen the third one used in mathematical papers about logic, and the fourth one is used in many programming language for Boolean variables (e.g. C, C++, Java, Perl).
+</li>
+<li><u><b>OR</b></u><BR>
+When the OR operator is applied to two variables, the result can be <i>true</i> if the first variable is true, if the second variable is true, or if both are true.  The only time the OR operator results in <i>false</i> is when both variables are false.  <BR>Technically, then, if a waiter asks me if I want a soup or a salad, I am responding affirmatively if I say that I want a soup, a salad, or both of them (if the waiter intends that I should have at most one, then he should ask if I <i>either</i> want a soup or a salad, which we will see later with the <a href="#XOR"> XOR operator</a>).<BR>
+<ol><li>A + B</li>
+<li>A \/ B</li>
+<li>A || B</li></ol><BR>
+Above are three different ways to write "A or B."  <u>The ACSL exam usually uses the first one</u>, and the third one is used in programming languages with Boolean variables and TRUE/FALSE conditions.<BR>
+<BR><B>NOTE:</b> <i>Using the first notation system on </i>two variables that are true<i>, we get </i>1+1=1<i>.  This may look weird, but remember, this isn't the algebra we're used to dealing with; it's Boolean algebra.  Hence, this statement is totally valid here.</i></li>
+<li><u><b>NOT</b></u><BR>
+When the NOT operator is applied to a variable, the result is the opposite truth condition of the variable.  Therefore, "NOT true" is false, and "NOT false" is true.  Pretty logical, eh?<BR>
+<ol>
+<li><table><tr><td>__</td></tr><tr><td><center>A</center></td></tr></table></li>
+<li><img src="not.gif"> A</li>
+<li>!A</li>
+<li>A'</li>
+</ol>
+Above are four different ways to write "NOT A."  The first one with the line on top of the variable is used in ACSL, and the third is used in computer programming.  <b>The fourth way is the most convenient for me to write in HTML, so I will start using it as we get to more complicated examples</b>.</li></ul></p>
+<BR><BR>
+<a name="thetruth"><b><u><tt>Truth Tables</tt></u></b></a>
+<p>
+As I mentioned earlier and I hope you could see by some of my above examples, there are only a finite number of combinations of different values for all of the variables.  Because of this, we can organize <i>every single case that exists</i> into a table, called a "truth table," by using the basic counting principle.  This makes it very straightforward to find solutions.  Let's try to make a truth table for the AND operator below:<BR>
+<table border="1" cellpadding="5"><tr><td>A</td><td>B</td><td>A * B</td></tr>
+<tr><td>1</td><td>1</td><td><center>1</center></td></tr>
+<tr><td>1</td><td>0</td><td><center>0</center></td></tr>
+<tr><td>0</td><td>1</td><td><center>0</center></td></tr>
+<tr><td>0</td><td>0</td><td><center>0</center></td></tr>
+</table>
+So now that we have every case written out in an organized fashion, it's easy to see how the answer, A*B, is only true when both A and B are true.<BR><BR>
+Now it's time to quickly discuss the combinatorics of charting all of the possible values of the operands in these tables.  Since each variable can be either 1 or 0, there are two values possible for each operand.  Thus, given <b>n</b> different variables in an expression, there are <b>2<SUP>n</SUP></b> cases to check.  Hopefully, this will make more sense with the following example:<BR><hr>
+<u>Example:</u> Chart all of the possible solutions for A*(B+C), and figure out which values of A, B, and C make the statement <b>true</b><BR><BR>
+<table><tr>
+<td><center><img src="3bitcombinations.jpg"></td>
+<td>To solve these problems, you must be able to chart out all of the possible combinations of values for A, B, and C.  With three bits, we know that the minimum value is zero, and that the maximum value is seven (1+2+4), for eight possible states total.  Similarly, with three boolean variables, eight combinations will exist (see the counting tree to the left).  With this in mind, it should be easier to understand how to develop a truth table using the methods below.
+</td></tr></table><BR>
+<table><tr><td>
+<table border="1" cellpadding="5"><tr><td>A</td><td>B</td><td>C</td><td>(B+C)</td><td>A * (B+C)</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td><center>1</center></td><td><center><b>1</b></center></td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td><center>1</center></td><td><center><b>1</b></center></td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td><center>1</center></td><td><center><b>1</b></center></td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td><center>0</center></td><td><center>0</center></td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td><center>1</center></td><td><center>0</center></td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td><center>1</center></td><td><center>0</center></td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td><center>1</center></td><td><center>0</center></td></tr>
+<tr><td>0</td><td>0</td><td>0</td><td><center>0</center></td><td><center>0</center></td></tr>
+</table>
+</td><td><ol>
+<li>Following the order of operations, set up a column with B+C (B or C), and evaluate that before evaluating A*(B+C).</li>
+<li>As mentioned before, since there are three variables, we know that there will be 2<SUP>3</SUP>, or <b>8</b>, different cases for values of A, B, and C, so set up eight rows for all of the possible cases</li>
+<li>Half of the values of A will be true, and half of the values will be false.  Hence, have the first four cases of A be true, and have the last four be false.</li>
+<li>For the first four cases in which A are true, half of the values of B will be true, and the other half will be false.  Half of the Bs will also be true for the four cases in which A is false, and half of them will be false.
+<li>Alternate true or false for C in all of the cases, because one will be true, and one will be false for each pair of Bs that are true and false<BR></li>
+<li>Now that we have all of the cases charted out, evaluate (B+C) for every case.  Then, to fill in the column with the solutions for each case, we note that the final expression can only be true if both (B+C) and A are true.  <b>This condition is only satisfied in the first three cases, so they are the combinations we are looking for:</b>
+<BR>1*(1+1)=1<BR>
+1*(1+0)=1<BR>
+1*(0+1)=1
+</ol></td></tr></table><BR>If it helps you to see why the first three cases yield a true value for the final expression, it may help to come up with an example of the situation and to talk it out until you are comfortable with Boolean algebra.  For instance, suppose that Steve (A), Jiaqi (B), and I (C) were to teach a computer club lesson on number systems.  Steve had prepared to teach binary, and Jiaqi and I had each prepared to teach octal and hexadecimal.  The computer club meeting could go on as long as someone was there to teach everything (both binary AND octal/hexadecimal would have to be covered).  The lesson could go on if Jiaqi was there, I was there, or both of us were there, but it could not go on if Steve was absent.  This corresponds perfectly with the above table. <BR>(Of course, we would never actually have to worry about that situation, because the trusty co-presidents of the computer club know <i>all</i> of the concepts like the back of their hands)</p><hr><BR><BR>
+
+
+<a name="XOR"><b><u><tt>The EXCLUSIVE OR operator</tt></u></b></a>
+<p>Given two variables, the XOR function evaluates to true if <b>exactly one</b> of the variables is true.  Unlike OR, therefore, <i>exclusive or evaluates to </i>false<i> if both variables are true</i>.<BR><BR>
+There are actually two simple ways to express this operation using the three operators that we already know (it helps to talk it out to figure out how):<BR>
+<ol><li>We know that XOR will be true if either A is true and B is false, or if A is false and B is true<BR>
+<img src="boolean/XOR1.GIF" alt="AB' + A'B"></li>
+<li>We know that XOR will only be true if either A or B is true, but not both of them<BR>
+<img src="boolean/XOR2.GIF" alt="(A+B)*(AB)'"></li>
+</ol>
+Even though they are rather concise, these two ways are too cumbersome to write out in long expressions.  Therefore, XOR has its own symbol (YAY!):<BR>
+<table><tr><td>
+<img src="boolean/AXORB.GIF" alt="A XOR B"></td><td> <b>means "A XOR B."</b></td></tr></table><BR>
+Now, let's look at a truth table for an XOR acting on two variables:<BR>
+<table border="1" cellpadding="5"><tr><td>A</td><td>B</td><td>A<img src="XOR.GIF" alt="XOR">B</td></tr>
+<tr><td>1</td><td>1</td><td><center>0</center></td></tr>
+<tr><td>1</td><td>0</td><td><center>1</center></td></tr>
+<tr><td>0</td><td>1</td><td><center>1</center></td></tr>
+<tr><td>0</td><td>0</td><td><center>0</center></td></tr>
+</table>
+<BR><BR>
+
+
+<a name="Demorgan"><b><u><tt>De Morgan's Laws</tt></u></b></a><BR><BR>
+De Morgan's Laws are two very important identities that resurface perpetually throughout the ACSL exam.  Like everything in Boolean algebra, though, they are both very logical, so it shouldn't be very hard to remember them.  I will come up with a practical example for each law to make it even easier.  Shall we go on, then?  Yes, I think it's time...<BR><BR>
+
+<u>LAW #1:</u><BR><BR>
+<img src="boolean/DeMorgan1.gif"><BR><BR>
+<table><tr><td>
+<table border="1" cellpadding="5"><tr><td>A</td><td>B</td><td><img src="boolean/NAND.GIF"></td><td><img src="boolean/DeMorgan1_1.GIF"></td></tr>
+<tr><td>1</td><td>1</td><td><center>0</center></td><td>0 + 0 = <b>0</b></td></tr>
+<tr><td>1</td><td>0</td><td><center>1</center></td><td>0 + 1 = <b>1</b></td></tr>
+<tr><td>0</td><td>1</td><td><center>1</center></td><td>1 + 0 = <b>1</b></td></tr>
+<tr><td>0</td><td>0</td><td><center>1</center></td><td>1 + 1 = <b>1</b></td></tr>
+</table></td>
+
+<td><u>Practical Example:</u> I'm writing a Windows program that I want to continue as long as the user is not pressing "ALT F4."  <b>A</b> will be true if the user is holding down ALT, and <b>B</b> will be true if the user is holding down F4.  <BR><BR>We are allowed to continue running through an animation loop as long as the user isn't holding down both keys: <b>(AB)'</b>.  Another way to say this is that we can continue running the program as long as A isn't being pressed, B isn't being pressed, or neither are being pressed: <b>A' + B'</b>.
+</td></tr></table><BR><BR>
+
+
+<u>LAW #2:</u><BR><BR>
+<img src="boolean/DeMorgan2.gif"><BR><BR>
+<table><tr><td>
+<table border="1" cellpadding="5"><tr><td>A</td><td>B</td><td><img src="boolean/NOR.GIF"></td><td><img src="boolean/DeMorgan2_1.GIF"></td></tr>
+<tr><td>1</td><td>1</td><td><center>0</center></td><td>0*0 = <b>0</b></td></tr>
+<tr><td>1</td><td>0</td><td><center>0</center></td><td>0*1 = <b>0</b></td></tr>
+<tr><td>0</td><td>1</td><td><center>0</center></td><td>1*0 = <b>0</b></td></tr>
+<tr><td>0</td><td>0</td><td><center>1</center></td><td>1*1 = <b>1</b></td></tr>
+</table></td>
+
+<td><u>Practical Example:</u> To watch a rated R movie, you should neither be under 17 years of age, nor should you be immature.  Let <b>A</b> represent being under 17 years of age and <b>B</b> represent being immature.<BR><BR>
+I am allowed to watch the movie as long as I am mature and over 17 years of age; I cannot watch it if I am not 17 and mature, if I am 17 but I am immature, and if I am both under 17 and immature: <b>(A+B)'</b>.  Another way to say this is that I must both be <b>NOT</b> immature (double negative=mature) <b>AND</b> <b>NOT</b> under 17 (double negative=over 17): <b>A'*B'</b>.  <BR><BR>[I'll leave it up to you to decide whether or not I match the fourth case in the truth table to the left  :-D]
+</td></tr></table><BR><BR>
+***De Morgan's laws are sometimes known as the <b>"line breakers"</b> for obvious reasons.  It is easy to remember how they work; you <i>break the line</i> and <i>switch the operator</i> from AND to OR or vice versa, depending on the situation.
+
+<BR><BR>
+<a name="propident"><b><u><tt>Other properties and identities</tt></u></b></a><BR><BR>
+Most of the properties below are very logical (that's what I love about Boolean algebra), so you can usually get by if you forget one of them.  You can also easily verify any of them by making a truth table, or you can think of them logically.  Because of their simplicity, I'm simply going to list them this time without much of an explanation (contact me if you do need an explanation, though):
+<ul>
+<li><table border="1" cellpadding="5"><tr><td>a + (b + c) = (a + b) + c</td><td>a(bc) = (ab)c</td><td>(Associative)</td></tr></table></li>
+<BR><li><table border="1" cellpadding="5"><tr><td>a + b = b + a</td><td>a*b = b*a</td><td>(Commutative)</td></tr></table></li><BR>
+<li><table border="1" cellpadding="5" ><tr><td>a + (b + c) = (a + b) + c</td><td>a(bc) = (ab)c</td><td>(Associative)</td></tr></table></li><BR>
+<li><table border="1" cellpadding="5" ><tr><td>a * (b + c) = (a + b) + (a + c)</td><td>a * (b+c) = ab + ac</td><td>(Distributive property)</td></tr></table></li><BR>
+<li><table border="1" cellpadding="5"><tr><td>a + ab = a</td><td>a*(a+b) = a</td><td>(Absorption)</td></tr></table></li><BR>
+<li><table border="1" cellpadding="5" ><tr><td>a + a' = 1</td><td>a * a' = 0</td><td>(Complements)</td></tr></table></li><BR>
+<li><table border="1" cellpadding="5" ><tr><td>a + a = a</td><td>a * a = a</td><td>(Identity property)</td></tr></table></li><BR>
+<li><table border="1" cellpadding="5" ><tr><td>a + 0 = a</td><td>a * 1 = a</td><td>a + 1 = 1</td><td>a * 0 = 0</td><td>(Boundedness)</td></tr></table></li><BR>
+<li><table border="1" cellpadding="5"><tr><td>(a')' = a</td><td> (a double negative is a positive)</td></tr></table></ul>
+<BR><BR>
+<a name="ACSL"><b><u><tt>ACSL Examples</tt></u></b></a>
+Now, let's look at some typical ACSL questions (that's what we're here for, right?)
+<BR>
+<ol>
+<li>(Adapted from the ACSL competition in 1996)<BR>Which ordered triples make the following expression true?<BR>
+<img src="boolean/q1.JPG" border="1"><BR><BR>
+Before we check cases, we should see if we can simplify this at all (<b>NOTE: I will be using A' to represent "NOT A" , because it is more convenient</b>):<BR>
+<table border="1" cellpadding="5"><tr><td><center>Step</center></td><td><center>Reason</center></td></tr>
+<tr><td>AB(A' + C) + A'(B + C) = <b>A*B*(A') + A*B*C + (A')*B + (A')*C</b></td><td>Distributive property</td></tr>
+<tr><td><del>A*B*(A')</del> + A*B*C + (A')*B + (A')*C = <b><u>A*B*C + (A')*B + (A')*C</u></b></td><td>Complements (A*A' = 0)</td></tr></table><BR>
+ABC + A'B + A'C [ (A AND B AND C) OR (NOT A AND B) OR (NOT A AND C) is certainly easier to look at.  Now let's break this down into a truth table:<BR>
+<table border="1" cellpadding="5"><tr><td>A</td><td>B</td><td>C</td><td>ABC</td><td>A'B</td><td>A'C</td><td>ABC + A'B</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td><center>1</center></td><td><center>0</center></td><td><center>0</center></td><td><center><b>1</b></center></td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td><center>0</center></td><td><center>1</center></td><td><center>1</center></td><td><center><b>1</b></center></td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td><center>0</center></td><td><center>1</center></td><td><center>0</center></td><td><center><b>1</b></center></td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td><center>0</center></td><td><center>0</center></td><td><center>1</center></td><td><center><b>1</b></center></td></tr>
+<tr><td>0</td><td>0</td><td>0</td><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td><td><center>0</center></td></tr></table><BR>
+Hence, the ordered tripes that make this statement true are (1,1,1), (0,1,1), (0,1,0), and (0,0,1).</li>
+<BR>
+<li>Simplify the following expression: ((A+B)' * (AB))'<BR><BR>
+<img src="boolean/q2.JPG" border="1" alt="procedure"><BR><BR>
+This statement actually simplifies to <b>true</b> in all cases.  The reason I gave this example is because the ACSL exam always makes you use De Morgan's Law a bunch of times in one problem somewhere along in the competition.  Anyway, it seems a little strange that every solution should be true, so let's check our answer with a truth table (always a good idea if you have time):<BR><BR>
+<table border="1" cellpadding="5"><tr><td>A</td><td>B</td><td>(A+B)'</td><td>AB</td><td>((A+B)' * (AB))'</td></tr>
+<tr><td>1</td><td>1</td><td><center>0</center></td><td><center>1</center></td><td>(0 * 1)' = <b>1</b></td></tr>
+<tr><td>1</td><td>0</td><td><center>0</center></td><td><center>0</center></td><td>(0 * 0)' = <b>1</b></td></tr>
+<tr><td>0</td><td>1</td><td><center>0</center></td><td><center>0</center></td><td>(0 * 0)' = <b>1</b></td></tr>
+<tr><td>0</td><td>0</td><td><center>1</center></td><td><center>0</center></td><td>(1 * 0)' = <b>1</b></td></tr>
+</table><BR>
+Hah!  It's "true," then.</li></ol><BR>
+Well, thanks for taking the time to read this tutorial (it took at lot of time, so it's always good to have my work appreciated).  Hopefully I explained everything adequately.<BR><BR><BR>
+<a name="sources"><b><u><tt>Outside Source Bibliography</tt></u></b></a><BR>
+<ol>
+<li><a href="http://www.acsl.org" target="_blank">ACSL</a> official test question</li>
+<li><a href="http://www.allaboutcircuits.com" target="_blank">Allaboutcircuits.com</li>
+<li><i>Discrete Math: Pennsylvania Governor's School for the Sciences 2006</i> by Douglas E. Ensley</li>
+<li><a href="http://en.wikipedia.org" target="_blank">Wikipedia</a></li>
+</ol>
+<BR>
+<center><h1><a href="index.html"><--BACK</a><!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->

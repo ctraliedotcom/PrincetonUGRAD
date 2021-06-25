@@ -1,0 +1,224 @@
+' {$STAMP BS2}
+
+'Programmers: Chris Tralie and Chris Koscielny
+'Purpose: To create software to run on the BASIC stamp
+'that reads in analog data from different sensors and
+'comes up with MIDI messages to send to a synthesizer
+'based on the parameters of our musical swifter
+
+pitch VAR Word
+lastpitch VAR Word
+lastpitch2 VAR Word
+noteenable VAR Bit
+velocity VAR Word
+axis1 VAR Word
+axis2 VAR Word
+
+CS  CON  2       ' Chip Select Pin
+CLK  CON  3      ' Clock Pin
+DIO_n  CON  4    ' Data In/Out Pin
+config  VAR  Nib ' Configuration bits
+AD0  VAR  Word   ' Analog Data Channel 0
+AD1  VAR  Word   ' Analog Data Channel 1
+bitpos VAR Byte
+octavebias VAR Byte
+count300 VAR Nib
+
+channel = 0
+INPUT 0
+count300 = 0
+
+setzero:
+noteenable = 0
+
+myloop:
+    GOSUB convert1:
+
+    PULSIN 5, 1, axis1
+    PULSIN 6, 1, axis2
+
+    ' axis2 > 300 (resting) if the swiffer is in position to change the musical instrument
+    ' since  300+ readings can briefly be achieved by moving the swiffer fast, this can result
+    ' in accidentally changing the instrument. This problem can be reduced/eliminated if we ensure
+    ' that numerous 300+ values are read in a row.
+
+    IF axis2 > 300 THEN countup
+        count300=0
+    countup:
+    count300 = count300 + 1
+
+    ' only change instrument if we receive 14+ values in a row are 300+
+    IF count300 < 14 THEN noprgchng
+        lastpitch = pitch
+        GOSUB getpitch:
+
+        ' We used the exponential slide potentiometer to change instruments. Its difficult
+        ' to use the potentiometer to control 128 possible values, especially on an exponential
+        ' scale, so we linearized it down to 12 possible values using the same function as we
+        ' used to control pitch.
+
+        '3 is in arbitrary number that can be changed so that the potentiometer selects instruments
+        ' across a wider range (i.e. so not all instruments are in the same family)
+        mbyte2 = pitch * 3
+        GOSUB midiprog:
+
+    ' dont replay the note if it was just played
+    IF lastpitch = pitch THEN skipplay
+        mbyte2 = 70  ' note number
+        mbyte3 = 127  ' mid velocity
+        GOSUB midion:
+    skipplay:
+    noprgchng:
+
+    IF AD1 < 100 THEN setzero 'Only play a note if the button is pressed
+    'go back to the beginning of the loop if the button isnt being pressed
+
+    'get readings from our homemade capacitor pressure sensor
+    LOW 0
+    RCTIME 0,0, velocity
+
+    velocity = (velocity - 600) >> 4
+
+    IF velocity < 127 THEN velocityokay
+        velocity = 127  ' in case of overflow
+    velocityokay:
+
+    ' get readings from the slider
+    GOSUB getpitch:
+
+    ' set octave based on swiffer position
+    octavebias = ((axis1 + axis2) >> 6) * 12 - 37
+    pitch = pitch + octavebias
+    IF pitch < 127 THEN pitchokay
+        pitch = 0
+    pitchokay:
+
+    PAUSE 2
+    IF (lastpitch = pitch) & (noteenable = 1) THEN keepon
+        ' play the note
+        mbyte2 = pitch  ' note number
+        mbyte3 = 127  ' mid velocity
+        GOSUB midion:
+
+        'PAUSE 200
+        mbyte2 = lastpitch 'Turn off the last note which is different
+        GOSUB midioff:
+        GOSUB endbranch:
+    keepon:
+    ' change the volume of the channel, but dont change the note
+    mbyte2 = 7
+    mbyte3 = velocity
+    GOSUB midicont:
+    endbranch:
+
+    lastpitch2 = lastpitch
+    lastpitch = pitch
+    noteenable = 1
+GOTO myloop:
+
+
+'********************************************************************
+'*****   USEFUL MIDI FUNCTIONS
+' Set channel to 0 - 15
+' NOTE: mbyte2 and mbyte3 must be in range 0-127!!
+
+channel  VAR Nib
+mbyte2   VAR Byte
+mbyte3   VAR Byte
+lastnote VAR Byte
+
+noteOn   CON    144
+channel0 CON    0
+noteOff  CON    128
+controlr CON    176
+atouch   CON    208
+bender   CON    224
+prgchang CON    192
+MIDIPIN  CON   16
+MIDITIME CON   $6   '****  12 for BS2, 60 for BS2SX *'
+
+'*** we used an expotential slide potentiometer, so the following code
+'*** is needed to map the exponential values to a linear scale (from 1 to 12)
+getpitch :
+    GOSUB convert0:
+        pitch = 1
+    IF AD0 > 3358 THEN rightpitch
+        pitch = 2
+    IF AD0 > 2115 THEN rightpitch
+        pitch = 3
+    IF AD0 > 1266 THEN rightpitch
+        pitch = 4
+    IF AD0 > 842 THEN rightpitch
+        pitch = 5
+    IF AD0 > 474 THEN rightpitch
+        pitch = 6
+    IF AD0 > 341 THEN rightpitch
+        pitch = 7
+    IF AD0 > 200 THEN rightpitch
+        pitch = 8
+    IF AD0 > 133 THEN rightpitch
+        pitch = 9
+    IF AD0 > 85 THEN rightpitch
+        pitch = 10
+    IF AD0 > 45 THEN rightpitch
+        pitch = 11
+    IF AD0 > 21 THEN rightpitch
+        pitch = 12
+    rightpitch:
+RETURN
+
+'*** Standard Note On *'
+midion:
+  SEROUT MIDIPIN, MIDITIME, 0, [noteOn + channel, mbyte2, mbyte3]
+'      debug "NoteOn ", dec mbyte2, "  ", dec mbyte3, cr
+RETURN
+
+'*** Standard Note Off, uses real NoteOff status byte *'
+midioff:
+  SEROUT MIDIPIN, MIDITIME, 0, [noteOff + channel, mbyte2, 64]
+'      debug "NoteOff ", dec mbyte2, cr
+RETURN
+
+'*** Monophonic aftertouch *'
+miditouch:
+  SEROUT MIDIPIN, MIDITIME, 0, [atouch + channel, mbyte2]
+'      debug "ATouch ", dec mbyte2, cr
+RETURN
+
+'*** Send Bank Select first,then Program Number *'
+midiprog:
+  SEROUT MIDIPIN, MIDITIME, 0, [controlr + channel, 0, 0]
+  SEROUT MIDIPIN, MIDITIME, 0, [prgchang + channel, mbyte2]
+RETURN
+
+midiprogbase:
+  SEROUT MIDIPIN, MIDITIME, 0, [prgchang + channel, mbyte2]
+RETURN
+
+'*** Standard Pitch Bend *'
+midibend:
+  SEROUT MIDIPIN, MIDITIME, 0, [bender + channel, 127, mbyte3]
+'  debug "Bender ", dec mbyte3, cr
+RETURN
+
+'*** Control Change Message *'
+midicont:
+  SEROUT MIDIPIN, MIDITIME, 0, [controlr + channel, mbyte2, mbyte3]
+'     debug "Controller ", dec mbyte2, " ", dec mbyte3, cr
+RETURN
+
+convert0:    ' Convert channel 0 only
+  config = %1011
+  LOW CS
+  SHIFTOUT DIO_n,CLK,LSBFIRST,[config\4]
+  SHIFTIN DIO_n,CLK,MSBPOST,[AD0\12]
+  HIGH CS
+RETURN
+
+convert1:    ' Convert channel 1 only
+  config = %1111
+  LOW CS
+  SHIFTOUT DIO_n,CLK,LSBFIRST,[config\4]
+  SHIFTIN DIO_n,CLK,MSBPOST,[AD1\12]
+  HIGH CS
+RETURN

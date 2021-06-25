@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>Duke REU Project Summer 2009: Robotic Navigation with RFID Waypoints: Chris Tralie</title>
+</head>
+<body>
+
+<h2>
+<a href = "../"><--Back to Projects</a><BR>
+<a href = "../../"><--Home</a>
+</h2>
+<hr>
+
+<center><h1>Robotic Navigation with RFID Waypoints</h1><BR>
+<h2>Chris Tralie, Princeton University Computer Science<BR>
+Adviser: Dr. Matthew Reynolds, Duke University, Electrical and Computer Engineering<BR>
+</h2></center>
+
+<ul>
+<li><a href = "#abstract">Abstract</a></li>
+<li><a href = "report.pdf">Report</a></li>
+<li><a href = "presentation.zip">Powerpoint Presentation</a></li>
+</ul>
+
+<u><a name = "abstract">Abstract</a></u><BR>
+<p>The purpose of this project was to explore occupancy grid construction and RFID heatmap generation of an unknown environment on a small, affordable robot with a laser scanner and RFID reader. The robot platform consisted of an “iRobot Create” robot with an attached netbook and Hokuyo Urglaser range scanner, along with a ThingMagic Mercury® 5e RFID reader and a webcam. PlayerStage, an open source robotics development environment, was used to communicate with the robot hardware and to run simulations. Then, a utility called “pmaptest” used SLAM (Simultaneous Localization and Mapping) techniques to build occupancy grids of the hallways in the Duke engineering building from logged laser scan and odometry readings. Finally, a driver was written in C to communicate with the RFID reader, and RFID tags were dispersed throughout the hallway. The robot was driven through the hallway with a program created to steer the robot towards the centroid of open space (as determined by the laser range scanner), and data was logged. The information from the laser and odometry logs was used to build the occupancy grid, and the information from the RFID reader was used to build heatmaps of all of the RFID tags seen on top of the occupancy grid.</p><BR>
+<p>
+To test the project for success, RFID tags were placed at regular intervals in a hallway, and the occupancy grids and heatmaps were constructed. Then, the distances between the centroids as determined by the program were compared to the actual interval length. In the first test, 5 tags were placed along the wall with 4 feet in between each tag, and the program determined them to be 3.77ft +- 1.38 ft apart. In the second test, 10 tags were placed 20 feet apart, and the program determined them to be 20.1ft +- 3.69 ft apart. Overall, the main goal of RFID tag localization was met. Further avenues for research include improving the SLAM occupancy grid software to better account for odometry drift and prevent the map from bending, and using Player’s built-in wavefront driver for global navigation with waypoints on an occupancy grid.</p><BR>
+The source code repository for this project can be found at <a href = "http://code.google.com/p/hospirfidbot/">http://code.google.com/p/hospirfidbot/</a></p>
+
+<BR>
+<hr>
+<h2>
+<a href = "../"><--Back to Projects</a><BR>
+<a href = "../../"><--Home</a>
+</h2>
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+
+</html>

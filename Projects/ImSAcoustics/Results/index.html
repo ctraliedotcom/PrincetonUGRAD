@@ -1,0 +1,287 @@
+<html>
+<head>
+<title>Image Source Acoustics Results</title>
+</head>
+<body>
+
+<hr>
+<h1><b>NOTE: A Newer version of this page may exist.  <a href = "../../../../Teaching/ImSAcoustics/Results">Click here</a> to go to the never version</b></h1>
+<hr>
+
+<h2>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+<hr>
+
+<center><h1>Image Sources Acoustics Results</h1>
+<BR><h2>Chris Tralie and Ken Jenkins</h2><BR>
+</center><BR><BR>
+
+<h2><a href = "../writeup.pdf">Click here to see our formal writeup</a><BR><BR>
+
+<b>NOTE: For best results, please listen to these examples with a pair of headphones</b></h2><BR>
+
+<h2><u><b>Example 1: Room with door - diffraction disabled</b></u></h2><BR>
+This scene contains two rectangular rooms connected by a door.  The listener and source are placed in different rooms by default.  The reflection and transmission coefficients start at 1 (high reverb) and decay exponentially as the frequency of the sound increases.
+<table border = "1">
+<tr>
+<td><img src = "roomdoor_nodiffraction0.png"></td>
+<td><img src = "roomdoor_nodiffraction1.png"></td>
+</tr>
+<tr><td>In this example the listener is placed in an adjacent room to the sound source.  Diffraction is turned off, so only specular paths that bounce off of the walls in the other room at the correct angle can make it into this room.</td>
+<td>Here is another shot of the reflected rays converging at the listener's ears.  Note that there is one transmission path that makes it through the wall</td></tr>
+</table>
+<BR>
+The sound has been damped out a lot, especially in the high frequency range, since only specular and transmissive paths have contributed to the final impulse response (which have high decay coefficients above low frequency).
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "roomdoor_nodiffraction.wav" autostart=false><BR>
+<a href = "roomdoor_nodiffraction.wav">Click here to download sound</a>
+</td>
+<td><img src = "nodiffraction_spectrum.png"><BR>Here is a snapshot of the sound's spectrum</td>
+</tr>
+</table>
+<BR><BR>
+
+
+<h2><u><b>Example 2: Room with door - diffraction enabled</b></u></h2><BR>
+This is the same scene as before, except now diffraction is enabled.
+<table border = "1">
+<tr>
+<td><img src = "roomdoor_diffraction0.png"></td>
+<td><img src = "roomdoor_diffraction1.png"></td>
+</tr>
+<tr><td>Note how now in addition to all of the specular and transmissive paths that make it through, there is also one diffraction path that contributes (circled in blue).</td>
+<td>Here is another shot of the reflected rays converging at the listener's ears.  The diffraction bend is clearly visible here</td></tr>
+</table>
+<BR>
+The results of diffraction around the door are very apparent.  The sound is much louder overall because of the diffraction path that was unimpeded by any materials; none of the high frequencies were damped out over this path, and more of the overall energy was retained.  This scenario is much more realistic than the previous one because an open door would diffract and allow us to hear the sound source as if it were very close by.
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "roomdoor_diffraction.wav" autostart=false><BR>
+<a href = "roomdoor_diffraction.wav">Click here to download sound</a>
+</td><td><img src = "diffraction_spectrum.png"><BR>Here is a snapshot of the sound's spectrum.  Note the overall higher energy content, especially in the high frequencies.</td></tr>
+</table>
+<BR><BR>
+
+
+
+
+<h2><u><b>Example 3: Room with door - inside same room as source</b></u></h2><BR>
+This is the same scene as before, except we're inside the same room as the source now.
+<table border = "1">
+<tr>
+<td><img src = "insideroom.png"></td>
+<td><img src = "insideroom2.png"></td>
+<td><img src = "insideroom3.png"></td>
+</tr>
+<tr><td>Here's a snapshot from the point of view of the listener.  Notice how many more valid specular paths exist between the sound source and the listener.</td>
+<td>This shot shows all of the rays converging at the listener's left ear.</td>
+<td>This shot shows how a few of the specular paths bounced behind the listener into the other room and back again</td>
+</tr>
+</table>
+<BR>
+The sound source is loud in the same room, and the impulse response has a lot more hits.  Here is a plot of the impulse response in the zeroeth frequency band (0hz - 1000hz), for instance, which has 48 total impulses (paths):<BR>
+<img src = "insideroom_impulse.png"><BR>
+Note how most of the later impulses have decayed with distance.  Note the last couple of responses (directly after 0.1 seconds) that came from sound paths that bounced into the other room and back, giving a longer delay.
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "insideroom.wav" autostart=false><BR>
+<a href = "insideroom.wav">Click here to download sound</a>
+</td></tr>
+</table>
+<BR><BR>
+
+
+<h2><u><b>Example 4: Room with door - sound source to the right and left of listener</b></u></h2><BR>
+This is the same scene as before, except now we're showing off the binaural response at different ears.
+<table border = "1">
+<tr>
+<td><img src = "toleft.png"></td>
+<td><img src = "toright.png"></td>
+</tr>
+<tr><td>Here's an example where the listener is to the left of the sound source.  Click below to hear it<BR>
+<embed src = "toleft.wav" autostart=false><BR>
+<a href = "toleft.wav">Click here to download sound</a>
+</td>
+<td>Here is an example where the listener is to the right of the sound source.  Click below ot hear it<BR>
+<embed src = "toright.wav" autostart=false><BR>
+<a href = "toright.wav">Click here to download sound</a>
+</td>
+</tr>
+</table>
+<BR>
+If you have your headphones on in the correct direction, you should be able to percieve the location of the sound source on alternating sides of the listener's head.  This is a poor man's implementation of the head-related transfer function (HRTF) by simply calculating the impulse response at each ear.
+
+<BR><BR>
+
+
+<h2><u><b>Example 5: City - Standing 145 meters away from source</b></u></h2><BR>
+This model is a square area of a city with the tallest building approximately 175 meters tall.  The sound source is placed far (145 meters) away from the listener.
+<table border = "1">
+<tr>
+<td><img src = "cityfar0.png"></td>
+<td><img src = "cityfar1.png"></td>
+</tr>
+<tr><td>Here's a snapshot from the point of view of the listener.  Note the source off in the distance.</td>
+<td>This shot from above shows all of the rays converging at the listener's left ear</td>
+</tr>
+</table>
+<BR>
+There is a lot of sound attenuation with distance in this example, as well as clear reverberation because of how far way the source is.  The reflected paths and the direct path have a much larger absolute difference in distance that the echo is heard between them.  Here is a plot of the impulse response at the left ear for the zeroeth frequency band below:<BR>
+<img src = "cityfar_impulse.png"><BR>
+Notice how, in comparison with the small room example, the time scale is stretched out much more (one of the impulses has a delay greater than 0.5 seconds), and the impulse decay is much more severe.<BR>
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "cityfar.wav" autostart=false><BR>
+<a href = "cityfar.wav">Click here to download sound</a>
+</td></tr>
+</table>
+<BR><BR>
+
+
+
+<h2><u><b>Example 6: City - Standing close to source</b></u></h2><BR>
+This is the same model as last time, except the listener is standing much closer to the source.
+<table border = "1">
+<tr>
+<td><img src = "cityclose0.png"></td>
+<td><img src = "cityclose1.png"></td>
+</tr>
+<tr><td>Here's a snapshot from the point of view of the listener.  I threw a car model in there for fun</td>
+<td>This shot from above shows all of the specular rays converging at the listener's left ear.  The source and listener are much closer to each other; I actually had to circle them.</td>
+</tr>
+</table>
+<BR>
+The sound is much louder because the direct path between the listener and source is very short.  However, there is still a faint echo in the background because of the specular/transmissive paths that bounce off of the surrounding buildings:<BR>
+<img src = "cityclose_impulse.png"><BR>
+The reflected reverberation paths are so small in comparison with the direct path that I had to circle them in red towards the end (you have to listen very carefully to hear the effect).  The direct path by far dominates the energy of the response<BR>
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "cityclose.wav" autostart=false><BR>
+<a href = "cityclose.wav">Click here to download sound</a>
+</td></tr>
+</table>
+<BR><BR>
+
+
+<h2><u><b>Example 7: City - Standing on top of building looking down</b></u></h2><BR>
+Using the same city model, place the listener on top of a tall building looking down.
+<table border = "1">
+<tr>
+<td><img src = "cityontop0.png"></td>
+<td><img src = "cityontop1.png"></td>
+<td><img src = "cityontop2.png"></td>
+</tr>
+<tr><td>A shot showing how high up the listener is</td>
+<td>A shot looking down.  The car in perspective helps to emphasize how high up we are</td>
+<td>A shot of all of the rays</td></tr>
+</tr>
+</table>
+<BR>
+Here's the impulse response<BR>
+<img src = "cityontop_impulse.png"><BR>
+Note how there are only two indirect paths that make it.  This is because of the extreme viewing anble of the source with respect to the listener, very few valid specular paths exist that would make it from source, to a building, to the listener.
+
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "cityontop.wav" autostart=false><BR>
+<a href = "cityontop.wav">Click here to download sound</a>
+</td></tr>
+</table>
+<BR><BR>
+
+
+<h2><u><b>Example 8: Car sitting at stop light blasting rap music</b></u></h2><BR>
+Have you every been sitting next to someone waiting at a stop light who's blasting rap music?  The bass usually carries through extremely well and shakes up the entire street, but you can hardly make out the lyrics at all (high frequency info gets supressed by the material through which it propagates).  This example is a simulation of this scenario.  The sound source is sitting inside a mesh model of a car which has a material that only passes very low frequencies through it.  This shows off our frequency-dependent transmission.
+<table border = "1">
+<tr>
+<td><img src = "outsidecar.png"></td>
+<td><img src = "insidecar.png"></td>
+</tr>
+<tr><td>Standing outside of the car.  The sound is extremely muffled but the bass comes through well, which is the effect we were going for.  The spectrum plot verifies this analytically<BR>
+
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "outsidecar.wav" autostart=false><BR>
+<a href = "outsidecar.wav">Click here to download sound</a>
+</td></tr>
+</table>
+<BR>
+<img src = "outsidecar_spectrum.png">
+</td>
+<td>Inside of the car; lots of reverberation in a small space and much crisper sound because not only does a direct path exist, but the reflection coefficients don't damp as much of the high frequencies as the transmission coefficients in this example.<BR>
+
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "carinside.wav" autostart=false><BR>
+<a href = "carinside.wav">Click here to download sound</a>
+</td></tr>
+</table>
+<BR>
+<img src = "carinside_spectrum.png"></td>
+</tr>
+</table>
+
+<BR><BR>
+
+
+<h2><u><b>Example 9: Ellipsoidal "Whisper Chamber"</b></u></h2><BR>
+For fun to test specular reflections, we set up an ellipsoidal whisper chamber with the source at one focus of the ellipsoid and the listener at the other focus.  It is expected that the strongest impulse response will occur when listener and source are at opposite foci since all specular rays emitted from one focus will converge at the other focus.
+<table border = "1">
+<tr>
+<td><img src = "focus.png"></td>
+<td><img src = "nofocus.png"></td>
+</tr>
+<tr><td>Listener is placed at one focus and source is placed at the other focus.  Tons and tons of paths are found that converge, which makes sense because technically every single path on the spherical wavefront should converge here.  Note that this is a piecewise constant mesh approximation to an actual ellipsoid so there is some error.<BR>
+
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "focus.wav" autostart=false><BR>
+<a href = "focus.wav">Click here to download sound</a>
+</td></tr>
+</table>
+<BR>
+<img src = "focus_impulse.png"><BR>
+Notice how almost all of the rays focus at one time (which makes sense if they all travel from one focus to the other).  This means we hear almost no reverberation; the sound carries almost perfectly from one focus to the other (this is why it's called a whisper chamber; because someone can whisper from one focus to another with very little energy loss; but people who aren't standing at the focus can't hear it as well).  The focal length is about 14.14 meters, so the wavefront had to travel a distance of 28.28 meters in all directions. If sound goes at 343 m/second, then they should all converge after about 0.082 seconds.  This is roughly the time of convergence we see above (NOTE there is error because of inexact placement and the piecewise constant mesh approximation).
+</td>
+<td>The listener is no longer at a focus, nor is the sound source, so the impulses are spread out more over time.  We also get a more interesting pattern that doesn't sound much like any room we've experienced before.<BR>
+<BR>
+<table border = "3">
+<tr><td>Click below to play the sound<BR>
+<embed src = "nofocus.wav" autostart=false><BR>
+<a href = "nofocus.wav">Click here to download sound</a>
+</td></tr>
+</table>
+<BR>
+
+<img src = "nofocus_impulse.png"><BR>
+
+
+</tr>
+</table>
+
+<BR><BR>
+
+<BR>
+<hr>
+<h2>
+<a href = "../../"><--Back to Projects</a><BR>
+<a href = "../../../"><--Home</a>
+</h2>
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body></html>

@@ -1,0 +1,344 @@
+<html>
+<title>Taylor Series Tutorial: by Chris Tralie</title>
+<body>
+<center><h1>Taylor Series</h1><BR><h2>Chris Tralie</h2></center><BR>
+
+<b>Last updated 9/19/2010:</b> Fixed an error with the remainder theorem and updated some examples to reflect this change and to make things more clear<BR>
+
+<ol>
+<li><a href = "#Intro">Introduction: What's the Point?</a></li>
+<li><a href = "#differential">Starting with an Infinite Polynomial: A Differential point of View</a></li>
+<li><a href = "#observations">Some observations about the Taylor Series, and a Quick Example</a></li>
+<li><a href = "#error">Error and the Remainder Term</a></li>
+<li><a href = "#maclaurin">Maclaurin Series</a></li>
+<li><a href = "#smallangle">Small Angle Approximation for Sine</a></li>
+<li><a href = "#centering">A note about choosing a "center"</a></li>
+</ol>
+
+
+<a name = "Intro"><h2><u><b>1. Introduction: What's the Point?</b></u></h1></a>
+
+<p>
+Let me divert discussion about Taylor Series for one second and first talk about <i>transcendental functions</i>.  This will help motivate the problem.  <a href = "http://mathworld.wolfram.com/TranscendentalFunction.html">Mathworld</a> defines a transcendental function as "a function which is not an algebraic function."  In other words, it is impossible to do a finite combination of algebraic options on the input to a function to match the output in all cases.  What the heck does that mean?  It basically boils down to the fact that <i>it is impossible find a finite polynomial that matches a transcendental function exactly.</i>  Some examples of transcendental functions are <b>e<SUP>X</SUP>, ln(x), sin(x), and sqrt(x)</b>.  
+</p>
+
+<p>
+One immediate consequence of this is that, unfortunately, it's not going to be so simple to exactly evaluate these transcendental functions at a specific point with a closed number of algebraic operations.  So if someone asks you "what's log base 10 of 20?," you won't be able to just bust out a pen and paper and work it out in front of them.  So what can you do?  Well you know it's between 1 and 2.  You could try drawing a log curve on a piece of paper and doing some sort of interpolation guesswork.  But can you do better?  Well, it turns out you can if you make one very odd conceptual leap.  I told you we can't represent transcendental functions as finite polynomials.  But I never said we couldn't try to represent them with <i>infinite</i> polynomials, did I?  This is where Taylor Series comes in.  Now you might be thinking, "alright, even if we do find this infinite polynomial to represent..say...x<SUP>1/2</SUP>, what good is that?  I don't want to sit there for all of eternity writing down what the square root of 2 is."  Well it is great in theory to have these infinite polynomials, but it is also great in practice, because we can actually use finite approximations of them to find (damn good!) estimates of our transcendental functions (so you won't have to sit there forever to come up with an answer that's good enough).  So without further ado, let me begin to derive them for you....
+</p>
+
+<a name = "differential"><h2><u><b>2. Starting with an Infinite Polynomial: A Differential point of View</b></u></h2></a>
+
+<p>
+Let's start with a transcendental function <b>f(x)</b>.  Let's assume that I did manage to find an infinite polynomial that matched f(x) exactly at every point.  Define that infinite polynomial, <b>g(x)</b>, as follows:<BR><BR>
+<latex>EQ 1: $g(x) = c_0 + c_1(x-a) + c_2(x-a)^2 + c_3(x-a)^3 + c_4(x-a)^4 + ....$</latex>
+<BR><BR>
+Where c<SUB>0</SUB>, c<SUB>1</SUB>, c<SUB>2</SUB>, etc are the coefficients of each part of the polynomial, and a is some constant (we can say a is the point around which the polynomial is "centered"...more about that later).  g(x) is the most general polynomial expressible since the coefficients are expressed as variables.  We need to solve for those coefficients if we want g(x) to match up with f(x) exactly.  To do this, we note that: <BR><BR>
+<i>Since f(x) and g(x) represent the same function, all of their derivatives match</i>.<BR><BR>
+  If we're really clever, we can exploit this fact to our advantage.  Let's first see if we can solve for c<SUB>0</SUB> in terms of a known value of f(x).  To do this, we do a little trick by evaluating both functions at x=a.  This will cause all of the terms in the infinite polynomial to drop out except for the very first coefficient, since they will all be a-a (0) raised to some power.  <BR><BR>
+  
+  <latex>EQ 2: $f(a) = g(a) = c_0 + c_1(a-a) + c_2(a-a)^2 + c_3(a-a)^3 + ... = c_0$</latex>
+  
+<BR><BR>
+Therefore, <b>c<SUB>0</SUB> = f(a)</b>.  
+
+<BR>Let's now use that fact about derivatives, combined with this trick, to see if we can keep going and figure out some more coefficients.  First, start by taking the derivative of both functions, and remember that their derivative functions are equal since the functions themselves are assumed to be equal:
+<BR><BR>
+<latex>EQ 3: $f '(x) = g '(x) = c_1 + 2c_2(x-a) + 3c_3(x-a)^2 + 4c_4(x-a)^3 + ...$</latex>
+<BR><BR>
+Now use that trick again and evaluate f'(x) and g'(x) at a.  Once again, everything drops out except for c<SUB>1</SUB>, leaving:<BR>
+<b>c<SUB>1</SUB> = f '(a)</b><BR><BR>
+
+Next step, take the second derivative, and evaluate at x=a:
+<BR><BR>
+<latex>EQ 4: $f''(x) = g''(x) = 2c_2 + (3)(2)c_3(x-a) + (4)(3)c_4(x-a)^2 + ...$</latex>
+
+<BR><BR>
+<!--<latex>\[ \sum_{k=1}^n k^2 = \frac{1}{2} n (n+1).\] </latex>!-->
+
+f ''(a) = g''(a) = 2c<SUB>2</SUB><BR>
+<b>c<SUB>2</SUB> = f ''(a) / 2</b><BR><BR>
+
+Let's go one more step, and perhaps then we can see a pattern beginning to emerge:<BR><BR>
+
+<latex>EQ 5: $f'''(x) = g'''(x) = (3)(2)c_3 + (4)(3)(2)c_4(x-a) + ....$</latex><BR><BR>
+
+f '''(a) = g '''(a) = (3)(2)c_3<BR>
+<b>c<SUB>3</SUB> = f '''(a) / [(3)(2)]</b><BR><BR>
+
+Now we should begin to see a pattern emerge with the coefficients.  Each time we take the derivative of the polynomial function, we simply use <i>the power rule</i> on each one of the polynomial terms, bringing it down one power and bringing the previous power down as a coefficient.  This keeps happening until that term gets obliterated, leaving it as a constant.  In other words, after taking n derivatives, the term that was originally c<SUB>n</SUB>x<SUP>n</SUP> is now <b>(c<SUB>n</SUB>)n!</b>.  When we plug in a into that derivative function, everything gets wiped out except for that constant coefficient (as we can see by those examples above).  Therefore, we always have:<BR><BR>
+f<SUP>n</SUP>(a) = (c<SUB>n</SUB>)n!<BR>
+<b>***c<SUB>n</SUB> = f<SUP>n</SUP>(a) / n!</b><BR><BR>
+
+We now have a general formula for all of the coefficients, leaving us enough information to define the entire infinite polynomial.  Here is the formal definition of the Taylor polynomial using the information from above:<BR><BR>
+
+<latex>EQ 6 (Taylor Series): $\displaystyle\sum_{n=0}^\infty  \frac{f^n(a)}{n!}(x-a)^n$</latex>
+
+</p>
+
+
+<a name = "observations"><h2><u><b>3. Some observations about the Taylor Series, and a Quick Example</b></u></h2></a>
+
+<p>Now that we have this infinite polynomial after doing some roundabout (and not entirely intuitive) tricks, let's see if we can gain some intuition about the polynomial and make some more sense about how it matches up with the original function.  Okay first let me make a distinction with terms here; the "Taylor Series" is the entire infinite polynomial for some function.  A <b>Taylor Polynomial</b>, on the other hand, is a subset of that polynomial taken out to some finite degree.  For example, the function<BR>
+<b>f(x) = 3*(x-2)<SUP>3</SUP> + (x-2) + 5</b><BR>
+could be a "Third Order Taylor Polynomial centered about 2" for some function.  When I say "centered about 2," I mean that in equation 6, a=2.  When I say the "third order Taylor polynomial," I mean that we've brought the infinite polynomial for some function out only to the third degree, simply leaving out all of the high order terms.  Thus, we would not expect this polynomial to match up exactly with the original function anymore, but rather it is an approximation.</p><BR>
+
+<p>So how well does a taylor polynomial of a certain order match a function?  Let's start with an example and see what happens.  Take the function:<BR><BR>
+<latex>EX 1: $f(x) = 1 + sin(x)$</latex><BR><BR>
+Let's start with the first order talyor polynomial for f(x), centered about <b>a = 3*PI / 4</b><BR><BR>
+<latex>\begin{align} 
+g(x) &= f(\frac{3\pi}{4}) + f'(\frac{3\pi}{4})(x - \frac{3\pi}{4})\\
+&=1 + sin(\frac{3\pi}{4}) + cos(\frac{3\pi}{4})(x - \frac{3\pi}{4})\\
+&=1 + \frac{\sqrt{2}}{2} -\frac{\sqrt{2}}{2}*(x - \frac{3\pi}{4})
+\end{align}</latex><BR><BR>
+Here's a graph of that function, matched up with the original<BR><BR>
+<img src = "example1_1.png"><BR><BR>
+Another name for the first order taylor polynomial is the <i>"linear approximation of a function f(x)"</i>.  It ends up just being the tangent line at a point!  You can see it does a great job really close to the point where we chose to center the Taylor Polynomial, but it starts to do a horrible job when we get just a little outside of that neighborhood.  This makes sense, because you would expect the higher order terms to be negligible if (x-a) is small; in other words, if (x-a) << 1, raising it to a higher power makes it even smaller, so we might as well just ignore those terms if we have an x that's close to a.  The linear approximation of a function is very useful in science and engineering, and you will probably see it pop up a lot because it simplifies math so much.<BR><BR>
+
+Alright, let's see what happens when we compute the second order Taylor Polynomial for this function, centered about <b>a = 3*PI / 4</b>:<BR><BR>
+<latex>\begin{align} 
+g(x) &= f(\frac{3\pi}{4}) + f'(\frac{3\pi}{4})(x - \frac{3\pi}{4}) + \frac{1}{2}f''(\frac{3\pi}{4})(x - \frac{3\pi}{4})^2\\
+&=1 + sin(\frac{3\pi}{4}) + cos(\frac{3\pi}{4})(x - \frac{3\pi}{4}) - \frac{1}{2}sin(\frac{3\pi}{4})(x - \frac{3\pi}{4})^2\\
+&=1 + \frac{\sqrt{2}}{2} -\frac{\sqrt{2}}{2}*(x - \frac{3\pi}{4}) -\frac{\sqrt{2}}{4}*(x - \frac{3\pi}{4})^2
+\end{align}</latex><BR><BR>
+Here's a graph of this<BR><BR>
+<img src = "example1_2.png"><BR><BR>
+As you can see, this does a better job than the first example; it hugs the function a little bit longer before it starts to shoot off and deviate like crazy.  In general, the more terms you take, the better job the Taylor Polynomial does.  In the next section, I'll show how to quantify that statement and figure out exactly what the error is when using these approximations.
+</p>
+
+<a name = "error"><h2><u><b>4. Error and the Remainder Term</b></u></h2></a>
+<p>Now I'm going to explain how to reason about the accuracy of Taylor Polynomials.  This is an important question to answer, since we will need to use them in practice (who has time to fill in an infinite polynomial?).  To answer this question, I'm going to use another trick and start doing something that's not very intuitive, but trust me, it will answer this question</p>
+
+<p>As usual, let's start with some function <b>f(x)</b>.  Take the following definite integral:<BR><BR>
+
+<latex>\[ \int_a^x f'(t)dt = f(x) - f(a) .\] </latex>
+
+<BR><BR>
+Rearrange terms<BR><BR>
+
+<latex>\[ f(x) = f(a) + \int_a^x f'(t)dt .\]</latex><BR><BR>
+
+Now do integration by parts to obtain the integral of f '(t)dt, letting u=f '(t) and dv = dt:<BR><BR>
+
+<latex>\[ \int_a^x f'(t)dt =  [tf'(t)]_{t = a}^{t = x} - \int_a^x tf''(t)dt .\]</latex><BR>
+
+<BR><BR>
+Evaluate the first part of the definite integral
+<BR><BR> 
+
+<latex>\[ \int_a^x f'(t)dt =  xf'(x) - af'(a) - \int_a^x tf''(t)dt .\]</latex>
+
+<BR><BR>
+In the xf '(x) term, plug in the following (this is using the same trick we used right at the beginning when we took the integral of f'(t) from a to x):<BR><BR>
+
+<latex>\[ \int_a^x f'(t)dt =  x[f'(a) + \int_a^x f''(t)dt ] - af'(a) - \int_a^x tf''(t)dt .\]</latex><BR><BR>
+<latex>\[ \int_a^x f'(t)dt =  xf'(a) - af'(a) + x\int_a^x f''(t)dt - \int_a^x tf''(t)dt .\]</latex><BR><BR>
+
+Now combine like terms and plug this back into the original equation for f(x)
+
+<BR><BR>
+
+<latex>\[ f(x) = f(a) +  (x-a)f'(a) + \int_a^x (x - t)f''(t)dt .\]</latex><BR><BR>
+
+Okay, now this is starting to look a little bit more like the Taylor Series.  Let's take it one step further now:<BR><BR>
+
+<latex>\[ \int_a^x (x - t)f''(t)dt  = ?.\]</latex><BR><BR>
+Proceed again via integration by parts, letting u = f''(t) and dv = (x-t)dt.  Then v = -(1/2)(x-t)<SUP>2</SUP>.<BR><BR>
+
+<latex>\[ \int_a^x (x - t)f''(t)dt  = [-\frac{1}{2}(x-t)^2f''(t)]_{t = a}^{t = x} - \int_a^x -\frac{1}{2}(x-t)^2 f'''(t)dt.\]</latex><BR><BR>
+Once again, evaluate the first part of the definite integral
+<BR><BR>
+
+<latex>\[ \int_a^x (x - t)f''(t)dt  = -\frac{1}{2}(x-x)^2f''(x) + \frac{1}{2}(x-a)^2f''(a) + \int_a^x \frac{1}{2}(x-t)^2 f'''(t)dt.\]</latex><BR><BR>
+
+The (x-x) term will drop out<BR><BR>
+
+<latex>\[ \int_a^x (x - t)f''(t)dt  = \frac{1}{2}(x-a)^2f''(a) + \int_a^x \frac{1}{2}(x-t)^2 f'''(t)dt.\]</latex><BR><BR>
+
+Now plug this back into the original equation for f(x)<BR><BR>
+
+<latex>\[ f(x) = f(a) + (x-a)f'(a) + \frac{1}{2}(x-a)^2f''(a) + \int_a^x \frac{1}{2}(x-t)^2 f'''(t)dt .\]</latex><BR><BR>
+
+And if we broke up that integral at the end again using integration by parts, we would get the following:<BR><BR>
+
+<latex>\[ f(x) = f(a) + (x-a)f'(a) + \frac{1}{2}(x-a)^2f''(a) + \frac{1}{(3)(2)}(x-a)^3f'''(a) + \int_a^x \frac{1}{(3)(2)}(x-t)^3 f''''(t)dt .\]</latex><BR><BR>
+
+Hopefully by now you can see a pattern.  When we continue doing integration by parts, we continue to get more terms of the Taylor polynomial for a particular function, plus some definite integral.  The difference between f(x) and its nth order Taylor Polynomial is that definite integral, which is the following (I'll call the function R<SUB>n</SUB>(x)):<BR><BR>
+
+<latex>\[ R_n(x) = \int_a^x \frac{1}{n!}(x-t)^n f^{n+1}(t)dt .\]</latex><BR><BR>
+
+This is known as the <b>remainder term</b>, because it gives what's left over after evaluating the nth order Taylor Polynomial for some x.  This definite integral evaluates to a number (that's what definite integrals do) for every x (well, when the function is "well-behaved," at least), so we now have an expression for the exact amount of error introduced by using a Taylor approximation!
+</p>
+
+<!--<p>
+There's another way to write the remainer term that doesn't involve an integral, and I'll try to explain it quickly since most professors probably want you to know it.  It calls upon <a href = "http://demonstrations.wolfram.com/TheIntegralMeanValueTheoremAnIllustration/">the mean value theorem for integrals</a>, which states that <i>if a function f is continuous on [a,b], then there exists a number c in [a, b] such that (b-a) * f(c) = integral<SUB>a</SUB><SUP>b</SUP>f(x)dx</i>.  Basically all this means is that we can find exactly one rectangle that lies on [a,b] that has the same area as the function on that integral, and that the height of that rectangle has to be within the bounds that the function takes on in that interval.<BR><BR>
+<img src = "intermediatevalue.png"><BR><BR>
+
+We can now use this fact to write the remainder term a different way.  We state that there is a c between a and x such that
+
+<latex>\[ R_n(x) = \int_a^x \frac{1}{n!}(x-t)^n f^{n+1}(t)dt  = \frac{1}{n!}(c-t)^n f^{n+1}(c).\]</latex><BR><BR>
+
+</p>
+
+
+<latex>$\frac{1}{n!}(x-t)^n f^{n+1}(t)$</latex><BR><BR>
+
+Let's !-->
+
+<p>Usually, you won't be able to say what the integral is exactly, but it's not very hard to figure out an upper bound for the absolute value of the error.  Let's start back with that remainder term again, and look at the accumulator function inside of the integral:<BR><BR>
+
+<latex>$\frac{1}{n!}(x-t)^n f^{n+1}(t)$</latex><BR><BR>
+
+If we can find an upper bound on the absolute value of this function, then we can put that upper bound back in the integral and get a constant back.  First, we find the absolute maximum that f<SUP>n+1</SUP>(t) reaches on the interval [a, x].  I'll call this <b>M</b>.  Then we note that on the interval [a, x], (x-t)<SUP>n</SUP> is maximized when t = a.  Therefore:<BR><BR>
+
+<latex>$ | \frac{1}{n!}(x-t)^n f^{n+1}(t)| <= \frac{M}{n!}|(x-a)^n|$</latex><BR><BR>
+which, using the fact that <BR><BR><latex>$|\int f(x)dx| <= \int |f(x)|dx$</latex><BR><BR> implies that<BR><BR>
+
+<latex>\[ |R_n(x)| <= \int_a^x |\frac{1}{n!}(x-t)^n f^{n+1}(t)|dt <= \int_a^x | \frac{M}{n!}(x-a)^n|dt \]</latex><BR><BR>
+
+By the power rule and the fact that <b>M</b> is a <i>constant</i> upper bound of the (n+1)<SUP>th</SUP> derivative of <i>f</i>:<BR><BR>
+
+<latex>\[ \int_a^x | \frac{M}{n!}(x-a)^n|dt = |\frac{M}{(n+1)!}(x-a)^{n+1}| \]</latex>
+
+<BR><BR>
+
+Thus, we can conclude that the absolute value of the remainder is no more than <BR><BR>
+<latex>\[ | \frac{M}{(n+1)!}(x-a)^{n+1} | \]</latex><BR><BR>
+
+Let's see an example of this in action:</p>
+<hr>
+<p>
+<u>Ex 2:</u> Take the function f(x) = (x + 1)<SUP>1/2</SUP>.  Let's center a third order Taylor Polynomial around a = 0, and see how well we can do estimating the sqare root of 2 (plug in x=1).<BR>
+<table cellpadding = "10" border = "1">
+<tr><td><latex>$f(x) = (x + 1)^{\frac{1}{2}}$</latex></td><td>f(0) = 1</td></tr>
+<tr><td><latex>$f'(x) = \frac{1}{2}(x + 1)^{- \frac{1}{2}}$</latex></td><td>f '(0) = 0.5</td></tr>
+<tr><td><latex>$f''(x) = - \frac{1}{4}(x + 1)^{- \frac{3}{2}}$</latex></td><td>f ''(0) = -0.25</td></tr>
+<tr><td><latex>$f'''(x) = \frac{3}{8}(x + 1)^{- \frac{5}{2}}$</latex></td><td>f '''(0) = 0.375</td></tr>
+</table>
+
+The third order taylor polynomial, therefore, is <BR><BR>
+<latex>$g(x) = 1 + 0.5x - \frac{1}{2}(0.25x^2) + \frac{1}{6}(0.375x^3)$</latex><BR><BR>
+g(1) = 1 + 0.5 - 0.125 + 0.0625 = <b>1.4375</b><BR><BR>
+
+Now how close is that to the actual square root of 2?  Let's look at the formula for the remainder again:
+<BR><BR>
+
+<latex>\[ | \frac{M}{(n+1)!}(x-a)^{n+1} | \]</latex>
+
+<BR><BR>
+
+We've taken the 3rd order Taylor approximation, so n=3.  We now need to find <b>M</b>, the upper bound of the fourth derivative of (x+1)<SUP>1/2</SUP>, which is <BR><BR><latex>$f^4(x) = -\frac{15}{16}(x+1)^{-\frac{7}{2}}$</latex><BR><BR>
+This is on the interval x = [0,1].  (x+1) raised to a negative power only decreases as the argument x becomes more positive, so the absolute max must occur at x=0.  So M = |-15/16*(1)<SUP>-7/2</SUP>| = <b>15/16</b>.<BR><BR>
+
+Plugging this all back in, we get that<BR><BR>
+<latex>\[ R_3(x) <= | \frac{(\frac{15}{16})}{4!}(1-0)^4 | = 0.0390625\]</latex><BR><BR>
+
+So our estimate of 1.4375 isn't off by more than 0.0391 of the actual square root of two.  Not bad for an estimate we did by hand, huh?  When I tell my calculator to give me the square root of 2, it gives me 1.414, which is less than 0.0235 of our estimate (which is within our confidence interval of += 0.0391).<BR><BR>
+
+Another thing to note about this Taylor Series example is that it produces an alternate series, so taking more terms continues to alternate above and below the actual value of the square root of two, getting closer and closer to that actual value.
+
+</p>
+
+<a name = "maclaurin"><h2><u><b>5. Maclaurin Series</b></u></h2></a>
+
+<p>
+You'll often hear the term "Maclaurin Series" pop up when people talk about Taylor Series.  This is just what we call a Taylor Series that we choose to center around the origin (a = 0):<BR><BR>
+
+<latex>(Taylor Series): $\displaystyle\sum_{n=0}^\infty  \frac{f^n(a)}{n!}(x-a)^n$</latex><BR><BR>
+<latex>(Maclaurin Series): $\displaystyle\sum_{n=0}^\infty  \frac{f^n(0)}{n!}x^n$</latex><BR><BR>
+In my opinion, these are actually slightly easier than Taylor Series.  I'll finish off this section by deriving the Maclaurin series of a few common funtions (ones you'll probably need to memorize for a test, but that are easy enough to derive if you forget them).
+
+<ul>
+<li><a name = "sinx">f(x) = sin(x)</a><BR><BR>
+<table cellpadding = "10" border = "1">
+<tr><td>f(x) = sin(x)</td><td>f(0) = 0</td></tr>
+<tr><td>f '(x) = cos(x)</td><td>f '(0) = 1</td></tr>
+<tr><td>f ''(x) = -sin(x)</td><td>f ''(0) = 0</td></tr>
+<tr><td>f '''(x) = -cos(x)</td><td>f '''(0) = -1</td></tr>
+<tr><td>f<SUP>4</SUP>(x) = sin(x)</td><td>f<SUP>4</SUP>(0) = 0</td></tr>
+</table><BR>
+....and the pattern continues to circle through (0, 1, 0, -1).  This translates into the following Maclaurin series:<BR><BR>
+<latex>\[ sin(x) = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + ... = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n + 1)!}x^{2n + 1} \]</latex><BR><BR>
+Notice that this series only has odd order terms in the polynomial.  This should make sense since sin(x) is an odd function
+</li>
+
+<li><a name = "cosx">f(x) = cos(x)</a><BR><BR>
+<table cellpadding = "10" border = "1">
+<tr><td>f(x) = cos(x)</td><td>f(0) = 1</td></tr>
+<tr><td>f '(x) = -sin(x)</td><td>f '(0) = 0</td></tr>
+<tr><td>f ''(x) = -cos(x)</td><td>f ''(0) = -1</td></tr>
+<tr><td>f '''(x) = sin(x)</td><td>f '''(0) = 0</td></tr>
+<tr><td>f<SUP>4</SUP>(x) = cos(x)</td><td>f<SUP>4</SUP>(0) = 1</td></tr>
+</table><BR>
+....and the pattern continues to circle through (1, 0, -1, 0).  This translates into the following Maclaurin series:<BR><BR>
+<latex>\[ cos(x) = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + ... = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n)!}x^{2n} \]</latex><BR><BR>
+Notice that this series only has even order terms in the polynomial.  This should make sense since cos(x) is an even function.  This is how I remember which one of cos(x) and sin(x) has even order terms, and which one has odd terms.  Another way to help remember is that cos(x) is 1 at 0 and sin(x) is 0, so the maclaurin series for cos(x) will have a 1 in it, while the maclaurin series for sin(x) will only have x terms raised to a power.<BR>
+Finally, note that we could have derived the maclaurin series for cos(x) from the maclaurin series for sin(x) by simply taking the derivative of both sides of the equation above (known as "term by term differentiation")
+</li>
+
+<li><a name = "ex">f(x) = e<SUP>x</SUP></a><BR><BR>
+This one is super easy because all of the derivatives of e<SUP>x</SUP> are e<SUP>x</SUP>.  And for the maclaurin series, we evaluate them all at x=0.  So every single coefficient is e<SUP>0</SUP> = 1<BR><BR>
+
+
+<latex>\[e^x = 1 + \frac{1}{2}x^2 + \frac{1}{3!}x^3 + \frac{1}{4!}x^4 + \frac{1}{5!}x^5 = \sum_{n=0}^{\infty} \frac{x^n}{n!}   \]</latex><BR><BR>
+This is why you may have seen the following definition of e<BR><BR>
+<latex>$e = 1 + \frac{1}{2} + \frac{1}{3!} + \frac{1}{4!} + \frac{1}{5!} + ...$</latex>
+</li>
+
+</ul>
+</p>
+
+<a name = "smallangle"><h2><u><b>6. Small Angle Approximation for Sine</b></u></h2></a>
+<p>
+You may have heard that it is possible to approximate sine of theta as simply theta when theta is small.  This is used for such things as the simple pendulum.  Well here's a quick proof of that fact using the Maclaurin Series for sine:
+<BR><BR>
+<latex>\[ sin(\theta) = \theta - \frac{\theta^3}{3!} + \frac{\theta^5}{5!} - \frac{\theta^7}{7!} + ... \approx \theta \]</latex>
+<BR><BR>
+The higher order terms theta<SUP>3</SUP>, theta<SUP>5</SUP>, etc. are not large when theta << 1.  So it doesn't seem like it would hurt to neglect them when theta is small.  But let's be a little more precise.  Recall the remainder theorem I discussed in section 4:<BR><BR>
+
+<latex>\[ R_n(\theta) <= | \frac{M}{(n+1)!}(\theta-a)^{n+1} | \]</latex><BR><BR>
+
+One way to look at this is that taking theta to approximate sine is taking the first order Taylor Polynomial (linear approximation), so n=1 in the above formula.  And we've taken the Maclaurin series of sin(theta) so a=0.  <b>M</b> is the absolute max that the second derivative of sin(x), which is -sin(x).  |-sin(x)| never goes above 1, so <b>M</b>=1.  Plugging this all into that formula, we get:<BR><BR>
+
+<latex>\[ R_1(\theta) <= |\frac{1}{2!}\theta^2| = \frac{1}{2}\theta^2 \]</latex>
+<BR><BR>
+
+But actually, we can come up with an even tighter bound by remembering that the second order term x<SUP>2</SUP> has a coefficient of zero, so the "linear approximation" of taking theta is really just as good as a quadratic approximation would have been.  So we've actually gotten all the accuracy of the quadratic approximation by just taking the linear term.  Plugging n=2 back into the formula, we now have:<BR><BR>
+
+<latex>\[ R_2(\theta) <= |\frac{1}{3!}\theta^3| = \frac{ \theta^3}{6} \]</latex>
+
+<BR><BR>
+This bound gives a percent error of 100%*(theta<SUP>3</SUP>/6)/theta = <b>(theta<SUP>2</SUP>*100/6) percent</b>.  When theta = 0.25, the error is no more than 1.04% (very small).  When theta = 0.5, this is no more than 4.17% error.  Even when theta = 1, the error is no more than 16.7%.  This graph below plotting x and sin(x) from 0 to pi/2 shows even more convincing visual evidence for how accurate this approximation is:<BR><BR>
+<img src = "smallangle.png">
+
+</p>
+<BR>
+
+
+<a name = "centering"><h2><u><b>7. A note about choosing a "center"</b></u></h2></a>
+
+<p>
+One more quick note and then I think we're done.  Something that used to confuse the heck out of me with Taylor Series is choosing what <b>a</b> is in the equation:<BR><BR>
+<latex>$\displaystyle\sum_{n=0}^\infty  \frac{f^n(a)}{n!}(x-a)^n$</latex>
+<BR><BR>
+Choosing a different a <b>does not</b> "shift" the function horizontally at all.  All it does is make the Taylor Polynomials more accurate close to a.  Regardless of the a you choose, taking the Taylor Series out to infinity should match up with the original function.<BR><BR>
+<img src = "centered.png"><BR><BR>
+This is an example of how choosing a different a value affects a second order Taylor Polynomial approximation of e<SUP>x</SUP>.  It simply does a better job closer to where it was chosen, but note that the taylor polynomials don't have to look anything alike.
+
+</p>
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>

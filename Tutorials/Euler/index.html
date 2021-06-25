@@ -1,0 +1,151 @@
+<html>
+<body>
+
+<hr>
+<h1><b>NOTE: A Newer version of this tutorial may exist.  <a href = "../../../Teaching/Euler">Click here</a> to go to the never version</b></h1>
+<hr>
+
+<center><h1>Euler's Identity</h1><BR>
+<h2>Chris Tralie</h2>
+</center>
+
+<ol>
+<li><a href = "#Intro">Introduction: What is it?</a></li>
+<li><a href = "#diffeq">Proving it with a differential equation</a></li>
+<li><a href = "#taylorseries">Proving it via Taylor Series expansion</a></li>
+<li><a href = "#visualizing">Visualizing Euler's Formula</a></li>
+<li><a href = "#trig">Trig Identities and Euler's Formula</a></li>
+<li><a href = "#sincos">Expressing Sine and Cosine</a></li>
+</ol>
+
+<a name = "Intro"><h2><u><b>1. Introduction: What is it?</b></u></h1></a>
+
+Euler's formula is this crazy formula that ties exponentials to sinusoids through imaginary numbers:<BR><BR>
+
+<img src = "latex0.png" alt = "$e^{i\theta} = cos(\theta) + isin(\theta)$">
+<BR><BR>
+
+Does that make sense?  It certainly didn't to me when I first saw it.  What does it really mean to raise a number to an imaginary power?  I think our instinct when reasoning about exponents is to imagine multiplying the base by itself "exponent" number of times.  So, for instance, 3<SUP>4</SUP> would be 3*3*3*3.  But this line of reasoning leads to a dead end when we have an imaginary exponent, so we can't use that definition of exponentiation.  We'll have to use another definition to prove that this is true.  So I will go ahead and prove it two different ways to convince you that it makes sense, and then I'll show how it actually makes life easier (in spite of how strange it may seem).
+<BR><BR>
+
+<a name = "diffeq"><h2><u><b>2. Proving it with a differential equation</b></u></h1></a>
+I'm going to start with an easy proof of this using some basic calculus.  I'll start by working backwards, starting with the result:<BR><BR>
+
+<img src = "latex1.png" alt = "$f(x) = cos(x) + isin(x)$">
+<BR><BR>
+
+Now differentiate f(x) one time:<BR><BR>
+
+<img src = "latex2.png" alt = "$f'(x) = -sin(x) + icos(x) = i(cos(x) + isin(x))$">
+
+<BR><BR>
+Now note the following differential equation:<BR><BR>
+
+<img src = "latex3.png" alt = "\[ \frac{d f(x)}{dx} = if(x) \]">
+<BR><BR>
+Therefore, 
+<BR><BR>
+<img src = "latex4.png" alt = "\[ f(x) = e^{ix} \]"><BR><BR>
+And we're done.  That was easy!
+<BR><BR>
+
+<a name = "taylorseries"><h2><u><b>3. Proving it via Taylor Series expansion</b></u></h1></a>
+Recall from my tutorial on Taylor Series that <a href = "../taylor/index.html#ex">the Maclaurin Series of e<SUP>x</SUP></a> is:<BR><BR>
+<img src = "latex5.png" alt = "\[ e^x = \sum_{n=0}^{\infty} \frac{x^n}{n!}   \]">
+<BR><BR>
+Plug in i*theta for x:<BR><BR>
+<img src = "latex6.png" alt = "\[ e^{i\theta} = 1 + (i\theta) + \frac{(i\theta)^2}{2!} + \frac{(i\theta)^3}{3!} + \frac{(i\theta)^4}{4!} + \frac{(i\theta)^5}{5!} + \frac{(i\theta)^6}{6!} + ... \]">
+<BR><BR>
+
+Now simplify all of the terms with powers of i in them, noting that i<SUP>2</SUP> = -1:<BR><BR>
+
+<img src = "latex7.png" alt = "\[ e^{i\theta} = 1 + (i\theta) + - \frac{\theta^2}{2!} -i \frac{\theta^3}{3!} + \frac{\theta^4}{4!} + i \frac{\theta^5}{5!} - \frac{\theta^6}{6!} + ... \]">
+
+<BR><BR>
+Now group all of the even order terms together and all of the odd order terms together, noting that only the odd order terms have an i factor left:<BR><BR>
+<img src = "latex8.png" alt = "\[ e^{i\theta} = (1 - \frac{\theta^2}{2!} + \frac{\theta^4}{4!} - \frac{\theta^6}{6!} + ...) + i(\theta - \frac{\theta^3}{3!} + \frac{\theta^5}{5!} - ...) \] "><BR><BR>
+
+You should now recognize a pattern here; all of the even powers form the <a href = "../taylor/index.html#cosx">Maclaurin series for cos(x)</a>, and all of the odd powers form the <a href = "../taylor/index.html#sinx">Maclaurin series for sin(x)</a>.  Therefore, we have proved once again that e<SUP>ix</SUP> = cos(x) + isin(x).
+
+<a name = "visualizing"><h2><u><b>4. Visualizing Euler's Formula</b></u></h1></a>
+So hopefully now you can buy Euler's formula; if not at a concrete level, at least at some abstract level by noting that everything "works" mathematically if you accept that i is the square root of -1.  Now it's difficult to try to visualize it unless we come up with some conventions.  For this, we first need to remember how to plot complex numbers in rectangular form.  We normally visualize complex numbers in 2D by convention, plotting the real component on the horizontal axis, and the imaginary part on the vertical axis.  For instance, the complex number, 4 + i, would be plotted as follows:<BR>
+<img src = "rectangularim.png"><BR><BR>
+If we adapt this convention, we notice that the components of e^(ix) in the complex plane are (cos(x), sin(x)).  Thus, feeding different x values to Euler's formula traces out a unit circle in the complex plane.  In this manner, Euler's formula can be used to express complex numbers in polar form.  We simply give a magnitude, <b>A</b>, and an angle, <b>theta</b>, that a complex number makes with the real axis (the arc tangent of the imaginary over the real component), and we can express it using Euler's formula.  For instance, we can express the number (1 + i) as:<BR><BR>
+<img src = "latex9.png" alt = "$\sqrt{2}e^{i( \frac{ \pi}{4})} = \sqrt{2}(cos(\frac{ \pi}{4}) + isin(\frac{ \pi}{4})) = \sqrt{2}(\frac{\sqrt{2}}{2} + i\frac{\sqrt{2}}{2}) = 1 + i$"><BR><BR>
+<img src = "eulerpolar.png"><BR>
+...where A is sqrt(2) and theta is 45 degrees in this case
+<BR>
+
+
+
+<a name = "trig"><h2><u><b>5. Trig Identities and Euler's Formula</b></u></h1></a>
+
+Euler's Formula makes it really easy to prove complicated trig identities, because we now get to use properties of exponents to help us out.  Let me show you a quick example:<BR><BR>
+
+<img src = "latex10.png" alt = "$sin(u \pm v) = sin(u)cos(v) \pm cos(u)sin(v)$"><BR><BR>
+<img src = "latex11.png" alt = "$cos(u \pm v) = cos(u)cos(v) \mp sin(u)sin(v)$"><BR><BR>
+Proof:<BR><BR>
+<img src = "latex12.png" alt = "\begin{align} e^{i(u + v)} &= cos(u + v) + isin(u + v) \\
+	&= e^{iu}e^{iv} \\
+	&= [cos(u) + isin(u)][cos(v) + isin(v)] \\
+	&= cos(u)cos(v) + icos(u)sin(v) + isin(u)cos(v) - sin(u)sin(v) \\
+	&= cos(u)cos(v) - sin(u)sin(v) + i(cos(u)sin(v) + sin(u)cos(v)) \end{align}">
+<BR><BR>
+Therefore, we end up with:<BR><BR>
+
+<img src = "latex13.png" alt = "$cos(u + v) + isin(u + v) = (cos(u)cos(v) - sin(u)sin(v)) + i(cos(u)sin(v) + sin(u)cos(v))$">
+<BR><BR>
+Now grouping both parts together:<BR><BR>
+
+<img src = "latex14.png" alt = "$ cos(u + v) = cos(u)cos(v) - sin(u)sin(v)$">
+<BR><BR>
+and...<BR><BR>
+
+<img src = "latex15.png" alt = "$isin(u + v) = i(cos(u)sin(v) + sin(u)cos(v))$"><BR>
+<img src = "latex16.png" alt = "$sin(u + v) = cos(u)sin(v) + sin(u)cos(v)$"><BR><BR>
+
+To get the other part of the "plus or minus," plug in (-v), noting that cos(-u) = cos(u) [the cosine is an even function] and sin(-u) = -sin(u) [the sine is an odd funtion]:<BR><BR>
+<img src = "latex17.png" alt = "$cos(u - v) = cos(-u)cos(v) - sin(-u)sin(v) = cos(u)cos(v) - -sin(u)sin(v)$"><BR>
+<img src = "latex18.png" alt = "$cos(u - v) = cos(u)cos(v) + sin(u)sin(v)$"><BR><BR>
+and...<BR><BR>
+<img src = "latex19.png" alt = "$sin(u - v) = sin(u)cos(-v) + cos(u)sin(-v) = sin(u)cos(v) + cos(u)[-sin(v)]$"><BR>
+<img src = "latex20.png" alt = "$sin(u - v) = sin(u)cos(v) - cos(u)sin(v)$"><BR><BR>
+
+The normal way to prove it with trig is much more complicated (I don't even feel it's worth writing down here right now).  But this identity is very important, and we will need it later when we talk about phasors in another tutorial.<BR><BR>
+
+<a name = "sincos"><h2><u><b>6. Expressing Sine and Cosine</b></u></h1></a><BR>
+One more quick note about how to write sine and cosine in terms of euler's identity.  These formulas rely on the fact that cosine is even (cos(x) = cos(-x)) and sine is odd (sin(x) = - sin(-x)).  The goal will be to use these facts to our advantage to cancel out the sine when we're trying to get the formula for the cosine, or vice versa:<BR><BR>
+
+<ul><li>
+<img src = "latex21.png" alt = "\[ sin(x) = \frac{e^{ix} - e^{-ix}}{2i} \]"><BR><BR>
+Proof:<BR><BR>
+<img src = "latex22.png" alt = "\begin{align} \frac{e^{ix} - e^{-ix}}{2i} &= \frac{cos(x) + isin(x) - (cos(-x) + isin(-x))}{2i}\\ 
+&= \frac{cos(x) + isin(x) - (cos(x) - isin(x))}{2i} \\
+&= \frac{cos(x) + isin(x) - cos(x) + isin(x)}{2i} \\
+&= sin(x) \end{align}"><BR><BR><BR>
+</li>
+
+<li><img src = "latex23.png" alt = "\[ cos(x) = \frac{e^{ix} + e^{-ix}}{2} \]"><BR><BR>
+Proof:<BR><BR>
+<img src = "latex24.png" alt = "\begin{align} \frac{e^{ix} + e^{-ix}}{2} &= \frac{cos(x) + isin(x) + cos(-x) + isin(-x)}{2} \\
+&= \frac{cos(x) + isin(x) + cos(x) - isin(x)}{2} \\
+&= cos(x) \end{align} ">
+</li></ul>
+
+
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=7309088; 
+var sc_invisible=1; 
+var sc_security="f655b56d"; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="free hit counter"
+href="http://statcounter.com/" target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+counter"></a></div></noscript>
+<!-- End of StatCounter Code -->
+</body>
+</html>
